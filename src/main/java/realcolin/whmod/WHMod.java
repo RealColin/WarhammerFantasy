@@ -21,6 +21,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.MapSampler;
 import realcolin.whmod.worldgen.densityfunction.MapSamplerWithBlending;
@@ -35,8 +36,6 @@ public class WHMod {
     public static final String MOD_ID = "whmod";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
     private static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES = DeferredRegister.create(BuiltInRegistries.BIOME_SOURCE, MOD_ID);
@@ -53,8 +52,8 @@ public class WHMod {
         DENSITY_FUNCTIONS.register("map_sampler", () -> MapSampler.CODEC);
         DENSITY_FUNCTIONS.register("blended_map_sampler", () -> MapSamplerWithBlending.CODEC);
 
-        BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
+        WHBlocks.BLOCKS.register(modEventBus);
+        WHBlocks.ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         BIOME_SOURCES.register(modEventBus);
         DENSITY_FUNCTIONS.register(modEventBus);
