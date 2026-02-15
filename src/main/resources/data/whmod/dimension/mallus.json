@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:overworld",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "whmod:map_biome_source",
+      "map": "whmod:mallus"
+    },
+    "settings": "whmod:mallus"
+  }
+}

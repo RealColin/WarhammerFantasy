@@ -1,0 +1,5 @@
+{
+  "type": "whmod:blended_map_sampler",
+  "map": "whmod:mallus",
+  "field": "height"
+}

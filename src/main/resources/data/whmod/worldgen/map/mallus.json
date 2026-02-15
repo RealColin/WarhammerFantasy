@@ -1,0 +1,129 @@
+{
+  "image": "whmod:mallus.svg",
+  "resolution": 96,
+  "default_biome": "whmod:the_sea",
+  "default_terrain": "whmod:ocean",
+  "entries": [
+    {
+      "region": "reikwald",
+      "color": 37632,
+      "terrain": "whmod:flats",
+      "biomes": [
+        {
+          "biome": "whmod:reikwald",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "grey_mountains",
+      "color": 11842740,
+      "terrain": "whmod:mountains",
+      "biomes": [
+        {
+          "biome": "whmod:grey_mountains",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "old_world_placeholder",
+      "color": 6927429,
+      "terrain": "whmod:flats",
+      "biomes": [
+        {
+          "biome": "minecraft:plains",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "river_reik",
+      "color": 255,
+      "terrain": "whmod:river",
+      "biomes": [
+        {
+          "biome": "whmod:river_reik",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "reikstream",
+      "color": 240,
+      "terrain": "whmod:river",
+      "biomes": [
+        {
+          "biome": "whmod:reikstream",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "river_teufel",
+      "color": 243,
+      "terrain": "whmod:river",
+      "biomes": [
+        {
+          "biome": "whmod:river_teufel",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "river_bogen",
+      "color": 246,
+      "terrain": "whmod:river",
+      "biomes": [
+        {
+          "biome": "whmod:river_bogen",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "grissenwald_stream",
+      "color": 249,
+      "terrain": "whmod:river",
+      "biomes": [
+        {
+          "biome": "whmod:grissenwald_stream",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "vorbergland",
+      "color": 7632209,
+      "terrain": "whmod:flats",
+      "biomes": [
+        {
+          "biome": "whmod:vorbergland",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "vorber_marsh",
+      "color": 5196826,
+      "terrain": "whmod:flats",
+      "biomes": [
+        {
+          "biome": "whmod:vorber_marsh",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "region": "furdienst",
+      "color": 5527306,
+      "terrain": "whmod:flats",
+      "biomes": [
+        {
+          "biome": "whmod:furdienst",
+          "weight": 50
+        }
+      ]
+    }
+  ]
+}

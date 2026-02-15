@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:add",
+  "argument1": 63,
+  "argument2": {
+    "type": "minecraft:mul",
+    "argument1": "whmod:height",
+    "argument2": 256
+  }
+}
