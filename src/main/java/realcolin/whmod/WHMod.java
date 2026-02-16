@@ -22,6 +22,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.MapSampler;
 import realcolin.whmod.worldgen.densityfunction.MapSamplerWithBlending;
@@ -30,7 +31,6 @@ import realcolin.whmod.worldgen.densityfunction.ShiftedNoise;
 import realcolin.whmod.worldgen.map.Terrain;
 import realcolin.whmod.worldgen.map.WorldMap;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(WHMod.MOD_ID)
 public class WHMod {
     public static final String MOD_ID = "whmod";
@@ -53,7 +53,7 @@ public class WHMod {
         DENSITY_FUNCTIONS.register("blended_map_sampler", () -> MapSamplerWithBlending.CODEC);
 
         WHBlocks.BLOCKS.register(modEventBus);
-        WHBlocks.ITEMS.register(modEventBus);
+        WHItems.ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         BIOME_SOURCES.register(modEventBus);
         DENSITY_FUNCTIONS.register(modEventBus);
