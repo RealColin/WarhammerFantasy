@@ -27,5 +27,6 @@ public class WHDataGenerator {
 
         event.createProvider(WHModelProvider::new);
         event.createProvider(WHLanguageProvider::new);
+        event.createProvider(WHBlockTagsProvider::new);
     }
 }

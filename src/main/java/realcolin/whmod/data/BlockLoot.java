@@ -29,6 +29,8 @@ public class BlockLoot extends BlockLootSubProvider {
             dropSelf(woodSet.button().get());
             dropSelf(woodSet.pressurePlate().get());
             dropSelf(woodSet.sapling().get());
+            dropSelf(woodSet.door().get());
+            dropSelf(woodSet.trapdoor().get());
 
             add(woodSet.leaves().get(), createLeavesDrops(
                     woodSet.leaves().get(),

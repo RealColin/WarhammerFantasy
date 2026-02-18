@@ -32,6 +32,8 @@ public record WoodSet(
         DeferredBlock<Block> fenceGate,
         DeferredBlock<Block> button,
         DeferredBlock<Block> pressurePlate,
+        DeferredBlock<Block> door,
+        DeferredBlock<Block> trapdoor,
         DeferredBlock<Block> leaves,
         DeferredBlock<Block> sapling,
 
@@ -46,6 +48,8 @@ public record WoodSet(
         DeferredItem<Item> fenceGateItem,
         DeferredItem<Item> buttonItem,
         DeferredItem<Item> pressurePlateItem,
+        DeferredItem<Item> doorItem,
+        DeferredItem<Item> trapdoorItem,
         DeferredItem<Item> leavesItem,
         DeferredItem<Item> saplingItem
 ) {
@@ -99,7 +103,22 @@ public record WoodSet(
                         .instrument(NoteBlockInstrument.BASS)
                         .strength(2.0F, 3.0F)
                         .sound(SoundType.WOOD)
-                        .ignitedByLava()));
+                        .ignitedByLava()) {
+            @Override
+            public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return true;
+            }
+
+            @Override
+            public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 20;
+            }
+
+            @Override
+            public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 5;
+            }
+        });
 
         String slabName = name + "_slab";
         DeferredBlock<Block> slab = WHBlocks.BLOCKS.register(slabName, res -> new SlabBlock(
@@ -156,6 +175,28 @@ public record WoodSet(
                         .ignitedByLava()
                         .pushReaction(PushReaction.DESTROY)));
 
+        String doorName = name + "_door";
+        DeferredBlock<Block> door = WHBlocks.BLOCKS.register(doorName, res -> new DoorBlock(BlockSetType.OAK,
+                BlockBehaviour.Properties.of()
+                        .setId(ResourceKey.create(Registries.BLOCK, res))
+                        .mapColor(planks.get().defaultMapColor())
+                        .instrument(NoteBlockInstrument.BASS)
+                        .strength(3.0F)
+                        .noOcclusion()
+                        .ignitedByLava()
+                        .pushReaction(PushReaction.DESTROY)));
+
+        String trapdoorName = name + "_trapdoor";
+        DeferredBlock<Block> trapdoor = WHBlocks.BLOCKS.register(trapdoorName, res -> new TrapDoorBlock(BlockSetType.OAK,
+                BlockBehaviour.Properties.of()
+                        .setId(ResourceKey.create(Registries.BLOCK, res))
+                        .mapColor(MapColor.WOOD)
+                        .instrument(NoteBlockInstrument.BASS)
+                        .strength(3.0F)
+                        .noOcclusion()
+                        .isValidSpawn(Blocks::never)
+                        .ignitedByLava()));
+
         String leavesName = name + "_leaves";
         DeferredBlock<Block> leaves = WHBlocks.BLOCKS.register(leavesName, res -> new TintedParticleLeavesBlock(0.01f,
                 BlockBehaviour.Properties.of()
@@ -204,6 +245,10 @@ public record WoodSet(
                 res -> new BlockItem(button.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));
         DeferredItem<Item> pressurePlateItem = WHItems.ITEMS.register(pressurePlateName,
                 res -> new BlockItem(pressurePlate.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));
+        DeferredItem<Item> doorItem = WHItems.ITEMS.register(doorName,
+                res -> new BlockItem(door.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));
+        DeferredItem<Item> trapdoorItem = WHItems.ITEMS.register(trapdoorName,
+                res -> new BlockItem(trapdoor.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));
         DeferredItem<Item> leavesItem = WHItems.ITEMS.register(leavesName,
                 res -> new BlockItem(leaves.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));
         DeferredItem<Item> saplingItem = WHItems.ITEMS.register(saplingName,
@@ -222,6 +267,8 @@ public record WoodSet(
                 fenceGate,
                 button,
                 pressurePlate,
+                door,
+                trapdoor,
                 leaves,
                 sapling,
                 logItem,
@@ -235,6 +282,8 @@ public record WoodSet(
                 fenceGateItem,
                 buttonItem,
                 pressurePlateItem,
+                doorItem,
+                trapdoorItem,
                 leavesItem,
                 saplingItem
         );

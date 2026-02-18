@@ -36,7 +36,10 @@ public class WHModelProvider extends ModelProvider {
                     .fence(woodSet.fence().get())
                     .fenceGate(woodSet.fenceGate().get())
                     .button(woodSet.button().get())
-                    .pressurePlate(woodSet.pressurePlate().get());
+                    .pressurePlate(woodSet.pressurePlate().get())
+
+                    .door(woodSet.door().get())
+                    .trapdoor(woodSet.trapdoor().get());
 
             var leaves = woodSet.leaves();
             blockModels.createTintedLeaves(leaves.get(), TexturedModel.LEAVES, FoliageColor.FOLIAGE_DEFAULT);
