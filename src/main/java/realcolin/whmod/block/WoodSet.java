@@ -128,11 +128,41 @@ public record WoodSet(
                         .instrument(NoteBlockInstrument.BASS)
                         .strength(2.0F, 3.0F)
                         .sound(SoundType.WOOD)
-                        .ignitedByLava()));
+                        .ignitedByLava()) {
+            @Override
+            public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return true;
+            }
+
+            @Override
+            public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 20;
+            }
+
+            @Override
+            public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 5;
+            }
+        });
 
         String stairsName = name + "_stairs";
         DeferredBlock<Block> stairs = WHBlocks.BLOCKS.register(stairsName, res -> new StairBlock(planks.get().defaultBlockState(),
-                BlockBehaviour.Properties.ofFullCopy(planks.get()).setId(ResourceKey.create(Registries.BLOCK, res))));
+                BlockBehaviour.Properties.ofFullCopy(planks.get()).setId(ResourceKey.create(Registries.BLOCK, res))) {
+            @Override
+            public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return true;
+            }
+
+            @Override
+            public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 20;
+            }
+
+            @Override
+            public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 5;
+            }
+        });
 
         String fenceName = name + "_fence";
         DeferredBlock<Block> fence = WHBlocks.BLOCKS.register(fenceName, res -> new FenceBlock(
@@ -143,7 +173,22 @@ public record WoodSet(
                         .instrument(NoteBlockInstrument.BASS)
                         .strength(2.0F, 3.0F)
                         .sound(SoundType.WOOD)
-                        .ignitedByLava()));
+                        .ignitedByLava()) {
+            @Override
+            public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return true;
+            }
+
+            @Override
+            public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 20;
+            }
+
+            @Override
+            public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 5;
+            }
+        });
 
         String fenceGateName = name + "_fence_gate";
         DeferredBlock<Block> fenceGate = WHBlocks.BLOCKS.register(fenceGateName, res -> new FenceGateBlock(WoodType.OAK,
@@ -153,7 +198,22 @@ public record WoodSet(
                         .forceSolidOn()
                         .instrument(NoteBlockInstrument.BASS)
                         .strength(2.0F, 3.0F)
-                        .ignitedByLava()));
+                        .ignitedByLava()) {
+            @Override
+            public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return true;
+            }
+
+            @Override
+            public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 20;
+            }
+
+            @Override
+            public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 5;
+            }
+        });
 
         String buttonName = name + "_button";
         DeferredBlock<Block> button = WHBlocks.BLOCKS.register(buttonName, res -> new ButtonBlock(BlockSetType.OAK, 30,
@@ -210,7 +270,22 @@ public record WoodSet(
                         .isViewBlocking(WoodSet::never)
                         .ignitedByLava()
                         .pushReaction(PushReaction.DESTROY)
-                        .isRedstoneConductor(WoodSet::never)));
+                        .isRedstoneConductor(WoodSet::never)) {
+            @Override
+            public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return true;
+            }
+
+            @Override
+            public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 60;
+            }
+
+            @Override
+            public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                return 30;
+            }
+        });
 
         String saplingName = name + "_sapling";
         DeferredBlock<Block> sapling = WHBlocks.BLOCKS.register(saplingName, res -> new SaplingBlock(TreeGrower.SPRUCE,
