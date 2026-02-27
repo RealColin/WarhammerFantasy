@@ -20,6 +20,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import realcolin.whmod.item.WHItems;
 
+@SuppressWarnings("NullableProblems")
 public record WoodSet(
         DeferredBlock<Block> log,
         DeferredBlock<Block> wood,
@@ -54,7 +55,7 @@ public record WoodSet(
         DeferredItem<Item> saplingItem
 ) {
 
-    public static WoodSet make(String name) {
+    public static WoodSet make(String name, TreeGrower treeGrower) {
         String logName = name + "_log";
         DeferredBlock<Block> log = WHBlocks.BLOCKS.register(logName, res -> new FlammableRotatedPillarBlock(
                 BlockBehaviour.Properties.of()
@@ -288,7 +289,7 @@ public record WoodSet(
         });
 
         String saplingName = name + "_sapling";
-        DeferredBlock<Block> sapling = WHBlocks.BLOCKS.register(saplingName, res -> new SaplingBlock(TreeGrower.SPRUCE,
+        DeferredBlock<Block> sapling = WHBlocks.BLOCKS.register(saplingName, res -> new SaplingBlock(treeGrower,
                 BlockBehaviour.Properties.of()
                         .setId(ResourceKey.create(Registries.BLOCK, res))
                         .mapColor(MapColor.PLANT)

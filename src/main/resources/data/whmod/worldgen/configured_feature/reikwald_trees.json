@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": "whmod:small_pine_pred",
+    "features": [
+      {
+        "chance": 0.2,
+        "feature": "whmod:small_pine_pred"
+      },
+      {
+        "chance": 0.2,
+        "feature": "whmod:small_oak_pred"
+      },
+      {
+        "chance": 0.15,
+        "feature": "whmod:small_beech_pred"
+      },
+      {
+        "chance": 0.1,
+        "feature": "whmod:giant_pine_pred"
+      },
+      {
+        "chance": 0.1,
+        "feature": "whmod:fancy_oak_pred"
+      }
+    ]
+  }
+}

@@ -10,19 +10,21 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.item.WHItems;
+import realcolin.whmod.worldgen.tree.WHTreeGrowers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class WHBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(WHMod.MOD_ID);
 
     public static final List<WoodSet> woodSets = new ArrayList<>();
 
-    public static final WoodSet PINE = WoodSet.make("pine");
-    public static final WoodSet BEECH = WoodSet.make("beech");
-    public static final WoodSet ELM = WoodSet.make("elm");
+    public static final WoodSet PINE = WoodSet.make("pine", WHTreeGrowers.PINE);
+    public static final WoodSet BEECH = WoodSet.make("beech", WHTreeGrowers.BEECH);
+    public static final WoodSet ELM = WoodSet.make("elm", WHTreeGrowers.PINE);
 
     private static DeferredBlock<Block> blockItem(String name, Function<ResourceLocation, ? extends Block> func) {
 
