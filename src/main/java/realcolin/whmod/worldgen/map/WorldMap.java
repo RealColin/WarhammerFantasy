@@ -104,19 +104,31 @@ public class WorldMap {
         set.add(defaultBiome);
 
         for (var e : entries) {
-            set.addAll(e.biomes().stream().map(MapEntry.BiomePair::biome).toList());
+            List<Holder<Biome>> list = e.biomes().values().stream().map(com.mojang.datafixers.util.Pair::getSecond).toList();
+            set.addAll(list);
+
+//            set.addAll(e.biomes().stream().map(MapEntry.BiomePair::biome).toList());
         }
 
         return set;
     }
 
-    public Holder<Biome> getBiome(int x, int z) {
+//    public Holder<Biome> getBiome(int x, int z) {
+//        var color = getColorAtPixel(x, z);
+//
+//        if (color != -1 && colorRegionMap.containsKey(color))
+//            return colorRegionMap.get(color).biomes().getFirst().biome(); // TODO change this to select a biome with noise somehow
+//
+//        return defaultBiome;
+//    }
+
+    public MapEntry getEntryAt(int x, int z) {
         var color = getColorAtPixel(x, z);
 
         if (color != -1 && colorRegionMap.containsKey(color))
-            return colorRegionMap.get(color).biomes().getFirst().biome(); // TODO change this to select a biome with noise somehow
+            return colorRegionMap.get(color);
 
-        return defaultBiome;
+        return null;
     }
 
     public Set<Holder<Terrain>> getTerrains() {
