@@ -3,6 +3,7 @@ package realcolin.whmod;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.level.FoliageColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -10,10 +11,15 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.client.BoarModel;
+import realcolin.whmod.client.BoarRenderer;
+import realcolin.whmod.entity.WHEntities;
+import realcolin.whmod.entity.animal.Boar;
 
 @SuppressWarnings("deprecation")
 @Mod(value = WHMod.MOD_ID, dist = Dist.CLIENT)
@@ -29,6 +35,8 @@ public class WHClient {
         for (var woodSet : WHBlocks.woodSets) {
             ItemBlockRenderTypes.setRenderLayer(woodSet.sapling().get(), ChunkSectionLayer.CUTOUT);
         }
+
+        EntityRenderers.register(WHEntities.BOAR.get(), BoarRenderer::new);
     }
 
     @SubscribeEvent
@@ -43,4 +51,16 @@ public class WHClient {
                 WHBlocks.ELM.leaves().get()
         );
     }
+
+//    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+//        event.<Boar>registerEntityRenderer(WHEntities.BOAR.get(), BoarRenderer::new);
+//    }
+
+//    @SubscribeEvent
+//    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+//        event.registerLayerDefinition(BoarModel.LAYER_LOCATION, BoarModel::createBodyLayer);
+//    }
+
+
+
 }

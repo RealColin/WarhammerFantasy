@@ -49,16 +49,10 @@
   "spawners": {
     "creature": [
       {
-        "type": "minecraft:wolf",
-        "maxCount": 4,
+        "type": "whmod:boar",
+        "maxCount": 8,
         "minCount": 4,
-        "weight": 5
-      },
-      {
-        "type": "minecraft:fox",
-        "maxCount": 4,
-        "minCount": 4,
-        "weight": 5
+        "weight": 10
       }
     ]
   },

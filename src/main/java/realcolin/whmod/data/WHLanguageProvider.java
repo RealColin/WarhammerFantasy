@@ -4,6 +4,7 @@ import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.item.WHItems;
 
 public class WHLanguageProvider extends LanguageProvider {
@@ -15,6 +16,7 @@ public class WHLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         WHBlocks.BLOCKS.getEntries().forEach(h -> addBlock(h, toTitleCase(h.getId().getPath())));
         WHItems.ITEMS.getEntries().forEach(h -> addItem(h, toTitleCase(h.getId().getPath())));
+        WHEntities.ENTITY_TYPES.getEntries().forEach(h -> addEntityType(h, toTitleCase(h.getId().getPath())));
     }
 
     private static String toTitleCase(String path) {

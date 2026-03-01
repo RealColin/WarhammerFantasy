@@ -1,9 +1,17 @@
 package realcolin.whmod;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.SpawnPlacementType;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import org.slf4j.Logger;
 
@@ -22,6 +30,10 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.client.BoarModel;
+import realcolin.whmod.client.WHModelLayers;
+import realcolin.whmod.entity.WHEntities;
+import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.MapSampler;
@@ -54,6 +66,7 @@ public class WHMod {
 
         WHBlocks.BLOCKS.register(modEventBus);
         WHItems.ITEMS.register(modEventBus);
+        WHEntities.ENTITY_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         BIOME_SOURCES.register(modEventBus);
         DENSITY_FUNCTIONS.register(modEventBus);
@@ -61,6 +74,9 @@ public class WHMod {
 
         NeoForge.EVENT_BUS.register(this);
 
+        modEventBus.addListener(this::registerAttributes);
+        modEventBus.addListener(this::registerLayers);
+        modEventBus.addListener(this::registerSpawns);
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerData);
 
@@ -85,5 +101,20 @@ public class WHMod {
     public void registerData(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(WHRegistries.TERRAIN, Terrain.DIRECT_CODEC);
         event.dataPackRegistry(WHRegistries.MAP, WorldMap.DIRECT_CODEC);
+    }
+
+    public void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(WHEntities.BOAR.get(), Boar.createAttributes().build());
+    }
+
+    public void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        var boarLayerDef = BoarModel.createBodyLayer(CubeDeformation.NONE);
+        event.registerLayerDefinition(WHModelLayers.BOAR, () -> boarLayerDef);
+        event.registerLayerDefinition(WHModelLayers.BOAR_BABY, () -> boarLayerDef.apply(BoarModel.BABY_TRANSFORMER));
+    }
+
+    public void registerSpawns(RegisterSpawnPlacementsEvent event) {
+        event.register(WHEntities.BOAR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }
