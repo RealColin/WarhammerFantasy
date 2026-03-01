@@ -23,7 +23,9 @@ public class WHDataGenerator {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         gen.addProvider(true, new LootTableProvider(output, Collections.emptySet(),
-                List.of(new LootTableProvider.SubProviderEntry(BlockLoot::new, LootContextParamSets.BLOCK)), lookupProvider));
+                List.of(new LootTableProvider.SubProviderEntry(BlockLoot::new, LootContextParamSets.BLOCK),
+                        new LootTableProvider.SubProviderEntry(EntityLoot::new, LootContextParamSets.ENTITY)),
+                lookupProvider));
 
         event.createProvider(WHModelProvider::new);
         event.createProvider(WHLanguageProvider::new);
