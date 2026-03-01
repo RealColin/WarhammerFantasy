@@ -56,6 +56,12 @@
         "weight": 10
       },
       {
+        "type": "minecraft:rabbit",
+        "maxCount": 4,
+        "minCount": 2,
+        "weight": 4
+      },
+      {
         "type": "minecraft:wolf",
         "maxCount": 4,
         "minCount": 4,
@@ -66,6 +72,12 @@
         "maxCount": 4,
         "minCount": 4,
         "weight": 3
+      },
+      {
+        "type": "whmod:brown_bear",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 1
       }
     ]
   },

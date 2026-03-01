@@ -31,9 +31,11 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.client.BoarModel;
+import realcolin.whmod.client.BrownBearModel;
 import realcolin.whmod.client.WHModelLayers;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
+import realcolin.whmod.entity.animal.BrownBear;
 import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.MapSampler;
@@ -105,16 +107,23 @@ public class WHMod {
 
     public void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(WHEntities.BOAR.get(), Boar.createAttributes().build());
+        event.put(WHEntities.BROWN_BEAR.get(), BrownBear.createAttributes().build());
     }
 
     public void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         var boarLayerDef = BoarModel.createBodyLayer(CubeDeformation.NONE);
         event.registerLayerDefinition(WHModelLayers.BOAR, () -> boarLayerDef);
         event.registerLayerDefinition(WHModelLayers.BOAR_BABY, () -> boarLayerDef.apply(BoarModel.BABY_TRANSFORMER));
+        var brownBearLayerDef = BrownBearModel.createBodyLayer(false);
+        var brownBearBabyLayerDef = BrownBearModel.createBodyLayer(true);
+        event.registerLayerDefinition(WHModelLayers.BROWN_BEAR, () -> brownBearLayerDef);
+        event.registerLayerDefinition(WHModelLayers.BROWN_BEAR_BABY, () -> brownBearBabyLayerDef);
     }
 
     public void registerSpawns(RegisterSpawnPlacementsEvent event) {
         event.register(WHEntities.BOAR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(WHEntities.BROWN_BEAR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }

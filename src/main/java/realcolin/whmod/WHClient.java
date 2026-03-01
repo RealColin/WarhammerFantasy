@@ -18,6 +18,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.client.BoarModel;
 import realcolin.whmod.client.BoarRenderer;
+import realcolin.whmod.client.BrownBearRenderer;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 
@@ -37,6 +38,7 @@ public class WHClient {
         }
 
         EntityRenderers.register(WHEntities.BOAR.get(), BoarRenderer::new);
+        EntityRenderers.register(WHEntities.BROWN_BEAR.get(), BrownBearRenderer::new);
     }
 
     @SubscribeEvent
