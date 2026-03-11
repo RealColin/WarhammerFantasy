@@ -3,16 +3,23 @@ package realcolin.whmod;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.SpawnPlacementType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -36,6 +43,7 @@ import realcolin.whmod.client.WHModelLayers;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.entity.animal.BrownBear;
+import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.MapSampler;
@@ -44,6 +52,8 @@ import realcolin.whmod.worldgen.densityfunction.Noise;
 import realcolin.whmod.worldgen.densityfunction.ShiftedNoise;
 import realcolin.whmod.worldgen.map.Terrain;
 import realcolin.whmod.worldgen.map.WorldMap;
+
+import java.util.function.Supplier;
 
 @Mod(WHMod.MOD_ID)
 public class WHMod {
@@ -54,6 +64,15 @@ public class WHMod {
 
     private static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES = DeferredRegister.create(BuiltInRegistries.BIOME_SOURCE, MOD_ID);
     private static final DeferredRegister<MapCodec<? extends DensityFunction>> DENSITY_FUNCTIONS = DeferredRegister.create(BuiltInRegistries.DENSITY_FUNCTION_TYPE, MOD_ID);
+    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MOD_ID);
+
+    public static final Supplier<AttachmentType<Faction>> FACTION_ATTACHMENT = ATTACHMENT_TYPES.register(
+            "faction", () -> AttachmentType.builder(() -> Faction.NONE)
+                    .serialize(Faction.CODEC.fieldOf("faction"))
+                    .sync((holder, player) -> holder == player, Faction.STREAM_CODEC)
+                    .copyOnDeath()
+                    .build()
+    );
 
 
     public WHMod(IEventBus modEventBus, ModContainer modContainer) {
@@ -72,9 +91,10 @@ public class WHMod {
         CREATIVE_MODE_TABS.register(modEventBus);
         BIOME_SOURCES.register(modEventBus);
         DENSITY_FUNCTIONS.register(modEventBus);
+        ATTACHMENT_TYPES.register(modEventBus);
 
 
-        NeoForge.EVENT_BUS.register(this);
+//        NeoForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::registerAttributes);
         modEventBus.addListener(this::registerLayers);
@@ -94,11 +114,7 @@ public class WHMod {
 
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
 
-    }
 
     public void registerData(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(WHRegistries.TERRAIN, Terrain.DIRECT_CODEC);

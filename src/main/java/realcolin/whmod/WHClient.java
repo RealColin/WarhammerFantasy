@@ -15,12 +15,17 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.HandlerThread;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.client.BoarModel;
 import realcolin.whmod.client.BoarRenderer;
 import realcolin.whmod.client.BrownBearRenderer;
+import realcolin.whmod.client.ClientPayloadHandler;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
+import realcolin.whmod.network.CloseScreenPayload;
+import realcolin.whmod.network.OpenFactionScreenPayload;
 
 @SuppressWarnings("deprecation")
 @Mod(value = WHMod.MOD_ID, dist = Dist.CLIENT)
@@ -52,6 +57,12 @@ public class WHClient {
                 WHBlocks.BEECH.leaves().get(),
                 WHBlocks.ELM.leaves().get()
         );
+    }
+
+    @SubscribeEvent
+    static void registerClientPayloadHandlers(RegisterClientPayloadHandlersEvent event) {
+        event.register(OpenFactionScreenPayload.TYPE, HandlerThread.NETWORK, ClientPayloadHandler::handleOpenFactionScreen);
+        event.register(CloseScreenPayload.TYPE, HandlerThread.NETWORK, ClientPayloadHandler::handleCloseScreen);
     }
 
 //    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
