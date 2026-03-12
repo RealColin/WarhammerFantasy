@@ -1,57 +1,21 @@
 package realcolin.whmod;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.SpawnPlacementType;
-import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.levelgen.DensityFunction;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
-import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.block.WHBlocks;
-import realcolin.whmod.client.BoarModel;
-import realcolin.whmod.client.BrownBearModel;
-import realcolin.whmod.client.WHModelLayers;
 import realcolin.whmod.entity.WHEntities;
-import realcolin.whmod.entity.animal.Boar;
-import realcolin.whmod.entity.animal.BrownBear;
 import realcolin.whmod.faction.Faction;
+import realcolin.whmod.item.WHCreativeTabs;
 import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
-import realcolin.whmod.worldgen.densityfunction.MapSampler;
-import realcolin.whmod.worldgen.densityfunction.MapSamplerWithBlending;
-import realcolin.whmod.worldgen.densityfunction.Noise;
-import realcolin.whmod.worldgen.densityfunction.ShiftedNoise;
-import realcolin.whmod.worldgen.map.Terrain;
-import realcolin.whmod.worldgen.map.WorldMap;
+import realcolin.whmod.worldgen.densityfunction.*;
 
 import java.util.function.Supplier;
 
@@ -60,10 +24,6 @@ public class WHMod {
     public static final String MOD_ID = "whmod";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
-
-    private static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES = DeferredRegister.create(BuiltInRegistries.BIOME_SOURCE, MOD_ID);
-    private static final DeferredRegister<MapCodec<? extends DensityFunction>> DENSITY_FUNCTIONS = DeferredRegister.create(BuiltInRegistries.DENSITY_FUNCTION_TYPE, MOD_ID);
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MOD_ID);
 
     public static final Supplier<AttachmentType<Faction>> FACTION_ATTACHMENT = ATTACHMENT_TYPES.register(
@@ -74,72 +34,15 @@ public class WHMod {
                     .build()
     );
 
-
     public WHMod(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(this::commonSetup);
-
-        BIOME_SOURCES.register(Constants.MAP_BIOME_SOURCE_ID, () -> WHBiomeSource.CODEC);
-
-        DENSITY_FUNCTIONS.register("noise", () -> Noise.CODEC);
-        DENSITY_FUNCTIONS.register("shifted_noise", () -> ShiftedNoise.CODEC);
-        DENSITY_FUNCTIONS.register("map_sampler", () -> MapSampler.CODEC);
-        DENSITY_FUNCTIONS.register("blended_map_sampler", () -> MapSamplerWithBlending.CODEC);
-
         WHBlocks.BLOCKS.register(modEventBus);
         WHItems.ITEMS.register(modEventBus);
+        WHCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         WHEntities.ENTITY_TYPES.register(modEventBus);
-        CREATIVE_MODE_TABS.register(modEventBus);
-        BIOME_SOURCES.register(modEventBus);
-        DENSITY_FUNCTIONS.register(modEventBus);
+        WHDensityFunctions.DENSITY_FUNCTIONS.register(modEventBus);
+        WHBiomeSource.BIOME_SOURCES.register(modEventBus);
         ATTACHMENT_TYPES.register(modEventBus);
 
-
-//        NeoForge.EVENT_BUS.register(this);
-
-        modEventBus.addListener(this::registerAttributes);
-        modEventBus.addListener(this::registerLayers);
-        modEventBus.addListener(this::registerSpawns);
-        modEventBus.addListener(this::addCreative);
-        modEventBus.addListener(this::registerData);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-    }
-
-    private void commonSetup(FMLCommonSetupEvent event) {
-
-    }
-
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
-    }
-
-
-
-    public void registerData(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(WHRegistries.TERRAIN, Terrain.DIRECT_CODEC);
-        event.dataPackRegistry(WHRegistries.MAP, WorldMap.DIRECT_CODEC);
-    }
-
-    public void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(WHEntities.BOAR.get(), Boar.createAttributes().build());
-        event.put(WHEntities.BROWN_BEAR.get(), BrownBear.createAttributes().build());
-    }
-
-    public void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        var boarLayerDef = BoarModel.createBodyLayer(CubeDeformation.NONE);
-        event.registerLayerDefinition(WHModelLayers.BOAR, () -> boarLayerDef);
-        event.registerLayerDefinition(WHModelLayers.BOAR_BABY, () -> boarLayerDef.apply(BoarModel.BABY_TRANSFORMER));
-        var brownBearLayerDef = BrownBearModel.createBodyLayer(false);
-        var brownBearBabyLayerDef = BrownBearModel.createBodyLayer(true);
-        event.registerLayerDefinition(WHModelLayers.BROWN_BEAR, () -> brownBearLayerDef);
-        event.registerLayerDefinition(WHModelLayers.BROWN_BEAR_BABY, () -> brownBearBabyLayerDef);
-    }
-
-    public void registerSpawns(RegisterSpawnPlacementsEvent event) {
-        event.register(WHEntities.BOAR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
-        event.register(WHEntities.BROWN_BEAR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }

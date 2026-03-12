@@ -1,4 +1,4 @@
-package realcolin.whmod.client;
+package realcolin.whmod.client.entity;
 
 import net.minecraft.client.model.BabyModelTransform;
 import net.minecraft.client.model.QuadrupedModel;

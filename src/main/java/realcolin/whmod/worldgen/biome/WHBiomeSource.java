@@ -3,14 +3,20 @@ package realcolin.whmod.worldgen.biome;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.NotNull;
+import realcolin.whmod.Constants;
+import realcolin.whmod.WHMod;
 import realcolin.whmod.worldgen.map.WorldMap;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class WHBiomeSource extends BiomeSource {
 
     public static final MapCodec<WHBiomeSource> CODEC =
@@ -43,7 +49,12 @@ public class WHBiomeSource extends BiomeSource {
 
         var params = entry.biomes();
         return params.findValue(sampler.sample(i, i1, i2));
-
-//        return map.value().getBiome(i * 4, i2 * 4);
     }
+
+    public static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES =
+            DeferredRegister.create(BuiltInRegistries.BIOME_SOURCE, WHMod.MOD_ID);
+
+    public static final Supplier<MapCodec<? extends BiomeSource>> MAP_SOURCE =
+            BIOME_SOURCES.register(Constants.MAP_BIOME_SOURCE_ID, () -> WHBiomeSource.CODEC);
+
 }

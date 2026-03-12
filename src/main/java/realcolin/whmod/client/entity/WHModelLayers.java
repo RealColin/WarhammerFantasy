@@ -1,4 +1,4 @@
-package realcolin.whmod.client;
+package realcolin.whmod.client.entity;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;

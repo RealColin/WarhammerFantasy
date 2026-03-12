@@ -1,4 +1,4 @@
-package realcolin.whmod.client;
+package realcolin.whmod.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.AdultAndBabyModelPair;

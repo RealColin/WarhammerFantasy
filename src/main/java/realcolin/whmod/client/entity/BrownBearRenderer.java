@@ -1,4 +1,4 @@
-package realcolin.whmod.client;
+package realcolin.whmod.client.entity;
 
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
