@@ -31,6 +31,7 @@ public class EntityLoot extends EntityLootSubProvider {
     @Override
     public void generate() {
         this.add(WHEntities.BOAR.get(), boarLoot());
+        this.add(WHEntities.BROWN_BEAR.get(), brownBearLoot());
     }
 
     private LootTable.Builder boarLoot() {
@@ -43,6 +44,11 @@ public class EntityLoot extends EntityLootSubProvider {
                         ))));
 
         return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(pork));
+    }
+
+    private LootTable.Builder brownBearLoot() {
+
+        return LootTable.lootTable();
     }
 
     @Override
