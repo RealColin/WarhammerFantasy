@@ -8,21 +8,27 @@ import net.minecraft.network.codec.StreamCodec;
 import realcolin.whmod.util.Pair;
 
 public enum Faction {
-    NONE("none", new Pair(0, 0), Component.translatable("faction.whmod.none.desc"), Component.translatable("faction.whmod.none.traits")),
-    EMPIRE("empire", new Pair(46526, 30134), Component.translatable("faction.whmod.empire.desc"), Component.translatable("faction.whmod.empire.traits")),
-    DWARFS("dwarfs", new Pair(46526, 30134), Component.translatable("faction.whmod.dwarfs.desc"), Component.translatable("faction.whmod.dwarfs.traits")),
-    BEASTMEN("beastmen", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc"), Component.translatable("faction.whmod.beastmen.traits"));
+    NONE("none", new Pair(0, 0), Component.translatable("faction.whmod.none.desc")),
+    EMPIRE("empire", new Pair(46526, 30134), Component.translatable("faction.whmod.empire.desc")),
+    DWARFS("dwarfs", new Pair(46526, 30134), Component.translatable("faction.whmod.dwarfs.desc")),
+    BEASTMEN("beastmen", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc")),
+    DUMMY1("dummy1", new Pair(0, 0), Component.literal("hi")),
+    DUMMY2("dummy2", new Pair(0, 0), Component.literal("hi")),
+    DUMMY3("dummy3", new Pair(0, 0), Component.literal("hi")),
+    DUMMY4("dummy4", new Pair(0, 0), Component.literal("hi")),
+    DUMMY5("dummy5", new Pair(0, 0), Component.literal("hi")),
+    DUMMY6("dummy6", new Pair(0, 0), Component.literal("hi")),
+    DUMMY7("dummy7", new Pair(0, 0), Component.literal("hi"));
 
     private final String id;
     private final Pair spawnPos;
     private final Component description;
-    private final Component traits;
 
-    Faction(String id, Pair spawnPos, Component description, Component traits) {
+
+    Faction(String id, Pair spawnPos, Component description) {
         this.id = id;
         this.spawnPos = spawnPos;
         this.description = description;
-        this.traits = traits;
     }
 
     public String id() {
@@ -35,10 +41,6 @@ public enum Faction {
 
     public Component description() {
         return description;
-    }
-
-    public Component traits() {
-        return traits;
     }
 
     public static final Codec<Faction> CODEC = Codec.STRING.xmap(

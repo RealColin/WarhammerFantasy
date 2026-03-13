@@ -35,11 +35,14 @@ public class WHLanguageProvider extends LanguageProvider {
     }
 
     private void addFactions() {
-        add("faction.whmod.empire.desc", "The Empire of Man");
-        add("faction.whmod.empire.traits", "Humans");
+        add("faction.whmod.empire.desc", """
+                The Empire is the greatest realm of mankind in the Old World, a vast and fractious nation held together by faith, steel, and the will of its Elector Counts. From the bustling cities along the Reik to the haunted forests of the Drakwald, the Empire stands as the bulwark against the countless horrors that threaten civilization\
+                
+                
+                Traits:
+                +Strong
+                -Whatever""");
         add("faction.whmod.dwarfs.desc", "The Dawi");
-        add("faction.whmod.dwarfs.traits", "+Strong -Slow");
         add("faction.whmod.beastmen.desc", "Beast Men");
-        add("faction.whmod.beastmen.traits", "+Stalk");
     }
 }
