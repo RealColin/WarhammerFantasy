@@ -36,7 +36,7 @@ public class WHLanguageProvider extends LanguageProvider {
 
     private void addFactions() {
         add("faction.whmod.empire.desc", """
-                The Empire is the greatest realm of mankind in the Old World, a vast and fractious nation held together by faith, steel, and the will of its Elector Counts. From the bustling cities along the Reik to the haunted forests of the Drakwald, the Empire stands as the bulwark against the countless horrors that threaten civilization\
+                The Empire is the greatest realm of mankind in the Old World, a vast and fractious nation held together by faith, steel, and the will of its Elector Counts. From the bustling cities along the Reik to the haunted forests of the Drakwald, the Empire stands as the bulwark against the countless horrors that threaten civilization. Blah Blah Blah Blah Blah Blah Whatever the empire is really whatever and I'm just trying to fill text so that the screen overflows and I can test the scrollbar because I need to test the scrollbar for whatever reason, because it's essential in case the description is super long or something like that idk yeah whatever i think this is long enough or maybe not maybe it needs to be a bit longer i think maybe I need to make sure I can scroll
                 
                 
                 Traits:
