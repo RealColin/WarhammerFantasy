@@ -30,5 +30,9 @@ public class WHDataGenerator {
         event.createProvider(WHModelProvider::new);
         event.createProvider(WHLanguageProvider::new);
         event.createProvider(WHBlockTagsProvider::new);
+        event.createProvider(WHItemTagsProvider::new);
+
+        gen.addProvider(true, new WHRecipeProvider.Runner(output, lookupProvider));
+
     }
 }

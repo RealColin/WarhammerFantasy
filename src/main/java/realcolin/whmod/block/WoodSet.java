@@ -22,6 +22,8 @@ import realcolin.whmod.item.WHItems;
 
 @SuppressWarnings("NullableProblems")
 public record WoodSet(
+        String name,
+
         DeferredBlock<Block> log,
         DeferredBlock<Block> wood,
         DeferredBlock<Block> strippedLog,
@@ -332,6 +334,7 @@ public record WoodSet(
 
 
         var set = new WoodSet(
+                name,
                 log,
                 wood,
                 strippedLog,
