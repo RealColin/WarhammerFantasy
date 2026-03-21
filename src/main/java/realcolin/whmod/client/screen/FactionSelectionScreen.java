@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import org.jetbrains.annotations.NotNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.network.SelectFactionPayload;
@@ -99,7 +100,6 @@ public class FactionSelectionScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && isMouseOverList(mouseX, mouseY)) {
-            int contentX = LIST_X + LIST_INSET;
             int contentY = LIST_Y + LIST_INSET;
 
             int localY = (int) mouseY - contentY + listScroll;
@@ -136,7 +136,7 @@ public class FactionSelectionScreen extends Screen {
     }
 
     @Override
-    public void resize(Minecraft minecraft, int width, int height) {
+    public void resize(@NotNull Minecraft minecraft, int width, int height) {
         super.resize(minecraft, width, height);
         listW = LIST_W;
         listH = (height - 30) - LIST_Y;
@@ -186,7 +186,7 @@ public class FactionSelectionScreen extends Screen {
             int rowColor = selected ? SELECTED_ROW : hovered ? HOVERED_ROW : ROW;
             g.fill(contentX, rowY, contentX + contentW, rowY + LIST_ROW_HEIGHT - 2, rowColor);
 
-            var name = factions.get(i).name();
+            var name = factions.get(i).getName();
             int textWidth = this.font.width(name);
             int textX = contentX + (contentW - textWidth) / 2;
 
@@ -203,6 +203,7 @@ public class FactionSelectionScreen extends Screen {
         drawListScrollbar(g, contentX + contentW + 4, contentY, SCROLLBAR_W, contentH);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void drawListScrollbar(GuiGraphics g, int x, int y, int w, int h) {
         int contentHeight = factions.size() * LIST_ROW_HEIGHT;
         if (contentHeight <= 0 || contentHeight <= h) return;
@@ -233,8 +234,21 @@ public class FactionSelectionScreen extends Screen {
         g.enableScissor(contentX, contentY, contentX + contentW, contentY + contentH);
 
         int y = contentY - infoScroll;
+
+        g.drawString(this.font, "Description:", contentX, y, TEXT);
+        y += 2 * (this.font.lineHeight + TEXT_SPACING);
+
         for (var line : descText) {
             g.drawString(this.font, line, contentX, y, TEXT);
+            y += this.font.lineHeight + TEXT_SPACING;
+        }
+        y += this.font.lineHeight + TEXT_SPACING;
+        g.drawString(this.font, "Traits:", contentX, y, TEXT);
+        y += this.font.lineHeight + TEXT_SPACING;
+        var fac = factions.get(selectedFactionIndex);
+        for (var trait : fac.traits()) {
+            g.drawString(this.font, trait.text(), contentX, y, trait.type().color());
+            g.drawString(this.font, trait.desc(), contentX + font.width(trait.text().getString()) + 4, y, TEXT);
             y += this.font.lineHeight + TEXT_SPACING;
         }
 
@@ -242,6 +256,7 @@ public class FactionSelectionScreen extends Screen {
         drawDescriptionScrollbar(g, contentX + contentW + 4, contentY, SCROLLBAR_W, contentH);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void drawDescriptionScrollbar(GuiGraphics g, int x, int y, int w, int h) {
         int contentHeight = descText.size() * (this.font.lineHeight + TEXT_SPACING);
         if (contentHeight <= 0 || contentHeight <= h) return;
@@ -263,15 +278,17 @@ public class FactionSelectionScreen extends Screen {
     }
 
     private void rebuildFactionDesc() {
-        var desc = factions.get(selectedFactionIndex).description();
+        var fac = factions.get(selectedFactionIndex);
+        var desc = fac.description();
 
         int contentW = descW - DESC_INSET * 2 - SCROLLBAR_W - 4;
 
-        var lines = new ArrayList<FormattedCharSequence>();
-        lines.addAll(this.font.split(desc, contentW));
+        var lines = new ArrayList<>(this.font.split(desc, contentW));
         this.descText = lines;
 
-        int totalTextHeight = lines.size() * (this.font.lineHeight + TEXT_SPACING);
+        var traitsLines = fac.traits().size();
+
+        int totalTextHeight = (lines.size() * (this.font.lineHeight + TEXT_SPACING)) + (traitsLines * (this.font.lineHeight + TEXT_SPACING)) + (5 * this.font.lineHeight + TEXT_SPACING);
         int visibleHeight = descH - DESC_INSET * 2;
 
         this.maxInfoScroll = Math.max(0, totalTextHeight - visibleHeight);

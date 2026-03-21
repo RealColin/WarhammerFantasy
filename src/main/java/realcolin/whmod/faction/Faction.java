@@ -7,32 +7,81 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import realcolin.whmod.util.Pair;
 
+import java.util.List;
+
 public enum Faction {
-    NONE("none", new Pair(0, 0), Component.translatable("faction.whmod.none.desc")),
-    EMPIRE("empire", new Pair(46526, 30134), Component.translatable("faction.whmod.empire.desc")),
-    DWARFS("dwarfs", new Pair(46526, 30134), Component.translatable("faction.whmod.dwarfs.desc")),
-    BEASTMEN("beastmen", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc")),
-    DUMMY1("dummy1", new Pair(0, 0), Component.literal("hi")),
-    DUMMY2("dummy2", new Pair(0, 0), Component.literal("hi")),
-    DUMMY3("dummy3", new Pair(0, 0), Component.literal("hi")),
-    DUMMY4("dummy4", new Pair(0, 0), Component.literal("hi")),
-    DUMMY5("dummy5", new Pair(0, 0), Component.literal("hi")),
-    DUMMY6("dummy6", new Pair(0, 0), Component.literal("hi")),
-    DUMMY7("dummy7", new Pair(0, 0), Component.literal("hi"));
+    NONE(
+            "none",
+            "",
+            new Pair(0, 0),
+            Component.translatable("faction.whmod.none.desc"),
+            List.of()),
+    EMPIRE(
+            "empire",
+            "The Empire",
+            new Pair(46526, 30134),
+            Component.translatable("faction.whmod.empire.desc"),
+            List.of(
+                    new FactionTrait(
+                            Component.translatable("faction.whmod.empire.trait.versatile"),
+                            Component.translatable("faction.whmod.empire.trait.versatile.desc"),
+                            TraitType.POSITIVE
+                    ),
+                    new FactionTrait(
+                            Component.translatable("faction.whmod.empire.trait.gunpowder"),
+                            Component.translatable("faction.whmod.empire.trait.gunpowder.desc"),
+                            TraitType.POSITIVE
+                    )
+            )
+    ),
+    DWARFS(
+            "dwarfs",
+            "Dwarfs",
+            new Pair(46526, 30134),
+            Component.translatable("faction.whmod.dwarfs.desc"),
+            List.of(
+                    new FactionTrait(
+                            Component.translatable("faction.whmod.dwarfs.trait.strong"),
+                            Component.translatable("faction.whmod.dwarfs.trait.strong.desc"),
+                            TraitType.POSITIVE
+                    ),
+                    new FactionTrait(
+                            Component.translatable("faction.whmod.dwarfs.trait.slow"),
+                            Component.translatable("faction.whmod.dwarfs.trait.slow.desc"),
+                            TraitType.NEGATIVE
+                    )
+            )
+    ),
+    BEASTMEN("beastmen", "Beastmen", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc"), List.of(
+
+    )),
+    GREENSKINS("greenskins", "Greenskins", new Pair(46526, 30134), Component.translatable("faction.whmod.greenskins.desc"), List.of(
+
+    )),
+    WOOD_ELVES("wood_elves", "Wood Elves", new Pair(46526, 30134), Component.translatable("faction.whmod.wood_elves.desc"), List.of(
+
+    ));
 
     private final String id;
+    private final String name;
     private final Pair spawnPos;
     private final Component description;
+    private final List<FactionTrait> traits;
 
-
-    Faction(String id, Pair spawnPos, Component description) {
+    Faction(String id, String name, Pair spawnPos, Component description, List<FactionTrait> traits) {
         this.id = id;
+        this.name = name;
         this.spawnPos = spawnPos;
         this.description = description;
+        this.traits = traits;
     }
 
     public String id() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Pair spawnPos() {
@@ -41,6 +90,10 @@ public enum Faction {
 
     public Component description() {
         return description;
+    }
+
+    public List<FactionTrait> traits() {
+        return traits;
     }
 
     public static final Codec<Faction> CODEC = Codec.STRING.xmap(
