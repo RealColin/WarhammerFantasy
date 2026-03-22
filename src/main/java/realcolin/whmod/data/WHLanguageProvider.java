@@ -35,10 +35,10 @@ public class WHLanguageProvider extends LanguageProvider {
 
     private void addFactions() {
         addEmpire();
-        add("faction.whmod.dwarfs.desc", "The Dawi");
-        add("faction.whmod.beastmen.desc", "Beast Men");
-
-
+        addDwarfs();
+        addBeastmen();
+        addGreenskins();
+        addWoodElves();
     }
 
     private void addEmpire() {
@@ -49,5 +49,21 @@ public class WHLanguageProvider extends LanguageProvider {
 
         add("faction.whmod.empire.trait.versatile.desc", "Adapts well to many situations");
         add("faction.whmod.empire.trait.gunpowder.desc", "Proficient in the use of gunpowder weaponry");
+    }
+
+    private void addDwarfs() {
+        add("faction.whmod.dwarfs.desc", "The Dawi");
+    }
+
+    private void addBeastmen() {
+        add("faction.whmod.beastmen.desc", "Beast Men");
+    }
+
+    private void addGreenskins() {
+        add("faction.whmod.greenskins.desc", "Orcs and Goblins");
+    }
+
+    private void addWoodElves() {
+        add("faction.whmod.wood_elves.desc", "Wood Elves");
     }
 }
