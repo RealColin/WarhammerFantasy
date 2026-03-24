@@ -1,5 +1,6 @@
 package realcolin.whmod.entity.npc;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -12,6 +13,8 @@ public abstract class NPC extends PathfinderMob {
     }
 
     public abstract Faction getFaction();
+    public abstract ResourceLocation getTextureLocation();
+    public abstract Gender getGender();
 
     @Override
     protected void registerGoals() {

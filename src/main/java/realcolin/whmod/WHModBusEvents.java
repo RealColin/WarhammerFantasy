@@ -15,10 +15,12 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import realcolin.whmod.client.entity.BoarModel;
 import realcolin.whmod.client.entity.BrownBearModel;
+import realcolin.whmod.client.entity.HumanModel;
 import realcolin.whmod.client.entity.WHModelLayers;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.entity.animal.BrownBear;
+import realcolin.whmod.entity.npc.ImperialSwordsman;
 import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 import realcolin.whmod.network.SelectFactionPayload;
@@ -47,6 +49,7 @@ public class WHModBusEvents {
     public static void createEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(WHEntities.BOAR.get(), Boar.createAttributes().build());
         event.put(WHEntities.BROWN_BEAR.get(), BrownBear.createAttributes().build());
+        event.put(WHEntities.IMPERIAL_SWORDSMAN.get(), ImperialSwordsman.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -55,6 +58,7 @@ public class WHModBusEvents {
                 Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(WHEntities.BROWN_BEAR.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+
     }
 
     @SubscribeEvent
@@ -66,6 +70,10 @@ public class WHModBusEvents {
         var brownBearBabyLayerDef = BrownBearModel.createBodyLayer(true);
         event.registerLayerDefinition(WHModelLayers.BROWN_BEAR, () -> brownBearLayerDef);
         event.registerLayerDefinition(WHModelLayers.BROWN_BEAR_BABY, () -> brownBearBabyLayerDef);
+        var humanLayerDef = HumanModel.createLayer(CubeDeformation.NONE);
+        var humanSlimLayerDef = HumanModel.createSlimLayer(CubeDeformation.NONE);
+        event.registerLayerDefinition(WHModelLayers.HUMAN, () -> humanLayerDef);
+        event.registerLayerDefinition(WHModelLayers.HUMAN_SLIM, () -> humanSlimLayerDef);
     }
 
     @SubscribeEvent
