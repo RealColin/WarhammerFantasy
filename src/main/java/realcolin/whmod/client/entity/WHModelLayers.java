@@ -14,6 +14,8 @@ public class WHModelLayers {
     public static final ModelLayerLocation HUMAN = make("human_npc");
     public static final ModelLayerLocation HUMAN_SLIM = make("human_npc_slim");
 
+    public static final ModelLayerLocation UNGOR = make("ungor");
+
     private static ModelLayerLocation make(String name) {
         return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, name), "main");
     }

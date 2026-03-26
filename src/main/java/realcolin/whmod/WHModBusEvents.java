@@ -13,14 +13,12 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
-import realcolin.whmod.client.entity.BoarModel;
-import realcolin.whmod.client.entity.BrownBearModel;
-import realcolin.whmod.client.entity.HumanModel;
-import realcolin.whmod.client.entity.WHModelLayers;
+import realcolin.whmod.client.entity.*;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.entity.animal.BrownBear;
 import realcolin.whmod.entity.npc.ImperialSwordsman;
+import realcolin.whmod.entity.npc.Ungor;
 import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 import realcolin.whmod.network.SelectFactionPayload;
@@ -50,6 +48,7 @@ public class WHModBusEvents {
         event.put(WHEntities.BOAR.get(), Boar.createAttributes().build());
         event.put(WHEntities.BROWN_BEAR.get(), BrownBear.createAttributes().build());
         event.put(WHEntities.IMPERIAL_SWORDSMAN.get(), ImperialSwordsman.createAttributes().build());
+        event.put(WHEntities.UNGOR.get(), Ungor.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -74,6 +73,9 @@ public class WHModBusEvents {
         var humanSlimLayerDef = HumanModel.createSlimLayer(CubeDeformation.NONE);
         event.registerLayerDefinition(WHModelLayers.HUMAN, () -> humanLayerDef);
         event.registerLayerDefinition(WHModelLayers.HUMAN_SLIM, () -> humanSlimLayerDef);
+
+        var ungorLayerDef = BeastmenModel.createLayer(CubeDeformation.NONE);
+        event.registerLayerDefinition(WHModelLayers.UNGOR, () -> ungorLayerDef);
     }
 
     @SubscribeEvent
