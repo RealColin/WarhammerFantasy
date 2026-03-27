@@ -6,7 +6,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.phys.Vec3;
 import realcolin.whmod.entity.npc.NPC;
 
 public class NPCMeleeAttackGoal extends Goal {
@@ -16,7 +15,6 @@ public class NPCMeleeAttackGoal extends Goal {
     private Path path;
     private int ticksUntilPathCalc;
     private int ticksUntilAttack;
-    private Vec3 targetPos = Vec3.ZERO;
 
     public NPCMeleeAttackGoal(NPC npc, double speedModifier) {
         this.npc = npc;
@@ -78,7 +76,6 @@ public class NPCMeleeAttackGoal extends Goal {
 
         ticksUntilPathCalc = Math.max(ticksUntilPathCalc - 1, 0);
         if (ticksUntilPathCalc == 0 && !withinAttackRange(target)) {
-            targetPos = new Vec3(target.getX(), target.getY(), target.getZ());
             ticksUntilPathCalc = 5;
             var distSqr = npc.distanceToSqr(target);
 
@@ -111,8 +108,15 @@ public class NPCMeleeAttackGoal extends Goal {
         if (target == null) return false;
 
         var reach = npc.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
-        var distSq = npc.distanceToSqr(target);
 
-        return distSq <= reach * reach;
+        var eyePos = npc.getEyePosition();
+        var look = npc.getViewVector(1.0F);
+        var reachVec = eyePos.add(look.scale(reach));
+
+        var hitbox = target.getBoundingBox().inflate(target.getPickRadius());
+
+        var hit = hitbox.clip(eyePos, reachVec);
+
+        return hit.isPresent();
     }
 }
