@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
 import realcolin.whmod.entity.npc.goal.TargetEnemyGoal;
 import realcolin.whmod.faction.Faction;
 
@@ -27,7 +28,7 @@ public class ImperialSwordsman extends NPC {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.3F, true));
+        this.goalSelector.addGoal(2, new NPCMeleeAttackGoal(this, 1.3F));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.F));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
@@ -39,7 +40,10 @@ public class ImperialSwordsman extends NPC {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 20)
                 .add(Attributes.MOVEMENT_SPEED, 0.25)
-                .add(Attributes.ATTACK_DAMAGE, 1.0);
+                .add(Attributes.ATTACK_DAMAGE, 1.0)
+                .add(Attributes.ATTACK_SPEED, 4.0)
+                .add(Attributes.ENTITY_INTERACTION_RANGE, 3.0)
+                .add(Attributes.FOLLOW_RANGE, 32.0);
     }
 
     @Override

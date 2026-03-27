@@ -20,6 +20,7 @@ public abstract class NPC extends PathfinderMob {
 
     protected NPC(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
+        setPersistenceRequired();
     }
 
     public abstract Faction getFaction();
@@ -69,5 +70,15 @@ public abstract class NPC extends PathfinderMob {
     protected void readAdditionalSaveData(@NotNull ValueInput input) {
         super.readAdditionalSaveData(input);
         equipmentInitialized = input.getBooleanOr("initializedEquipment", false);
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package realcolin.whmod.entity.npc.goal;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.player.Player;
 import realcolin.whmod.entity.npc.NPC;
 
 public class TargetEnemyGoal extends TargetGoal {
@@ -37,6 +38,8 @@ public class TargetEnemyGoal extends TargetGoal {
         double bestDist = Double.MAX_VALUE;
 
         for (var entity : nearby) {
+            if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) continue;
+
             var dist = npc.distanceToSqr(entity);
             if (dist < bestDist) {
                 bestDist = dist;
