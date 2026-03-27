@@ -21,10 +21,10 @@ import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlers
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
-import realcolin.whmod.client.entity.BeastmenRenderer;
-import realcolin.whmod.client.entity.BoarRenderer;
-import realcolin.whmod.client.entity.BrownBearRenderer;
-import realcolin.whmod.client.entity.HumanRenderer;
+import realcolin.whmod.client.entity.renderer.BeastmenRenderer;
+import realcolin.whmod.client.entity.renderer.BoarRenderer;
+import realcolin.whmod.client.entity.renderer.BrownBearRenderer;
+import realcolin.whmod.client.entity.renderer.HumanRenderer;
 import realcolin.whmod.client.screen.InGameMenuScreen;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.network.CloseScreenPayload;

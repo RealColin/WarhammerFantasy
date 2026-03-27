@@ -1,10 +1,13 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client.entity.renderer;
 
 import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.client.entity.renderstate.BrownBearRenderState;
+import realcolin.whmod.client.entity.WHModelLayers;
+import realcolin.whmod.client.entity.model.BrownBearModel;
 import realcolin.whmod.entity.animal.BrownBear;
 
 @SuppressWarnings("deprecation")

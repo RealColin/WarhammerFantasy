@@ -1,4 +1,4 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client.entity.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -6,6 +6,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import realcolin.whmod.client.entity.renderstate.HumanRenderState;
+import realcolin.whmod.client.entity.WHModelLayers;
+import realcolin.whmod.client.entity.model.HumanModel;
 import realcolin.whmod.entity.npc.Gender;
 import realcolin.whmod.entity.npc.NPC;
 

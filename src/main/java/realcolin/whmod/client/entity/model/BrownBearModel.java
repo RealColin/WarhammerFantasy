@@ -1,4 +1,4 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client.entity.model;
 
 import net.minecraft.client.model.BabyModelTransform;
 import net.minecraft.client.model.QuadrupedModel;
@@ -6,6 +6,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
+import realcolin.whmod.client.entity.renderstate.BrownBearRenderState;
 
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class BrownBearModel extends QuadrupedModel<BrownBearRenderState> {
             24.0F,
             Set.of("head"));
 
-    protected BrownBearModel(ModelPart root) {
+    public BrownBearModel(ModelPart root) {
         super(root);
     }
 

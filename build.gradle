@@ -23,6 +23,15 @@ repositories {
         name = "RedlanceMinecraft"
         url = "https://repo.redlance.org/public"
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'GeckoLib'
+                url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+            }
+        }
+        filter { includeGroupAndSubgroups('software.bernie.geckolib') }
+    }
 }
 
 base {
@@ -86,6 +95,7 @@ dependencies {
     implementation 'maven.modrinth:better-combat:3.0.0+1.21.8-neoforge'
     implementation "me.shedaniel.cloth:cloth-config-neoforge:19.0.147"
     implementation "com.zigythebird.playeranim:PlayerAnimationLibNeo:$project.pal_version"
+    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolibVersion}"
 
     implementation 'org.apache.xmlgraphics:batik-all:1.16'
     implementation 'org.apache.xmlgraphics:xmlgraphics-commons:2.7'

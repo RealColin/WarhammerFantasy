@@ -1,4 +1,4 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client.entity.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.HumanoidArm;
 import org.jetbrains.annotations.NotNull;
+import realcolin.whmod.client.entity.renderstate.HumanRenderState;
 import realcolin.whmod.entity.npc.NPC;
 
 @SuppressWarnings("unused")

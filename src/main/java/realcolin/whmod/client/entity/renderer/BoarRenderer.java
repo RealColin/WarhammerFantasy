@@ -1,4 +1,4 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client.entity.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.AdultAndBabyModelPair;
@@ -9,6 +9,9 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.client.entity.renderstate.BoarRenderState;
+import realcolin.whmod.client.entity.WHModelLayers;
+import realcolin.whmod.client.entity.model.BoarModel;
 import realcolin.whmod.entity.animal.Boar;
 
 public class BoarRenderer extends MobRenderer<Boar, BoarRenderState, BoarModel> {

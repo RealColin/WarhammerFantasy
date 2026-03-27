@@ -1,9 +1,12 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client.entity.renderer;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import realcolin.whmod.client.entity.renderstate.BeastmenRenderState;
+import realcolin.whmod.client.entity.WHModelLayers;
+import realcolin.whmod.client.entity.model.BeastmenModel;
 import realcolin.whmod.entity.npc.NPC;
 
 public class BeastmenRenderer<T extends NPC> extends HumanoidMobRenderer<T, BeastmenRenderState, BeastmenModel<T>> {
