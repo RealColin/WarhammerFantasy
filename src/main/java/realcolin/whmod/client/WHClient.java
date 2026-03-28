@@ -21,10 +21,7 @@ import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlers
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
-import realcolin.whmod.client.entity.renderer.BeastmenRenderer;
-import realcolin.whmod.client.entity.renderer.BoarRenderer;
-import realcolin.whmod.client.entity.renderer.BrownBearRenderer;
-import realcolin.whmod.client.entity.renderer.HumanRenderer;
+import realcolin.whmod.client.entity.renderer.*;
 import realcolin.whmod.client.screen.InGameMenuScreen;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.network.CloseScreenPayload;
@@ -48,7 +45,8 @@ public class WHClient {
         EntityRenderers.register(WHEntities.BOAR.get(), BoarRenderer::new);
         EntityRenderers.register(WHEntities.BROWN_BEAR.get(), BrownBearRenderer::new);
         EntityRenderers.register(WHEntities.IMPERIAL_SWORDSMAN.get(), HumanRenderer::new);
-        EntityRenderers.register(WHEntities.UNGOR.get(), BeastmenRenderer::new);
+//        EntityRenderers.register(WHEntities.UNGOR.get(), BeastmenRenderer::new);
+        EntityRenderers.register(WHEntities.UNGOR.get(), ctx -> new NPCRenderer<>(ctx, "npc/beastmen/ungor"));
     }
 
     @SubscribeEvent

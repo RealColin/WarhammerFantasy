@@ -14,8 +14,9 @@ import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.faction.FactionRelationship;
 import realcolin.whmod.faction.FactionRelationships;
+import software.bernie.geckolib.animatable.GeoEntity;
 
-public abstract class NPC extends PathfinderMob {
+public abstract class NPC extends PathfinderMob implements GeoEntity {
     private boolean equipmentInitialized = false;
 
     protected NPC(EntityType<? extends PathfinderMob> entityType, Level level) {
