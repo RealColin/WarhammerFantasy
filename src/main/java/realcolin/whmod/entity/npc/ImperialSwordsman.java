@@ -71,6 +71,11 @@ public class ImperialSwordsman extends NPC {
     }
 
     @Override
+    public void startAttack(LivingEntity target) {
+
+    }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
 
     }

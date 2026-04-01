@@ -28,6 +28,7 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
     public abstract ResourceLocation getTextureLocation();
     public abstract Gender getGender();
     public abstract void initializeEquipment();
+    public abstract void startAttack(LivingEntity target);
 
     public boolean isEnemy(LivingEntity other) {
         if (other == this) return false;

@@ -92,11 +92,17 @@ public class NPCMeleeAttackGoal extends Goal {
     }
 
     private void tryAttack(LivingEntity target) {
-        if (ticksUntilAttack <= 0 && withinAttackRange(target) && npc.getSensing().hasLineOfSight(target)) {
-            resetAttackCooldown();
-            npc.swing(InteractionHand.MAIN_HAND);
-            npc.doHurtTarget(getServerLevel(npc), target);
+        if (withinAttackRange(target) && npc.hasLineOfSight(target)) {
+            npc.startAttack(target);
         }
+
+//        if (ticksUntilAttack <= 0 && withinAttackRange(target) && npc.getSensing().hasLineOfSight(target)) {
+//            resetAttackCooldown();
+////            npc.swing(InteractionHand.MAIN_HAND);
+////            npc.triggerAnim("attack_controller", "attack");
+//            npc.startAttack(target);
+//            npc.doHurtTarget(getServerLevel(npc), target);
+//        }
     }
 
     private void resetAttackCooldown() {
