@@ -14,10 +14,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import realcolin.whmod.client.entity.*;
-import realcolin.whmod.client.entity.model.BeastmenModel;
 import realcolin.whmod.client.entity.model.BoarModel;
 import realcolin.whmod.client.entity.model.BrownBearModel;
-import realcolin.whmod.client.entity.model.HumanModel;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.entity.animal.BrownBear;
@@ -73,13 +71,6 @@ public class WHModBusEvents {
         var brownBearBabyLayerDef = BrownBearModel.createBodyLayer(true);
         event.registerLayerDefinition(WHModelLayers.BROWN_BEAR, () -> brownBearLayerDef);
         event.registerLayerDefinition(WHModelLayers.BROWN_BEAR_BABY, () -> brownBearBabyLayerDef);
-        var humanLayerDef = HumanModel.createLayer(CubeDeformation.NONE);
-        var humanSlimLayerDef = HumanModel.createSlimLayer(CubeDeformation.NONE);
-        event.registerLayerDefinition(WHModelLayers.HUMAN, () -> humanLayerDef);
-        event.registerLayerDefinition(WHModelLayers.HUMAN_SLIM, () -> humanSlimLayerDef);
-
-        var ungorLayerDef = BeastmenModel.createLayer(CubeDeformation.NONE);
-        event.registerLayerDefinition(WHModelLayers.UNGOR, () -> ungorLayerDef);
     }
 
     @SubscribeEvent
