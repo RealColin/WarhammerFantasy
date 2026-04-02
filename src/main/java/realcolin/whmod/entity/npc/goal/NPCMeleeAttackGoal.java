@@ -1,6 +1,5 @@
 package realcolin.whmod.entity.npc.goal;
 
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -14,7 +13,6 @@ public class NPCMeleeAttackGoal extends Goal {
 
     private Path path;
     private int ticksUntilPathCalc;
-    private int ticksUntilAttack;
 
     public NPCMeleeAttackGoal(NPC npc, double speedModifier) {
         this.npc = npc;
@@ -56,7 +54,6 @@ public class NPCMeleeAttackGoal extends Goal {
         npc.getNavigation().moveTo(path, speedModifier);
         npc.setAggressive(true);
         ticksUntilPathCalc = 0;
-        ticksUntilAttack = 0;
     }
 
     @Override
@@ -87,27 +84,13 @@ public class NPCMeleeAttackGoal extends Goal {
             npc.getNavigation().moveTo(target, speedModifier);
         }
 
-        ticksUntilAttack = Math.max(ticksUntilAttack - 1, 0);
         tryAttack(target);
     }
 
     private void tryAttack(LivingEntity target) {
         if (withinAttackRange(target) && npc.hasLineOfSight(target)) {
-            npc.startAttack(target);
+            npc.beginAttack();
         }
-
-//        if (ticksUntilAttack <= 0 && withinAttackRange(target) && npc.getSensing().hasLineOfSight(target)) {
-//            resetAttackCooldown();
-////            npc.swing(InteractionHand.MAIN_HAND);
-////            npc.triggerAnim("attack_controller", "attack");
-//            npc.startAttack(target);
-//            npc.doHurtTarget(getServerLevel(npc), target);
-//        }
-    }
-
-    private void resetAttackCooldown() {
-        var attackSpeed = npc.getAttributeValue(Attributes.ATTACK_SPEED);
-        ticksUntilAttack = (int) (20.0 / attackSpeed);
     }
 
     private boolean withinAttackRange(LivingEntity target) {

@@ -1,8 +1,6 @@
 package realcolin.whmod.entity.npc;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,10 +16,6 @@ import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
 import realcolin.whmod.entity.npc.goal.TargetEnemyGoal;
 import realcolin.whmod.faction.Faction;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animatable.processing.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class Ungor extends NPC {
@@ -29,12 +23,6 @@ public class Ungor extends NPC {
             ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, "textures/entity/npc/beastmen/ungor.png");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-
-    private boolean attacking = false;
-    private int attackTick = 0;
-    private int attackDurationTicks = 0;
-    private int damageTick = 0;
-    private boolean damageApplied = false;
 
     public Ungor(EntityType<? extends PathfinderMob> entityType, Level level) {
         super(entityType, level);
@@ -79,96 +67,6 @@ public class Ungor extends NPC {
     @Override
     public void initializeEquipment() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-    }
-
-    @Override
-    public void startAttack(LivingEntity target) {
-        if (attacking || this.getTarget() == null) return;
-
-        var attackSpeed = this.getAttributeValue(Attributes.ATTACK_SPEED);
-
-        this.attackDurationTicks = Math.max(1, Mth.floor((20.0 / attackSpeed)));
-        this.damageTick = Math.max(1, Mth.floor(this.attackDurationTicks * 0.6));
-
-        System.out.println("Duration: " + attackDurationTicks);
-        System.out.println("Damage at tick: " + damageTick);
-
-        this.attackTick = 0;
-        this.damageApplied = false;
-        this.attacking = true;
-
-        stopTriggeredAnim("attack_controller", "attack");
-        triggerAnim("attack_controller", "attack");
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-
-        if (!this.level().isClientSide && attacking) {
-            tickAttack();
-        }
-    }
-
-    private void tickAttack() {
-        attackTick++;
-
-        if (!damageApplied && attackTick >= damageTick) {
-            tryApplyAttackDamage();
-            damageApplied = true;
-        }
-
-        if (attackTick >= attackDurationTicks) {
-            attacking = false;
-            attackTick = 0;
-            attackDurationTicks = 0;
-            damageTick = 0;
-            damageApplied = false;
-        }
-    }
-
-    private void tryApplyAttackDamage() {
-        var target = this.getTarget();
-
-        if (target == null || !target.isAlive())
-            return;
-        if (!withinAttackRange(target))
-            return;
-        if (!this.hasLineOfSight(target))
-            return;
-
-        this.doHurtTarget((ServerLevel)level(), target);
-    }
-
-    private boolean withinAttackRange(LivingEntity target) {
-        if (target == null) return false;
-
-        var reach = this.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
-
-        var eyePos = this.getEyePosition();
-        var look = this.getViewVector(1.0F);
-        var reachVec = eyePos.add(look.scale(reach));
-
-        var hitbox = target.getBoundingBox().inflate(target.getPickRadius());
-
-        var hit = hitbox.clip(eyePos, reachVec);
-
-        return hit.isPresent();
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(DefaultAnimations.genericWalkIdleController());
-
-        var attackController = new AnimationController<>("attack_controller", 0, state -> PlayState.STOP)
-                .triggerableAnim("attack", DefaultAnimations.ATTACK_SWING)
-                .setAnimationSpeedHandler(state -> {
-                    var attackSpeed = this.getAttributeValue(Attributes.ATTACK_SPEED);
-                    int attackTicks = Math.max(1, Mth.floor((float) (20.0 / attackSpeed)));
-                    return 20.0 / attackTicks;
-                });
-
-        controllers.add(attackController);
     }
 
     @Override

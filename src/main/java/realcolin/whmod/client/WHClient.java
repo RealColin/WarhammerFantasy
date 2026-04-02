@@ -44,8 +44,7 @@ public class WHClient {
 
         EntityRenderers.register(WHEntities.BOAR.get(), BoarRenderer::new);
         EntityRenderers.register(WHEntities.BROWN_BEAR.get(), BrownBearRenderer::new);
-        EntityRenderers.register(WHEntities.IMPERIAL_SWORDSMAN.get(), HumanRenderer::new);
-//        EntityRenderers.register(WHEntities.UNGOR.get(), BeastmenRenderer::new);
+        EntityRenderers.register(WHEntities.IMPERIAL_SWORDSMAN.get(), ctx -> new NPCRenderer<>(ctx, "npc/human/imperial_swordsman"));
         EntityRenderers.register(WHEntities.UNGOR.get(), ctx -> new NPCRenderer<>(ctx, "npc/beastmen/ungor"));
     }
 
