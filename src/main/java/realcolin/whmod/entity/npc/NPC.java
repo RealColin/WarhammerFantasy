@@ -1,6 +1,5 @@
 package realcolin.whmod.entity.npc;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +25,7 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 public abstract class NPC extends PathfinderMob implements GeoEntity {
     private boolean equipmentInitialized = false;
 
+    // melee attack stuff
     private boolean attacking = false;
     private int attackTick = 0;
     private int attackDurationTicks = 0;
@@ -38,7 +38,6 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
     }
 
     public abstract Faction getFaction();
-    public abstract ResourceLocation getTextureLocation();
     public abstract Gender getGender();
     public abstract void initializeEquipment();
 
@@ -128,6 +127,7 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
     @SuppressWarnings("resource")
     @Override
     public void tick() {
+        // equipment initialized here because the attributes don't get applied properly if done in constructor
         if (!this.level().isClientSide() && !equipmentInitialized) {
             initializeEquipment();
             equipmentInitialized = true;

@@ -1,6 +1,5 @@
 package realcolin.whmod.entity.npc;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -8,7 +7,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import realcolin.whmod.WHMod;
 import realcolin.whmod.entity.npc.goal.NPCLookGoal;
 import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
 import realcolin.whmod.entity.npc.goal.TargetEnemyGoal;
@@ -17,8 +15,6 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ImperialSwordsman extends NPC {
-    private final ResourceLocation TEXTURE_LOCATION =
-            ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, "textures/entity/npc/human/imperial_swordsman.png");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -48,11 +44,6 @@ public class ImperialSwordsman extends NPC {
     @Override
     public Faction getFaction() {
         return Faction.EMPIRE;
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation() {
-        return TEXTURE_LOCATION;
     }
 
     @Override
