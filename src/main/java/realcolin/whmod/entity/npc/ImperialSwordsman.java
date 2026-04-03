@@ -4,14 +4,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.entity.npc.goal.NPCLookGoal;
 import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
 import realcolin.whmod.entity.npc.goal.TargetEnemyGoal;
 import realcolin.whmod.faction.Faction;
@@ -32,10 +30,8 @@ public class ImperialSwordsman extends NPC {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(2, new NPCMeleeAttackGoal(this, 1.3F));
+        this.goalSelector.addGoal(2, new NPCLookGoal(this, 6.0));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.F));
-        this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-
         this.targetSelector.addGoal(1, new TargetEnemyGoal(this, true));
     }
 
