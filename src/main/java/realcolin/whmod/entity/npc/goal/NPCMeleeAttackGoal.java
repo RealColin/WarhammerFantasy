@@ -1,11 +1,11 @@
 package realcolin.whmod.entity.npc.goal;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import realcolin.whmod.entity.npc.NPC;
+import realcolin.whmod.util.CombatHelper;
 
 public class NPCMeleeAttackGoal extends Goal {
     private final NPC npc;
@@ -29,7 +29,7 @@ public class NPCMeleeAttackGoal extends Goal {
             return false;
         else {
             path = npc.getNavigation().createPath(target, 0);
-            return path != null || withinAttackRange(target);
+            return path != null || CombatHelper.withinAttackRange(npc, target);
         }
     }
 
@@ -72,7 +72,7 @@ public class NPCMeleeAttackGoal extends Goal {
         npc.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
         ticksUntilPathCalc = Math.max(ticksUntilPathCalc - 1, 0);
-        if (ticksUntilPathCalc == 0 && !withinAttackRange(target)) {
+        if (ticksUntilPathCalc == 0 && !CombatHelper.withinAttackRange(npc, target)) {
             ticksUntilPathCalc = 5;
             var distSqr = npc.distanceToSqr(target);
 
@@ -88,24 +88,8 @@ public class NPCMeleeAttackGoal extends Goal {
     }
 
     private void tryAttack(LivingEntity target) {
-        if (withinAttackRange(target) && npc.hasLineOfSight(target)) {
+        if (CombatHelper.withinAttackRange(npc, target) && npc.hasLineOfSight(target)) {
             npc.beginAttack();
         }
-    }
-
-    private boolean withinAttackRange(LivingEntity target) {
-        if (target == null) return false;
-
-        var reach = npc.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
-
-        var eyePos = npc.getEyePosition();
-        var look = npc.getViewVector(1.0F);
-        var reachVec = eyePos.add(look.scale(reach));
-
-        var hitbox = target.getBoundingBox().inflate(target.getPickRadius());
-
-        var hit = hitbox.clip(eyePos, reachVec);
-
-        return hit.isPresent();
     }
 }

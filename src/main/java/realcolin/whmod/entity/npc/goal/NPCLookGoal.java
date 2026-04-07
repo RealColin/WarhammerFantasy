@@ -49,7 +49,7 @@ public class NPCLookGoal extends Goal {
     public void tick() {
         if (npc.getTarget() != null) {
             var target = npc.getTarget();
-            npc.getLookControl().setLookAt(target, 30.0F, 30.0F);
+            npc.getLookControl().setLookAt(target, 50.0F, 50.0F);
             lookTime = 0;
         } else {
             if (lookPos == null && lookTarget == null) {

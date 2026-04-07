@@ -16,6 +16,7 @@ import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.faction.FactionRelationship;
 import realcolin.whmod.faction.FactionRelationships;
+import realcolin.whmod.util.CombatHelper;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.animatable.processing.AnimationController;
@@ -94,28 +95,12 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
 
         if (target == null || !target.isAlive())
             return;
-        if (!withinAttackRange(target))
+        if (!CombatHelper.withinAttackRange(this, target))
             return;
         if (!this.hasLineOfSight(target))
             return;
 
         this.doHurtTarget((ServerLevel)level(), target);
-    }
-
-    private boolean withinAttackRange(LivingEntity target) {
-        if (target == null) return false;
-
-        var reach = this.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
-
-        var eyePos = this.getEyePosition();
-        var look = this.getViewVector(1.0F);
-        var reachVec = eyePos.add(look.scale(reach));
-
-        var hitbox = target.getBoundingBox().inflate(target.getPickRadius());
-
-        var hit = hitbox.clip(eyePos, reachVec);
-
-        return hit.isPresent();
     }
 
     private void playAttackAnimation() {
