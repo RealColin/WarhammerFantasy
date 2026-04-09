@@ -3,6 +3,7 @@ package realcolin.whmod.entity.npc;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import realcolin.whmod.entity.npc.goal.NPCLookGoal;
 import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
@@ -42,6 +43,10 @@ public class ImperialSwordsman extends NPC {
     @Override
     public void initializeEquipment() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(WHItems.IMPERIAL_SWORD.get()));
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
     }
 
     @Override

@@ -1,6 +1,18 @@
 {
   "format_version": "1.8.0",
   "animations": {
+    "misc.idle": {
+      "loop": true,
+      "bones": {
+        "right_arm": {
+          "rotation" : [2.5, 0, 0]
+        },
+        "left_arm": {
+          "rotation": [2.5, 0, 0]
+        }
+      }
+    },
+
     "move.walk": {
       "loop": true,
       "bones": {

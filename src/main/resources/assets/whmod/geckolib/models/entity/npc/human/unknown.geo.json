@@ -22,11 +22,7 @@
 				},
 				{
 					"name": "armor_head",
-					"parent": "head",
-					"pivot": [0, 24, 0],
-					"cubes": [
-						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 0]}
-					]
+					"pivot": [0, 24, 0]
 				},
 				{
 					"name": "body",
@@ -39,10 +35,7 @@
 				{
 					"name": "armor_body",
 					"parent": "body",
-					"pivot": [0, 24, 0],
-					"cubes": [
-						{"origin": [-4, 12, -2], "size": [8, 12, 4], "uv": [16, 16]}
-					]
+					"pivot": [0, 24, 0]
 				},
 				{
 					"name": "left_arm",
@@ -55,15 +48,7 @@
 				{
 					"name": "armor_left_arm",
 					"parent": "left_arm",
-					"pivot": [5, 22, 0],
-					"cubes": [
-						{"origin": [4, 12, -2], "size": [4, 12, 4], "uv": [32, 48]}
-					]
-				},
-				{
-					"name": "LeftHandItem",
-					"parent": "left_arm",
-					"pivot": [6, 13, 0]
+					"pivot": [5, 22, 0]
 				},
 				{
 					"name": "right_arm",
@@ -76,15 +61,7 @@
 				{
 					"name": "armor_right_arm",
 					"parent": "right_arm",
-					"pivot": [-5, 22, 0],
-					"cubes": [
-						{"origin": [-8, 12, -2], "size": [4, 12, 4], "uv": [40, 16]}
-					]
-				},
-				{
-					"name": "RightHandItem",
-					"parent": "right_arm",
-					"pivot": [-6, 13, 0]
+					"pivot": [-5, 22, 0]
 				},
 				{
 					"name": "left_leg",
@@ -96,18 +73,12 @@
 				{
 					"name": "armor_left_leg",
 					"parent": "left_leg",
-					"pivot": [2, 12, 0],
-					"cubes": [
-						{"origin": [0, 0, -2], "size": [4, 12, 4], "uv": [16, 48]}
-					]
+					"pivot": [2, 12, 0]
 				},
 				{
 					"name": "armor_left_boot",
 					"parent": "left_leg",
-					"pivot": [2, 12, 0],
-					"cubes": [
-						{"origin": [0, 0, -2], "size": [4, 12, 4], "uv": [16, 48]}
-					]
+					"pivot": [2, 12, 0]
 				},
 				{
 					"name": "right_leg",
@@ -119,18 +90,12 @@
 				{
 					"name": "armor_right_leg",
 					"parent": "right_leg",
-					"pivot": [-2, 12, 0],
-					"cubes": [
-						{"origin": [-4, 0, -2], "size": [4, 12, 4], "uv": [0, 16]}
-					]
+					"pivot": [-2, 12, 0]
 				},
 				{
 					"name": "armor_right_boot",
 					"parent": "right_leg",
-					"pivot": [-2, 12, 0],
-					"cubes": [
-						{"origin": [-4, 0, -2], "size": [4, 12, 4], "uv": [0, 16]}
-					]
+					"pivot": [-2, 12, 0]
 				}
 			]
 		}
