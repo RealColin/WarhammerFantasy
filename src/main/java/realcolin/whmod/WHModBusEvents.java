@@ -20,6 +20,7 @@ import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.entity.animal.BrownBear;
 import realcolin.whmod.entity.npc.ImperialSwordsman;
+import realcolin.whmod.entity.npc.NPCStats;
 import realcolin.whmod.entity.npc.Ungor;
 import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
@@ -49,8 +50,8 @@ public class WHModBusEvents {
     public static void createEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(WHEntities.BOAR.get(), Boar.createAttributes().build());
         event.put(WHEntities.BROWN_BEAR.get(), BrownBear.createAttributes().build());
-        event.put(WHEntities.IMPERIAL_SWORDSMAN.get(), ImperialSwordsman.createAttributes().build());
-        event.put(WHEntities.UNGOR.get(), Ungor.createAttributes().build());
+        event.put(WHEntities.IMPERIAL_SWORDSMAN.get(), NPCStats.defaultHumanAttributes().build());
+        event.put(WHEntities.UNGOR.get(), NPCStats.defaultBeastmenAttributes().build());
     }
 
     @SubscribeEvent
