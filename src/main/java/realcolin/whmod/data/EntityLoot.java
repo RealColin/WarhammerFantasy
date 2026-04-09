@@ -32,6 +32,8 @@ public class EntityLoot extends EntityLootSubProvider {
     public void generate() {
         this.add(WHEntities.BOAR.get(), boarLoot());
         this.add(WHEntities.BROWN_BEAR.get(), brownBearLoot());
+        this.add(WHEntities.IMPERIAL_SWORDSMAN.get(), npcLoot());
+        this.add(WHEntities.UNGOR.get(), npcLoot());
     }
 
     private LootTable.Builder boarLoot() {
@@ -54,5 +56,9 @@ public class EntityLoot extends EntityLootSubProvider {
     @Override
     protected @NotNull Stream<EntityType<?>> getKnownEntityTypes() {
         return WHEntities.ENTITY_TYPES.getEntries().stream().map(DeferredHolder::get);
+    }
+
+    private LootTable.Builder npcLoot() {
+        return LootTable.lootTable();
     }
 }

@@ -11,6 +11,7 @@ import realcolin.whmod.entity.npc.goal.NPCLookGoal;
 import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
 import realcolin.whmod.entity.npc.goal.TargetEnemyGoal;
 import realcolin.whmod.faction.Faction;
+import realcolin.whmod.item.WHItems;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -53,7 +54,7 @@ public class ImperialSwordsman extends NPC {
 
     @Override
     public void initializeEquipment() {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(WHItems.IMPERIAL_SWORD.get()));
     }
 
     @Override

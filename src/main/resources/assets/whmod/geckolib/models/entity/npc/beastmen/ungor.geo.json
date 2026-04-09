@@ -42,7 +42,7 @@
 				{
 					"name": "LeftHandItem",
 					"parent": "left_arm",
-					"pivot": [6, 12, -2]
+					"pivot": [6, 13, 0]
 				},
 				{
 					"name": "right_arm",
@@ -55,7 +55,7 @@
 				{
 					"name": "RightHandItem",
 					"parent": "right_arm",
-					"pivot": [-6, 12, -2]
+					"pivot": [-6, 13, 0]
 				},
 				{
 					"name": "left_leg",

@@ -3,12 +3,20 @@ package realcolin.whmod.data;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TexturedModel;
+import net.minecraft.client.renderer.item.BlockModelWrapper;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.FoliageColor;
 import org.jetbrains.annotations.NotNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.item.WHItems;
+
+import java.util.List;
 
 public class WHModelProvider extends ModelProvider {
     public WHModelProvider(PackOutput output) {
@@ -48,5 +56,23 @@ public class WHModelProvider extends ModelProvider {
             blockModels.createCrossBlock(sapling.get(), BlockModelGenerators.PlantType.NOT_TINTED);
             blockModels.registerSimpleFlatItemModel(sapling.get());
         }
+
+        handheld(itemModels, WHItems.IMPERIAL_SWORD.get());
+    }
+
+    private void handheld(ItemModelGenerators itemModels, Item item) {
+        ModelTemplates.FLAT_HANDHELD_ITEM.create(
+                ModelLocationUtils.getModelLocation(item),
+                TextureMapping.layer0(item),
+                itemModels.modelOutput
+        );
+
+        itemModels.itemModelOutput.accept(
+                item,
+                new BlockModelWrapper.Unbaked(
+                        ModelLocationUtils.getModelLocation(item),
+                        List.of()
+                )
+        );
     }
 }
