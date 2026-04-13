@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.WHMod;
 
+@SuppressWarnings("unused")
 public class WHItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(WHMod.MOD_ID);
 
@@ -18,4 +19,6 @@ public class WHItems {
                             -2.4F)
             )
     );
+
+    public static final ArmorSet STATE_TROOP_SET = ArmorSet.make("state_troop", WHArmorMaterials.STATE_TROOP);
 }
