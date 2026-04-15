@@ -1,7 +1,9 @@
 package realcolin.whmod.client.renderer;
 
+import com.geckolib.constant.DefaultAnimations;
 import com.geckolib.renderer.GeoArmorRenderer;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.BoneSnapshots;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.geckolib.renderer.base.RenderPassInfo;
 import com.geckolib.renderer.layer.builtin.ItemArmorGeoLayer;
@@ -40,5 +42,11 @@ public class NPCRenderer<R extends LivingEntityRenderState & GeoRenderState> ext
                     RenderData.rightFoot("armor_right_boot")
             );
         });
+    }
+
+    @Override
+    public void adjustModelBonesForRender(@NonNull RenderPassInfo<@NonNull R> renderPassInfo, @NonNull BoneSnapshots snapshots) {
+        super.adjustModelBonesForRender(renderPassInfo, snapshots);
+        DefaultAnimations.hardcodedHeadRotation(renderPassInfo, snapshots, "head");
     }
 }
