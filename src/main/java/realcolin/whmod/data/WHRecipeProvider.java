@@ -5,8 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
@@ -115,7 +115,7 @@ public class WHRecipeProvider extends RecipeProvider {
     private ResourceKey<Recipe<?>> recipeKey(String path) {
         return ResourceKey.create(
                 Registries.RECIPE,
-                ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, path)
+                Identifier.fromNamespaceAndPath(WHMod.MOD_ID, path)
         );
     }
 

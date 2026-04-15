@@ -1,7 +1,7 @@
-package realcolin.whmod.client.entity;
+package realcolin.whmod.client;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import realcolin.whmod.WHMod;
 
 public class WHModelLayers {
@@ -12,7 +12,7 @@ public class WHModelLayers {
     public static final ModelLayerLocation BROWN_BEAR_BABY = make("brown_bear_baby");
 
     private static ModelLayerLocation make(String name) {
-        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, name), "main");
+        return new ModelLayerLocation(Identifier.fromNamespaceAndPath(WHMod.MOD_ID, name), "main");
     }
 
 }

@@ -6,6 +6,7 @@ import realcolin.whmod.client.screen.FactionSelectionScreen;
 import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 
+@SuppressWarnings("unused")
 public class ClientPayloadHandler {
 
     public static void handleOpenFactionScreen(OpenFactionScreenPayload payload, IPayloadContext context) {

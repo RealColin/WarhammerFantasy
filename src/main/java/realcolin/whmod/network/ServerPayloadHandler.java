@@ -1,17 +1,17 @@
 package realcolin.whmod.network;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.worldgen.WHDimensions;
-
-import java.util.Objects;
 
 @SuppressWarnings("deprecation")
 public class ServerPayloadHandler {
@@ -28,7 +28,8 @@ public class ServerPayloadHandler {
 
         serverPlayer.setData(WHMod.FACTION_ATTACHMENT, fac);
 
-        var mallus = Objects.requireNonNull(serverPlayer.getServer()).getLevel(WHDimensions.MALLUS);
+        var mallus = serverPlayer.level().getServer().getLevel(WHDimensions.MALLUS);
+
         if (mallus == null) return;
 
         var spawnPos = fac.spawnPos();
@@ -46,10 +47,11 @@ public class ServerPayloadHandler {
 
         serverPlayer.teleport(transition);
 
+        var globalPos = GlobalPos.of(WHDimensions.MALLUS, spawn);
+        var respawnData = new LevelData.RespawnData(globalPos, serverPlayer.getXRot(), serverPlayer.getYRot());
+
         var respawn = new ServerPlayer.RespawnConfig(
-                WHDimensions.MALLUS,
-                spawn,
-                0.0F,
+                respawnData,
                 true
         );
 

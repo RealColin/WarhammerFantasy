@@ -1,16 +1,15 @@
 package realcolin.whmod.client.screen.menu;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
+@SuppressWarnings("unused")
 public class CharacterSubScreen implements MenuSubScreen {
 
     private static final int BUFFER = 10;
@@ -19,11 +18,11 @@ public class CharacterSubScreen implements MenuSubScreen {
 
     private static final int BG = 0x44444444;
 
-    private static final ResourceLocation HEART = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/heart/full");
-    private static final ResourceLocation WINDS = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/air");
-    private static final ResourceLocation ARMOR = ResourceLocation.fromNamespaceAndPath("minecraft", "hud/armor_full");
+    private static final Identifier HEART = Identifier.fromNamespaceAndPath("minecraft", "hud/heart/full");
+    private static final Identifier WINDS = Identifier.fromNamespaceAndPath("minecraft", "hud/air");
+    private static final Identifier ARMOR = Identifier.fromNamespaceAndPath("minecraft", "hud/armor_full");
 
-    private Player player;
+    private final Player player;
 
     private float modelYaw = 180.0F;
     private float modelPitch = 0.0F;
@@ -34,8 +33,9 @@ public class CharacterSubScreen implements MenuSubScreen {
         this.player = player;
     }
 
+
     @Override
-    public void render(GuiGraphics g, int px, int py, int pw, int ph, int mouseX, int mouseY, Font font) {
+    public void render(GuiGraphicsExtractor g, int px, int py, int pw, int ph, int mouseX, int mouseY, Font font) {
         renderBackground(g, px, py, pw, ph);
         renderTitlePanel(g, px, py, pw, ph, font);
         renderMiddle(g, px, py, pw, ph, font, mouseX, mouseY);
@@ -85,7 +85,7 @@ public class CharacterSubScreen implements MenuSubScreen {
                 && mouseY >= modelBoxY1 && mouseY < modelBoxY2;
     }
 
-    private void renderBackground(GuiGraphics g, int px, int py, int pw, int ph) {
+    private void renderBackground(GuiGraphicsExtractor g, int px, int py, int pw, int ph) {
         int x = px + BUFFER;
         int y = py + BUFFER;
         int w = pw - 2 * BUFFER;
@@ -94,21 +94,21 @@ public class CharacterSubScreen implements MenuSubScreen {
         g.fill(x, y, x + w, y + h, BG);
     }
 
-    private void renderTitlePanel(GuiGraphics g, int px, int py, int pw, int ph, Font font) {
+    private void renderTitlePanel(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font) {
         int x = px + BUFFER;
         int y = py + BUFFER;
         int w = pw - 2 * BUFFER;
-        int h = TITLE_HEIGHT;
 
         var name = player.getName();
         int textWidth = font.width(name);
         int textX = x + (w - textWidth) / 2;
 
-        g.fill(x, y, x + w, y + h, 0xAA9F7622);
-        g.drawString(font, player.getName(), textX, y + 6, 0xFFFFFFFF);
+        g.fill(x, y, x + w, y + TITLE_HEIGHT, 0xAA9F7622);
+        g.text(font, player.getName(), textX, y + 6, 0xFFFFFFFF);
     }
 
-    private void renderMiddle(GuiGraphics g, int px, int py, int pw, int ph, Font font, int mouseX, int mouseY) {
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    private void renderMiddle(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font, int mouseX, int mouseY) {
         int x = px + BUFFER;
         int y = py + BUFFER + TITLE_HEIGHT;
         int w = pw - 2 * BUFFER;
@@ -138,16 +138,30 @@ public class CharacterSubScreen implements MenuSubScreen {
                 .rotateX((float) Math.toRadians(modelPitch))
                 .rotateY((float) Math.toRadians(modelYaw));
 
-        InventoryScreen.renderEntityInInventory(
+//        InventoryScreen.renderEntityInInventory(
+//                g,
+//                ex,
+//                ey,
+//                ex + ew,
+//                ey + eh,
+//                (float)scale / player.getScale(),
+//                new Vector3f(0.0F, player.getBbHeight() / 2.0F + 0.0625F * player.getScale(), 0.0F),
+//                rotation,
+//                null,
+//                player
+//        );
+
+        // TODO verify this works
+        InventoryScreen.renderEntityInInventoryFollowsAngle(
                 g,
                 ex,
                 ey,
                 ex + ew,
                 ey + eh,
-                (float)scale / player.getScale(),
-                new Vector3f(0.0F, player.getBbHeight() / 2.0F + 0.0625F * player.getScale(), 0.0F),
-                rotation,
-                null,
+                (int)(scale / player.getScale()),
+                0.0f,
+                modelPitch,
+                modelYaw,
                 player
         );
 
@@ -160,11 +174,11 @@ public class CharacterSubScreen implements MenuSubScreen {
         int ty = dy + 8;
 
         String temp = "Hi this is a temporary String";
-        g.drawString(font, temp, tx, ty, 0xFFFFFFFF);
+        g.text(font, temp, tx, ty, 0xFFFFFFFF);
 
     }
 
-    private void renderBottomPanel(GuiGraphics g, int px, int py, int pw, int ph, Font font) {
+    private void renderBottomPanel(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font) {
         int w = pw - 2 * BUFFER;
         int h = BOTTOM_HEIGHT;
         int x = px + BUFFER;
@@ -181,7 +195,7 @@ public class CharacterSubScreen implements MenuSubScreen {
         int heartIconX = hx + font.width(healthText) + 2;
         int heartIconY = y + 14;
 
-        g.drawString(font, healthText, hx, y + 16, 0xFFFFFFFF);
+        g.text(font, healthText, hx, y + 16, 0xFFFFFFFF);
         g.blitSprite(RenderPipelines.GUI_TEXTURED, HEART, heartIconX, heartIconY, 12, 12);
 
         // winds of magic info
@@ -193,7 +207,7 @@ public class CharacterSubScreen implements MenuSubScreen {
         int windsIconX = wx + font.width(windsText) + 2;
         int windsIconY = y + 14;
 
-        g.drawString(font, windsText, wx, y + 16, 0xFFFFFFFF);
+        g.text(font, windsText, wx, y + 16, 0xFFFFFFFF);
         g.blitSprite(RenderPipelines.GUI_TEXTURED, WINDS, windsIconX, windsIconY, 12, 12);
 
 
@@ -205,7 +219,7 @@ public class CharacterSubScreen implements MenuSubScreen {
         int armorIconX = ax + font.width(armorText) + 2;
         int armorIconY = y + 14;
 
-        g.drawString(font, armorText, ax, y + 16, 0xFFFFFFFF);
+        g.text(font, armorText, ax, y + 16, 0xFFFFFFFF);
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR, armorIconX, armorIconY, 12, 12);
     }
 

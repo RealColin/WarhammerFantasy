@@ -1,8 +1,8 @@
 package realcolin.whmod.block;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +26,7 @@ public class WHBlocks {
     public static final WoodSet BEECH = WoodSet.make("beech", WHTreeGrowers.BEECH);
     public static final WoodSet ELM = WoodSet.make("elm", WHTreeGrowers.PINE);
 
-    private static DeferredBlock<Block> blockItem(String name, Function<ResourceLocation, ? extends Block> func) {
+    private static DeferredBlock<Block> blockItem(String name, Function<Identifier, ? extends Block> func) {
 
         DeferredBlock<Block> block = BLOCKS.register(name, func);
         WHItems.ITEMS.register(name, res -> new BlockItem(block.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));

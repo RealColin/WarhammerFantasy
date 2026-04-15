@@ -1,20 +1,18 @@
 package realcolin.whmod.client.screen;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import realcolin.whmod.client.screen.menu.CharacterSubScreen;
 import realcolin.whmod.client.screen.menu.FactionSubScreen;
 import realcolin.whmod.client.screen.menu.MapSubScreen;
 import realcolin.whmod.client.screen.menu.MenuSubScreen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-@SuppressWarnings("PointlessArithmeticExpression")
+@SuppressWarnings({"PointlessArithmeticExpression", "unused"})
 public class InGameMenuScreen extends Screen {
 
     private static final int BUFFER = 10;
@@ -65,17 +63,16 @@ public class InGameMenuScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         // TODO render background
-
-        drawSidebar(guiGraphics, mouseX, mouseY);
-        drawContentPanel(guiGraphics, mouseX, mouseY);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        drawSidebar(graphics, mouseX, mouseY);
+        drawContentPanel(graphics, mouseX, mouseY);
+        super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 
     @Override
-    public void resize(Minecraft minecraft, int width, int height) {
-        super.resize(minecraft, width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         sidebarH = (this.height - 30) - SIDEBAR_Y;
         contentX = SIDEBAR_X + SIDEBAR_W + BUFFER;
         contentW = (this.width - BUFFER) - contentX;
@@ -83,12 +80,12 @@ public class InGameMenuScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && isMouseOverSidebar(mouseX, mouseY)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (event.button() == 0 && isMouseOverSidebar(event.x(), event.y())) {
 
             int cy = SIDEBAR_Y + INSET;
 
-            int y = (int)mouseY - cy;
+            int y = (int)event.y() - cy;
             int index = y / ROW_HEIGHT;
 
             if (index >= 0 && index < subScreens.size()) {
@@ -96,24 +93,24 @@ public class InGameMenuScreen extends Screen {
 
                 return true;
             }
-        } else if (button == 0 && isMouseOverContent(mouseX, mouseY)) {
+        } else if (event.button() == 0 && isMouseOverContent(event.x(), event.y())) {
             var sub = subScreens.get(selectedIndex);
-            return sub.mouseClicked(mouseX, mouseY, button);
+            return sub.mouseClicked(event.x(), event.y(), 0);
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         var sub = subScreens.get(selectedIndex);
-        return sub.mouseReleased(mouseX, mouseY, button);
+        return sub.mouseReleased(event.x(), event.y(), event.button());
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
         var sub = subScreens.get(selectedIndex);
-        return sub.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return sub.mouseDragged(event.x(), event.y(), event.button(), dx, dy);
     }
 
     private boolean isMouseOverSidebar(double mouseX, double mouseY) {
@@ -126,7 +123,7 @@ public class InGameMenuScreen extends Screen {
                 && mouseY >= CONTENT_Y && mouseY < CONTENT_Y + contentH;
     }
 
-    private void drawSidebar(GuiGraphics g, int mouseX, int mouseY) {
+    private void drawSidebar(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         g.fill(SIDEBAR_X, SIDEBAR_Y, SIDEBAR_X + SIDEBAR_W, this.height - BUFFER, PANEL_BG);
 
         int b = BORDER;
@@ -160,7 +157,7 @@ public class InGameMenuScreen extends Screen {
             int textWidth = this.font.width(name);
             int textX = cx + (cw - textWidth) / 2;
 
-            g.drawString(
+            g.text(
                     this.font,
                     name,
                     textX,
@@ -172,7 +169,7 @@ public class InGameMenuScreen extends Screen {
         g.disableScissor();
     }
 
-    private void drawContentPanel(GuiGraphics g, int mouseX, int mouseY) {
+    private void drawContentPanel(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         g.fill(contentX, CONTENT_Y, contentX + contentW, this.height - BUFFER, PANEL_BG);
 
         int b = BORDER;

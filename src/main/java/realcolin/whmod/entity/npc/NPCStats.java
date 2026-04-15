@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.neoforge.common.NeoForgeMod;
 
+@SuppressWarnings("unused")
 public class NPCStats {
     public static AttributeSupplier.Builder defaultHumanAttributes() {
         return LivingEntity.createLivingAttributes()

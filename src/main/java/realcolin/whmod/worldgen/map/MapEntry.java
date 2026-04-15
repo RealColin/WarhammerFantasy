@@ -9,14 +9,7 @@ import net.minecraft.world.level.biome.Climate;
 
 import java.util.List;
 
-@SuppressWarnings("ClassEscapesDefinedScope")
 public record MapEntry(String region, Integer color, Holder<Terrain> terrain, Climate.ParameterList<Holder<Biome>> biomes) {
-
-    public static final Codec<List<BiomePair>> BIOMES_CODEC =
-            RecordCodecBuilder.<BiomePair>create(instance -> instance.group(
-                    Biome.CODEC.fieldOf("biome").forGetter(BiomePair::biome),
-                    Codec.INT.fieldOf("weight").forGetter(BiomePair::weight)
-            ).apply(instance, BiomePair::new)).listOf();
 
     public static final MapCodec<Climate.ParameterList<Holder<Biome>>> BIOME_CODEC =
             Climate.ParameterList.codec(Biome.CODEC.fieldOf("biome")).fieldOf("biomes");
@@ -28,6 +21,4 @@ public record MapEntry(String region, Integer color, Holder<Terrain> terrain, Cl
                     Terrain.CODEC.fieldOf("terrain").forGetter(MapEntry::terrain),
                     BIOME_CODEC.forGetter(MapEntry::biomes)
             ).apply(instance, MapEntry::new)).listOf();
-
-    record BiomePair(Holder<Biome> biome, Integer weight) {}
 }

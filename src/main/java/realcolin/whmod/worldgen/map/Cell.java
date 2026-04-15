@@ -14,13 +14,12 @@ import java.util.HashSet;
 
 public class Cell {
 
-    private final BufferedImage regionMap;
     private final BufferedImage bufferedRegionMap;
 
     private final HashMap<Integer, double[][]> distanceTransforms;
 
     public Cell(GraphicsNode node, int resolution, Pair cellPos) {
-        regionMap = new BufferedImage(Constants.CELL_SIZE, Constants.CELL_SIZE, BufferedImage.TYPE_INT_RGB);
+        BufferedImage regionMap = new BufferedImage(Constants.CELL_SIZE, Constants.CELL_SIZE, BufferedImage.TYPE_INT_RGB);
         var g2d = regionMap.createGraphics();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -44,25 +43,14 @@ public class Cell {
         node.paint(g2dd);
 
         distanceTransforms = new HashMap<>();
-        createDistTransforms(cellPos);
-
-//        try {
-//            String filename = String.format("cell_%d_%d.png",
-//                    cellPos.a(),
-//                    cellPos.b());
-//            File output = new File(filename);
-//            ImageIO.write(bufferedRegionMap, "png", output);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        createDistTransforms();
     }
 
     public int getColorAt(int x, int z) {
-        //return regionMap.getRGB(Math.floorMod(x, Constants.CELL_SIZE), Math.floorMod(z, Constants.CELL_SIZE));
         return bufferedRegionMap.getRGB(Math.floorMod(x, Constants.CELL_SIZE) + (Constants.CELL_BUFFER / 2), Math.floorMod(z, Constants.CELL_SIZE) + (Constants.CELL_BUFFER / 2));
     }
 
-    private void createDistTransforms(Pair cellPos) {
+    private void createDistTransforms() {
         // get every unique color in the buffered map
         var colors = new HashSet<Integer>();
         for (int x = 0; x < bufferedRegionMap.getWidth(); x++) {
@@ -94,40 +82,6 @@ public class Cell {
                     maxDist = Math.max(maxDist, dists[x][y]);
                 }
             }
-
-//            if (cellPos.a() == 98 && cellPos.b() == 59) {
-//                System.out.println("=== Color " + Integer.toHexString(color) + " ===");
-//                System.out.println("Corner (0,0): " + dists[0][0]);
-//                System.out.println("Corner (" + (width-1) + ",0): " + dists[width-1][0]);
-//                System.out.println("Corner (0," + (height-1) + "): " + dists[0][height-1]);
-//                System.out.println("Corner (" + (width-1) + "," + (height-1) + "): " + dists[width-1][height-1]);
-//                System.out.println("Center (" + (width/2) + "," + (height/2) + "): " + dists[width/2][height/2]);
-//                System.out.println("Max distance: " + maxDist);
-//                System.out.println();
-//            }
-
-//            BufferedImage debugImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    // Normalize distance to 0-255
-//                    int brightness = (int) ((dists[x][y] / maxDist) * 255);
-//                    int rgb = (brightness << 16) | (brightness << 8) | brightness;
-//                    debugImg.setRGB(x, y, rgb);
-//                }
-//            }
-//
-//            try {
-//                // Save with color in filename
-//                String filename = String.format("edt_cell_%d_%d_color_%s.png",
-//                        cellPos.a(),
-//                        cellPos.b(),
-//                        Integer.toHexString(color));
-//                File output = new File(filename);
-//                ImageIO.write(debugImg, "png", output);
-////                System.out.println("Saved EDT visualization: " + output.getAbsolutePath());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
 
             distanceTransforms.put(color, dists);
         }

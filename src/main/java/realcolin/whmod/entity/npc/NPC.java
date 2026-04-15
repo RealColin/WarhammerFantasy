@@ -1,5 +1,10 @@
 package realcolin.whmod.entity.npc;
 
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.constant.DefaultAnimations;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -17,11 +22,6 @@ import realcolin.whmod.faction.Faction;
 import realcolin.whmod.faction.FactionRelationship;
 import realcolin.whmod.faction.FactionRelationships;
 import realcolin.whmod.util.CombatHelper;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animatable.processing.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.constant.DefaultAnimations;
 
 public abstract class NPC extends PathfinderMob implements GeoEntity {
     private boolean equipmentInitialized = false;
@@ -39,6 +39,7 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
     }
 
     public abstract Faction getFaction();
+    @SuppressWarnings("unused")
     public abstract Gender getGender();
     public abstract void initializeEquipment();
 
@@ -155,13 +156,15 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(DefaultAnimations.genericWalkIdleController());
 
-        var attackController = new AnimationController<>("attack_controller", 0, state -> PlayState.STOP)
-                .triggerableAnim("attack", DefaultAnimations.ATTACK_SWING)
-                .setAnimationSpeedHandler(state -> {
-                    var attackSpeed = this.getAttributeValue(Attributes.ATTACK_SPEED);
-                    int attackTicks = Math.max(1, Mth.floor((float) (20.0 / attackSpeed)));
-                    return 20.0 / attackTicks;
-                });
+        var attackController = new AnimationController<>("attack_controller", 0, _ -> PlayState.STOP)
+                .triggerableAnim("attack", DefaultAnimations.ATTACK_SWING);
+
+        // TODO figure out workaround for this
+//                .setAnimationSpeed(state -> {
+//                    var attackSpeed = this.getAttributeValue(Attributes.ATTACK_SPEED);
+//                    int attackTicks = Math.max(1, Mth.floor((float) (20.0 / attackSpeed)));
+//                    return 20.0 / attackTicks;
+//                });
 
         controllers.add(attackController);
     }

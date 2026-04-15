@@ -1,15 +1,15 @@
 package realcolin.whmod.client.screen;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.network.SelectFactionPayload;
@@ -54,8 +54,8 @@ public class FactionSelectionScreen extends Screen {
     private int infoScroll = 0;
     private int maxInfoScroll = 0;
 
-    private static final ResourceLocation BG =
-            ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, "fac_bg");
+    private static final Identifier BG =
+            Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "fac_bg");
 
     public FactionSelectionScreen() {
         super(Component.literal("hi"));
@@ -73,7 +73,7 @@ public class FactionSelectionScreen extends Screen {
         rebuildFactListScrollBounds();
         rebuildFactionDesc();
 
-        Button confirmSelectionButton = Button.builder(Component.literal("Select Faction"), b ->
+        Button confirmSelectionButton = Button.builder(Component.literal("Select Faction"), _ ->
                         ClientPacketDistributor.sendToServer(new SelectFactionPayload(factions.get(selectedFactionIndex))))
                 .bounds(this.width / 2 - 60, this.height - 25, 120, 20).build();
 
@@ -81,15 +81,14 @@ public class FactionSelectionScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // screen background
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BG, 0, 0, this.width, this.height);
-        guiGraphics.fill(0, 0, this.width, this.height, 0x55000000); // darken the background image a bit
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, BG, 0, 0, this.width, this.height);
+        graphics.fill(0, 0, this.width, this.height, 0x55000000); // darken the background image a bit
 
-        drawFactionList(guiGraphics, mouseX, mouseY);
-        drawDescription(guiGraphics);
+        drawFactionList(graphics, mouseX, mouseY);
+        drawDescription(graphics);
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 
     @Override
@@ -98,7 +97,11 @@ public class FactionSelectionScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        var button = event.button();
+        var mouseX = event.x();
+        var mouseY = event.y();
+
         if (button == 0 && isMouseOverList(mouseX, mouseY)) {
             int contentY = LIST_Y + LIST_INSET;
 
@@ -113,7 +116,7 @@ public class FactionSelectionScreen extends Screen {
             }
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
@@ -136,8 +139,8 @@ public class FactionSelectionScreen extends Screen {
     }
 
     @Override
-    public void resize(@NotNull Minecraft minecraft, int width, int height) {
-        super.resize(minecraft, width, height);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         listW = LIST_W;
         listH = (height - 30) - LIST_Y;
         descX = LIST_X + listW + 10;
@@ -155,7 +158,7 @@ public class FactionSelectionScreen extends Screen {
                 && mouseY >= DESC_Y && mouseY < DESC_Y + descH;
     }
 
-    private void drawFactionList(GuiGraphics g, int mouseX, int mouseY) {
+    private void drawFactionList(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         g.fill(LIST_X, LIST_Y, listW + LIST_X, this.height - 30, PANEL_BG); // faction list panel background
 
         int b = BORDER_WIDTH;
@@ -190,7 +193,7 @@ public class FactionSelectionScreen extends Screen {
             int textWidth = this.font.width(name);
             int textX = contentX + (contentW - textWidth) / 2;
 
-            g.drawString(
+            g.text(
                     this.font,
                     name,
                     textX,
@@ -204,7 +207,7 @@ public class FactionSelectionScreen extends Screen {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void drawListScrollbar(GuiGraphics g, int x, int y, int w, int h) {
+    private void drawListScrollbar(GuiGraphicsExtractor g, int x, int y, int w, int h) {
         int contentHeight = factions.size() * LIST_ROW_HEIGHT;
         if (contentHeight <= 0 || contentHeight <= h) return;
 
@@ -217,7 +220,7 @@ public class FactionSelectionScreen extends Screen {
         g.fill(x, thumbY, x + w, thumbY + thumbH, SELECTED_ROW);
     }
 
-    private void drawDescription(GuiGraphics g) {
+    private void drawDescription(GuiGraphicsExtractor g) {
         g.fill(descX, DESC_Y, this.width - 10, this.height - 30, PANEL_BG); // faction desc panel
         int b = BORDER_WIDTH;
         g.fill(descX, DESC_Y, descX + b, this.height - 30, PANEL_BORDER); // left
@@ -235,20 +238,20 @@ public class FactionSelectionScreen extends Screen {
 
         int y = contentY - infoScroll;
 
-        g.drawString(this.font, "Description:", contentX, y, TEXT);
+        g.text(this.font, "Description:", contentX, y, TEXT);
         y += 2 * (this.font.lineHeight + TEXT_SPACING);
 
         for (var line : descText) {
-            g.drawString(this.font, line, contentX, y, TEXT);
+            g.text(this.font, line, contentX, y, TEXT);
             y += this.font.lineHeight + TEXT_SPACING;
         }
         y += this.font.lineHeight + TEXT_SPACING;
-        g.drawString(this.font, "Traits:", contentX, y, TEXT);
+        g.text(this.font, "Traits:", contentX, y, TEXT);
         y += this.font.lineHeight + TEXT_SPACING;
         var fac = factions.get(selectedFactionIndex);
         for (var trait : fac.traits()) {
-            g.drawString(this.font, trait.text(), contentX, y, trait.type().color());
-            g.drawString(this.font, trait.desc(), contentX + font.width(trait.text().getString()) + 4, y, TEXT);
+            g.text(this.font, trait.text(), contentX, y, trait.type().color());
+            g.text(this.font, trait.desc(), contentX + font.width(trait.text().getString()) + 4, y, TEXT);
             y += this.font.lineHeight + TEXT_SPACING;
         }
 
@@ -257,7 +260,7 @@ public class FactionSelectionScreen extends Screen {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void drawDescriptionScrollbar(GuiGraphics g, int x, int y, int w, int h) {
+    private void drawDescriptionScrollbar(GuiGraphicsExtractor g, int x, int y, int w, int h) {
         int contentHeight = descText.size() * (this.font.lineHeight + TEXT_SPACING);
         if (contentHeight <= 0 || contentHeight <= h) return;
 

@@ -1,11 +1,8 @@
 package realcolin.whmod.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.world.level.FoliageColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -21,13 +18,14 @@ import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlers
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
-import realcolin.whmod.client.entity.renderer.*;
+import realcolin.whmod.client.renderer.*;
 import realcolin.whmod.client.screen.InGameMenuScreen;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 
-@SuppressWarnings("deprecation")
+import java.util.List;
+
 @Mod(value = WHMod.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = WHMod.MOD_ID, value = Dist.CLIENT)
 public class WHClient {
@@ -38,9 +36,10 @@ public class WHClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        for (var woodSet : WHBlocks.woodSets) {
-            ItemBlockRenderTypes.setRenderLayer(woodSet.sapling().get(), ChunkSectionLayer.CUTOUT);
-        }
+        // TODO figure out alternative for this
+//        for (var woodSet : WHBlocks.woodSets) {
+//            ItemBlockRenderTypes.setRenderLayer(woodSet.sapling().get(), ChunkSectionLayer.CUTOUT);
+//        }
 
         EntityRenderers.register(WHEntities.BOAR.get(), BoarRenderer::new);
         EntityRenderers.register(WHEntities.BROWN_BEAR.get(), BrownBearRenderer::new);
@@ -49,16 +48,14 @@ public class WHClient {
     }
 
     @SubscribeEvent
-    static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-        event.register(
-                (state, level, pos, tintIndex) ->
-                        level != null && pos != null
-                                ? BiomeColors.getAverageFoliageColor(level, pos)
-                                : FoliageColor.FOLIAGE_DEFAULT,
+    static void registerBlockColors(RegisterColorHandlersEvent.BlockTintSources event) {
+
+        event.register(List.of(
+                BlockTintSources.foliage()
+        ),
                 WHBlocks.PINE.leaves().get(),
                 WHBlocks.BEECH.leaves().get(),
-                WHBlocks.ELM.leaves().get()
-        );
+                WHBlocks.ELM.leaves().get());
     }
 
     @SubscribeEvent

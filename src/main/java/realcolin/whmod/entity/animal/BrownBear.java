@@ -2,24 +2,19 @@ package realcolin.whmod.entity.animal;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.PolarBear;
+import net.minecraft.world.entity.animal.fox.Fox;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 public class BrownBear extends Animal implements NeutralMob {
     public BrownBear(EntityType<? extends Animal> entityType, Level level) {
@@ -39,9 +34,9 @@ public class BrownBear extends Animal implements NeutralMob {
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 //        this.targetSelector.addGoal(1, new PolarBear.PolarBearHurtByTargetGoal()); // TODO create BrownBearHurtByTargetGoal
 //        this.targetSelector.addGoal(2, new PolarBear.PolarBearAttackPlayersGoal()); // TODO create BrownBearAttackPlayersGoal
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, this::isAngryAt));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Fox.class, 10, true, true, (TargetingConditions.Selector)null));
-        this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal(this, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isAngryAt));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Fox.class, 10, true, true, null));
+        this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -53,32 +48,32 @@ public class BrownBear extends Animal implements NeutralMob {
     }
 
     @Override
-    public boolean isFood(ItemStack itemStack) {
+    public boolean isFood(@NonNull ItemStack itemStack) {
         return false;
     }
 
     @Override
-    public @Nullable AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
+    public @Nullable AgeableMob getBreedOffspring(@NonNull ServerLevel serverLevel, @NonNull AgeableMob ageableMob) {
         return null;
     }
 
     @Override
-    public int getRemainingPersistentAngerTime() {
+    public long getPersistentAngerEndTime() {
         return 0;
     }
 
     @Override
-    public void setRemainingPersistentAngerTime(int i) {
+    public void setPersistentAngerEndTime(long endTime) {
 
     }
 
     @Override
-    public @Nullable UUID getPersistentAngerTarget() {
+    public @org.jspecify.annotations.Nullable EntityReference<LivingEntity> getPersistentAngerTarget() {
         return null;
     }
 
     @Override
-    public void setPersistentAngerTarget(@Nullable UUID uuid) {
+    public void setPersistentAngerTarget(@org.jspecify.annotations.Nullable EntityReference<LivingEntity> persistentAngerTarget) {
 
     }
 

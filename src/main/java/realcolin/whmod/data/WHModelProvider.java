@@ -7,7 +7,7 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TexturedModel;
-import net.minecraft.client.renderer.item.BlockModelWrapper;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.FoliageColor;
@@ -16,7 +16,8 @@ import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.item.WHItems;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Optional;
 
 public class WHModelProvider extends ModelProvider {
     public WHModelProvider(PackOutput output) {
@@ -67,11 +68,13 @@ public class WHModelProvider extends ModelProvider {
                 itemModels.modelOutput
         );
 
+        // TODO make sure this works
         itemModels.itemModelOutput.accept(
                 item,
-                new BlockModelWrapper.Unbaked(
+                new CuboidItemModelWrapper.Unbaked(
                         ModelLocationUtils.getModelLocation(item),
-                        List.of()
+                        Optional.empty(),
+                        Collections.emptyList()
                 )
         );
     }

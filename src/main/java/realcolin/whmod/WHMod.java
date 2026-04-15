@@ -1,5 +1,6 @@
 package realcolin.whmod;
 
+import com.geckolib.loading.math.MolangQueries;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
@@ -17,7 +18,6 @@ import realcolin.whmod.item.WHCreativeTabs;
 import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.*;
-import software.bernie.geckolib.loading.math.MolangQueries;
 
 import java.util.function.Supplier;
 
@@ -45,6 +45,7 @@ public class WHMod {
         WHBiomeSource.BIOME_SOURCES.register(modEventBus);
         ATTACHMENT_TYPES.register(modEventBus);
 
+        // TODO NOT sure if i need these any more considering he supposedly fixed the bug
         MolangQueries.<NPC>setActorVariable("query.whmod_limb_swing", state -> {
             var npc = state.animatable();
             float pt = state.partialTick();

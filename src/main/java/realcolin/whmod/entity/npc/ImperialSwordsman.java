@@ -1,17 +1,18 @@
 package realcolin.whmod.entity.npc;
 
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 import realcolin.whmod.entity.npc.goal.NPCLookGoal;
 import realcolin.whmod.entity.npc.goal.NPCMeleeAttackGoal;
 import realcolin.whmod.entity.npc.goal.TargetEnemyGoal;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHItems;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ImperialSwordsman extends NPC {
 
@@ -43,14 +44,14 @@ public class ImperialSwordsman extends NPC {
     @Override
     public void initializeEquipment() {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(WHItems.IMPERIAL_SWORD.get()));
-        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+//        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+//        this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+//        this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+//        this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return geoCache;
     }
 }

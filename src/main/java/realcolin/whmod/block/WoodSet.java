@@ -222,7 +222,7 @@ public record WoodSet(
         DeferredBlock<Block> button = WHBlocks.BLOCKS.register(buttonName, res -> new ButtonBlock(BlockSetType.OAK, 30,
                 BlockBehaviour.Properties.of()
                         .setId(ResourceKey.create(Registries.BLOCK, res))
-                        .noCollission()
+                        .noCollision()
                         .strength(0.5F)
                         .pushReaction(PushReaction.DESTROY)));
 
@@ -233,7 +233,7 @@ public record WoodSet(
                         .mapColor(planks.get().defaultMapColor())
                         .forceSolidOn()
                         .instrument(NoteBlockInstrument.BASS)
-                        .noCollission()
+                        .noCollision()
                         .strength(0.5F)
                         .ignitedByLava()
                         .pushReaction(PushReaction.DESTROY)));
@@ -295,7 +295,7 @@ public record WoodSet(
                 BlockBehaviour.Properties.of()
                         .setId(ResourceKey.create(Registries.BLOCK, res))
                         .mapColor(MapColor.PLANT)
-                        .noCollission()
+                        .noCollision()
                         .randomTicks()
                         .instabreak()
                         .sound(SoundType.GRASS)

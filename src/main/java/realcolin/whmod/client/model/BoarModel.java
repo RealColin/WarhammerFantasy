@@ -1,11 +1,11 @@
-package realcolin.whmod.client.entity.model;
+package realcolin.whmod.client.model;
 
 import net.minecraft.client.model.BabyModelTransform;
 import net.minecraft.client.model.QuadrupedModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import realcolin.whmod.client.entity.renderstate.BoarRenderState;
+import realcolin.whmod.client.renderstate.BoarRenderState;
 
 import java.util.Set;
 

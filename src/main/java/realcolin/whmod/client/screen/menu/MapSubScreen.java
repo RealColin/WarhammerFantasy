@@ -1,11 +1,11 @@
 package realcolin.whmod.client.screen.menu;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class MapSubScreen implements MenuSubScreen{
     @Override
-    public void render(GuiGraphics g, int px, int py, int pw, int ph, int mouseX, int mouseY, Font font) {
+    public void render(GuiGraphicsExtractor g, int px, int py, int pw, int ph, int mouseX, int mouseY, Font font) {
 
     }
 

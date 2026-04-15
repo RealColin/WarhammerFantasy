@@ -32,16 +32,6 @@ public class NPCLookGoal extends Goal {
         return true;
     }
 
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public void stop() {
-
-    }
-
     // if the npc has a target, look at that and do not look away
     // else, either look at a nearby player, look at another nearby NPC, or look at a random location
 
@@ -89,7 +79,7 @@ public class NPCLookGoal extends Goal {
             } else {
                 var otherNPC = server.getNearestEntity(
                         npc.level().getEntitiesOfClass(
-                                NPC.class, npc.getBoundingBox().inflate(lookDistance, 3.0, lookDistance), (pred) -> true),
+                                NPC.class, npc.getBoundingBox().inflate(lookDistance, 3.0, lookDistance), (_) -> true),
                         lookAtConditions, npc, npc.getX(), npc.getEyeY(), npc.getZ());
 
                 if (otherNPC != null) {

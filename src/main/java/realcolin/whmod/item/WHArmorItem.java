@@ -1,24 +1,20 @@
 package realcolin.whmod.item;
 
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.resources.model.EquipmentClientInfo;
-import net.minecraft.resources.ResourceLocation;
+import com.geckolib.animatable.GeoItem;
+import com.geckolib.animatable.client.GeoRenderProvider;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.renderer.GeoArmorRenderer;
+import com.geckolib.util.GeckoLibUtil;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import realcolin.whmod.WHMod;
-import realcolin.whmod.client.entity.renderer.WHArmorRenderer;
-import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.animatable.client.GeoRenderProvider;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import realcolin.whmod.client.renderer.WHArmorRenderer;
 import java.util.function.Consumer;
 
 public class WHArmorItem extends Item implements GeoItem {
@@ -29,12 +25,12 @@ public class WHArmorItem extends Item implements GeoItem {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+    public void registerControllers(AnimatableManager.@NonNull ControllerRegistrar controllers) {
 
     }
 
     @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
         return geoCache;
     }
 
@@ -44,16 +40,9 @@ public class WHArmorItem extends Item implements GeoItem {
             private WHArmorRenderer<?> renderer;
 
             @Override
-            public <S extends HumanoidRenderState> @NotNull GeoArmorRenderer<?, ?> getGeoArmorRenderer(
-                    @Nullable S renderState,
-                    ItemStack itemStack,
-                    EquipmentSlot equipmentSlot,
-                    EquipmentClientInfo.LayerType type,
-                    @Nullable HumanoidModel<S> original
-            ) {
-
+            public @NonNull GeoArmorRenderer<?, ?> getGeoArmorRenderer(@NonNull ItemStack itemStack, @NonNull EquipmentSlot equipmentSlot) {
                 if (renderer == null) {
-                    renderer = new WHArmorRenderer<>(ResourceLocation.fromNamespaceAndPath(WHMod.MOD_ID, "armor/state_troop_armor"));
+                    renderer = new WHArmorRenderer<>(Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "armor/state_troop_armor"));
                 }
 
                 return renderer;

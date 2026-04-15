@@ -1,4 +1,4 @@
-package realcolin.whmod.client.entity.renderstate;
+package realcolin.whmod.client.renderstate;
 
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
