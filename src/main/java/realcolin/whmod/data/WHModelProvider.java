@@ -3,14 +3,12 @@ package realcolin.whmod.data;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.model.ModelLocationUtils;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TexturedModel;
+import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
@@ -59,6 +57,9 @@ public class WHModelProvider extends ModelProvider {
         }
 
         handheld(itemModels, WHItems.IMPERIAL_SWORD.get());
+        armorSets(itemModels);
+
+        craftingTables(blockModels);
     }
 
     private void handheld(ItemModelGenerators itemModels, Item item) {
@@ -68,7 +69,6 @@ public class WHModelProvider extends ModelProvider {
                 itemModels.modelOutput
         );
 
-        // TODO make sure this works
         itemModels.itemModelOutput.accept(
                 item,
                 new CuboidItemModelWrapper.Unbaked(
@@ -77,5 +77,32 @@ public class WHModelProvider extends ModelProvider {
                         Collections.emptyList()
                 )
         );
+    }
+
+    private void armorSets(ItemModelGenerators itemModels) {
+        for (var set : WHItems.ARMOR_SETS) {
+            itemModels.generateFlatItem(set.helmet().get(), ModelTemplates.FLAT_ITEM);
+            itemModels.generateFlatItem(set.chestplate().get(), ModelTemplates.FLAT_ITEM);
+            itemModels.generateFlatItem(set.leggings().get(), ModelTemplates.FLAT_ITEM);
+            itemModels.generateFlatItem(set.boots().get(), ModelTemplates.FLAT_ITEM);
+        }
+    }
+
+    private void craftingTables(BlockModelGenerators blockModels) {
+        for (var table : WHBlocks.CRAFTING_TABLES) {
+            var block = table.get();
+            blockModels.createCraftingTableLike(block, block, WHModelProvider::table);
+        }
+    }
+
+    private static TextureMapping table(Block table, Block nothing) {
+        return new TextureMapping()
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(table, "_front"))
+                .put(TextureSlot.UP, TextureMapping.getBlockTexture(table, "_top"))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(table, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(table, "_bottom"))
+                .put(TextureSlot.DOWN, TextureMapping.getBlockTexture(table, "_bottom"))
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(table, "_side"))
+                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(table, "_front"));
     }
 }

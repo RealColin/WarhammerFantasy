@@ -20,6 +20,8 @@ public record ArmorSet(DeferredItem<Item> helmet, DeferredItem<Item> chestplate,
         String bootsName = name + "_boots";
         DeferredItem<Item> boots = WHItems.ITEMS.registerItem(bootsName, props -> new WHArmorItem(material, ArmorType.BOOTS, props));
 
-        return new ArmorSet(helmet, chestplate, leggings, boots);
+        var set = new ArmorSet(helmet, chestplate, leggings, boots);
+        WHItems.ARMOR_SETS.add(set);
+        return set;
     }
 }

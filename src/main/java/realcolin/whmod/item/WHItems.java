@@ -2,13 +2,19 @@ package realcolin.whmod.item;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.WHMod;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class WHItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(WHMod.MOD_ID);
+
+    public static final List<ArmorSet> ARMOR_SETS = new ArrayList<>();
 
     public static final DeferredItem<Item> IMPERIAL_SWORD = ITEMS.registerItem(
             "imperial_sword",

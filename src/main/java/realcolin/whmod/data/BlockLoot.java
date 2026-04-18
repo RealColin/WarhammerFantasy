@@ -38,6 +38,10 @@ public class BlockLoot extends BlockLootSubProvider {
                     NORMAL_LEAVES_SAPLING_CHANCES
             ));
         }
+
+        for (var table : WHBlocks.CRAFTING_TABLES) {
+            dropSelf(table.get());
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package realcolin.whmod;
 
-import com.geckolib.loading.math.MolangQueries;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.slf4j.Logger;
@@ -12,10 +11,10 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.entity.WHEntities;
-import realcolin.whmod.entity.npc.NPC;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHCreativeTabs;
 import realcolin.whmod.item.WHItems;
+import realcolin.whmod.menu.WHMenuTypes;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.*;
 
@@ -39,24 +38,12 @@ public class WHMod {
     public WHMod(IEventBus modEventBus, ModContainer modContainer) {
         WHBlocks.BLOCKS.register(modEventBus);
         WHItems.ITEMS.register(modEventBus);
+        WHMenuTypes.MENU_TYPES.register(modEventBus);
         WHCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         WHEntities.ENTITY_TYPES.register(modEventBus);
         WHDensityFunctions.DENSITY_FUNCTIONS.register(modEventBus);
         WHBiomeSource.BIOME_SOURCES.register(modEventBus);
         ATTACHMENT_TYPES.register(modEventBus);
-
-        // TODO NOT sure if i need these any more considering he supposedly fixed the bug
-        MolangQueries.<NPC>setActorVariable("query.whmod_limb_swing", state -> {
-            var npc = state.animatable();
-            float pt = state.partialTick();
-            return npc.walkAnimation.position(pt);
-        });
-
-        MolangQueries.<NPC>setActorVariable("query.whmod_limb_swing_amount", state -> {
-            var npc = state.animatable();
-            float pt = state.partialTick();
-            return npc.walkAnimation.speed(pt);
-        });
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
