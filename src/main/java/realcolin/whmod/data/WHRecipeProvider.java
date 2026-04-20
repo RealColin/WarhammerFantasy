@@ -13,6 +13,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.NotNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.faction.Faction;
+import realcolin.whmod.item.WHItems;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -110,6 +112,24 @@ public class WHRecipeProvider extends RecipeProvider {
                     .unlockedBy("has_planks", has(woodSet.planksItem()))
                     .save(this.output);
         }
+
+        createFactionCraftingRecipes();
+    }
+
+    private void createFactionCraftingRecipes() {
+        createEmpireCraftingRecipes();
+    }
+
+    private void createEmpireCraftingRecipes() {
+        // imperial sword
+        FactionRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, WHItems.IMPERIAL_SWORD.get(), 1)
+                .pattern(" X ")
+                .pattern(" X ")
+                .pattern(" Y ")
+                .define('X', Items.IRON_INGOT)
+                .define('Y', Items.STICK)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(this.output);
     }
 
     private ResourceKey<Recipe<?>> recipeKey(String path) {

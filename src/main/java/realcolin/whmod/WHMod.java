@@ -14,6 +14,7 @@ import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHCreativeTabs;
 import realcolin.whmod.item.WHItems;
+import realcolin.whmod.item.recipe.WHRecipes;
 import realcolin.whmod.menu.WHMenuTypes;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
 import realcolin.whmod.worldgen.densityfunction.*;
@@ -38,6 +39,8 @@ public class WHMod {
     public WHMod(IEventBus modEventBus, ModContainer modContainer) {
         WHBlocks.BLOCKS.register(modEventBus);
         WHItems.ITEMS.register(modEventBus);
+        WHRecipes.RECIPE_TYPES.register(modEventBus);
+        WHRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         WHMenuTypes.MENU_TYPES.register(modEventBus);
         WHCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         WHEntities.ENTITY_TYPES.register(modEventBus);

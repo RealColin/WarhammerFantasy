@@ -10,11 +10,10 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import realcolin.whmod.block.FactionCraftingTableBlock;
 import realcolin.whmod.faction.Faction;
+import realcolin.whmod.item.recipe.WHRecipes;
 
 import java.util.List;
 
@@ -40,40 +39,41 @@ public class FactionCraftingMenu extends AbstractCraftingMenu {
     }
 
     @Override
-    public void slotsChanged(Container container) {
+    public void slotsChanged(@NonNull Container container) {
         if (!this.placingRecipe) {
-            this.access.execute((level, pos) -> {
+            this.access.execute((level, _) -> {
                 if (level instanceof ServerLevel serverLevel) {
-                    slotChangedCraftingGrid(this, serverLevel, this.player, this.craftSlots, this.resultSlots, null);
+                    slotChangedCraftingGrid(this, serverLevel, this.player, this.craftSlots);
                 }
 
             });
         }
     }
 
-    private static void slotChangedCraftingGrid(AbstractContainerMenu menu,
+    private void slotChangedCraftingGrid(AbstractContainerMenu menu,
                                                 ServerLevel level,
                                                 Player player,
-                                                CraftingContainer container,
-                                                ResultContainer resultSlots,
-                                                @Nullable RecipeHolder<CraftingRecipe> recipeHint) {
-        var input = container.asCraftInput();
-        var serverPlayer = (ServerPlayer)player;
+                                                CraftingContainer container) {
         var result = ItemStack.EMPTY;
-        var maybeRecipe = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level, recipeHint);
-        if (maybeRecipe.isPresent()) {
-            var recipeHolder = maybeRecipe.get();
-            var craftingRecipe = recipeHolder.value();
-            if (resultSlots.setRecipeUsed(serverPlayer, recipeHolder)) {
-                var recipeResult = craftingRecipe.assemble(input);
-                if (recipeResult.isItemEnabled(level.enabledFeatures())) {
-                    result = recipeResult;
-                }
+        var serverPlayer = (ServerPlayer)player;
+        var input = container.asCraftInput();
+
+        var optional = level.recipeAccess().getRecipeFor(
+                WHRecipes.FACTION_CRAFTING.get(),
+                input,
+                level
+        );
+
+        if (optional.isPresent()) {
+            var recipe = optional.get().value();
+
+            if (recipe.faction() == this.faction) {
+                result = recipe.assemble(input);
             }
         }
 
-        resultSlots.setItem(0, result);
-        menu.setRemoteSlot(0, result);
+        this.resultSlots.setItem(0, result);
+        this.setRemoteSlot(0, result);
         serverPlayer.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.incrementStateId(), 0, result));
     }
 
@@ -85,13 +85,13 @@ public class FactionCraftingMenu extends AbstractCraftingMenu {
     @Override
     protected void finishPlacingRecipe(@NonNull ServerLevel level, @NonNull RecipeHolder<CraftingRecipe> recipe) {
         this.placingRecipe = false;
-        slotChangedCraftingGrid(this, level, this.player, this.craftSlots, this.resultSlots, recipe);
+        slotChangedCraftingGrid(this, level, this.player, this.craftSlots);
     }
 
     @Override
     public void removed(@NonNull Player player) {
         super.removed(player);
-        this.access.execute((level, pos) -> this.clearContainer(player, this.craftSlots));
+        this.access.execute((_, _) -> this.clearContainer(player, this.craftSlots));
     }
 
     @Override
@@ -111,7 +111,7 @@ public class FactionCraftingMenu extends AbstractCraftingMenu {
 
     // TODO implement this of course
     @Override
-    public RecipeBookType getRecipeBookType() {
+    public @NonNull RecipeBookType getRecipeBookType() {
         return RecipeBookType.CRAFTING;
     }
 
