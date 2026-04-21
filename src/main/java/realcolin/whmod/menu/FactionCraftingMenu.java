@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jspecify.annotations.NonNull;
 import realcolin.whmod.block.FactionCraftingTableBlock;
 import realcolin.whmod.faction.Faction;
+import realcolin.whmod.item.recipe.WHRecipeBookTypes;
 import realcolin.whmod.item.recipe.WHRecipes;
 
 import java.util.List;
@@ -109,10 +110,9 @@ public class FactionCraftingMenu extends AbstractCraftingMenu {
         return this.player;
     }
 
-    // TODO implement this of course
     @Override
     public @NonNull RecipeBookType getRecipeBookType() {
-        return RecipeBookType.CRAFTING;
+        return WHRecipeBookTypes.FACTION_CRAFTING;
     }
 
     @Override

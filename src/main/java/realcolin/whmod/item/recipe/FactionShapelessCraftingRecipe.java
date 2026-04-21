@@ -91,6 +91,6 @@ public record FactionShapelessCraftingRecipe(Faction faction, List<Ingredient> i
 
     @Override
     public @NonNull RecipeBookCategory recipeBookCategory() {
-        return RecipeBookCategories.CRAFTING_MISC;
+        return WHRecipeBookCategories.FACTION_CRAFTING.get();
     }
 }

@@ -65,7 +65,7 @@ public record FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern p
 
     @Override
     public @NonNull RecipeBookCategory recipeBookCategory() {
-        return RecipeBookCategories.CRAFTING_MISC;
+        return WHRecipeBookCategories.FACTION_CRAFTING.get();
     }
 
     @Override
