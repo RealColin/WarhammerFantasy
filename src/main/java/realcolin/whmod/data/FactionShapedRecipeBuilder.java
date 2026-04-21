@@ -15,13 +15,13 @@ import net.minecraft.world.level.ItemLike;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import realcolin.whmod.faction.Faction;
-import realcolin.whmod.item.recipe.FactionCraftingRecipe;
+import realcolin.whmod.item.recipe.FactionShapedCraftingRecipe;
 
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public class FactionRecipeBuilder implements RecipeBuilder {
+public class FactionShapedRecipeBuilder implements RecipeBuilder {
     private final Faction faction;
     private final HolderGetter<Item> items;
     private final RecipeCategory category;
@@ -32,7 +32,7 @@ public class FactionRecipeBuilder implements RecipeBuilder {
     private @Nullable String group;
     private final boolean showNotification;
 
-    private FactionRecipeBuilder(Faction faction, HolderGetter<Item> items, RecipeCategory category, ItemStackTemplate result) {
+    private FactionShapedRecipeBuilder(Faction faction, HolderGetter<Item> items, RecipeCategory category, ItemStackTemplate result) {
         this.faction = faction;
         this.rows = Lists.newArrayList();
         this.key = Maps.newLinkedHashMap();
@@ -43,15 +43,15 @@ public class FactionRecipeBuilder implements RecipeBuilder {
         this.result = result;
     }
 
-    private FactionRecipeBuilder(Faction faction, HolderGetter<Item> items, RecipeCategory category, ItemLike result, int count) {
+    private FactionShapedRecipeBuilder(Faction faction, HolderGetter<Item> items, RecipeCategory category, ItemLike result, int count) {
         this(faction, items, category, new ItemStackTemplate(result.asItem(), count));
     }
 
-    public static FactionRecipeBuilder factionRecipe(Faction faction, HolderGetter<Item> items, RecipeCategory category, ItemLike item, int count) {
-        return new FactionRecipeBuilder(faction, items, category, item, count);
+    public static FactionShapedRecipeBuilder factionRecipe(Faction faction, HolderGetter<Item> items, RecipeCategory category, ItemLike item, int count) {
+        return new FactionShapedRecipeBuilder(faction, items, category, item, count);
     }
 
-    public FactionRecipeBuilder pattern(String row) {
+    public FactionShapedRecipeBuilder pattern(String row) {
         if (!this.rows.isEmpty() && row.length() != (this.rows.getFirst()).length()) {
             throw new IllegalArgumentException("Pattern must be the same width on every line!");
         } else {
@@ -60,11 +60,11 @@ public class FactionRecipeBuilder implements RecipeBuilder {
         }
     }
 
-    public FactionRecipeBuilder define(Character symbol, ItemLike item) {
+    public FactionShapedRecipeBuilder define(Character symbol, ItemLike item) {
         return this.define(symbol, Ingredient.of(item));
     }
 
-    public FactionRecipeBuilder define(Character symbol, Ingredient ingredient) {
+    public FactionShapedRecipeBuilder define(Character symbol, Ingredient ingredient) {
         if (this.key.containsKey(symbol)) {
             throw new IllegalArgumentException("Symbol '" + symbol + "' is already defined!");
         } else if (symbol == ' ') {
@@ -95,7 +95,7 @@ public class FactionRecipeBuilder implements RecipeBuilder {
     @Override
     public void save(RecipeOutput output, @NonNull ResourceKey<Recipe<?>> id) {
         var pattern = ShapedRecipePattern.of(this.key, this.rows);
-        var recipe = new FactionCraftingRecipe(faction, pattern, result);
+        var recipe = new FactionShapedCraftingRecipe(faction, pattern, result);
         output.accept(id, recipe, this.advancementBuilder.build(output, id, this.category));
     }
 }

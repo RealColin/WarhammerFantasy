@@ -6,6 +6,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.WHMod;
@@ -13,8 +16,7 @@ import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHItems;
 import realcolin.whmod.worldgen.tree.WHTreeGrowers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
@@ -27,8 +29,7 @@ public class WHBlocks {
     public static final WoodSet BEECH = WoodSet.make("beech", WHTreeGrowers.BEECH);
     public static final WoodSet ELM = WoodSet.make("elm", WHTreeGrowers.PINE);
 
-
-    public static final List<DeferredBlock<FactionCraftingTableBlock>> CRAFTING_TABLES = craftingTables();
+    public static final Map<Faction, DeferredBlock<FactionCraftingTableBlock>> CRAFTING_TABLE_MAP = craftingTableMap();
 
     private static DeferredBlock<Block> blockItem(String name, Function<Identifier, ? extends Block> func) {
 
@@ -38,18 +39,24 @@ public class WHBlocks {
         return block;
     }
 
-    private static List<DeferredBlock<FactionCraftingTableBlock>> craftingTables() {
-        var ret = new ArrayList<DeferredBlock<FactionCraftingTableBlock>>();
+    private static Map<Faction, DeferredBlock<FactionCraftingTableBlock>> craftingTableMap() {
+        var ret = new HashMap<Faction, DeferredBlock<FactionCraftingTableBlock>>();
 
         for (var fac : Faction.values()) {
             var name = fac.id() + "_crafting_table";
             var block = BLOCKS.registerBlock(name,
-                    (props) -> new FactionCraftingTableBlock(props, fac));
+                    (props) -> new FactionCraftingTableBlock(
+                            props
+                                    .mapColor(MapColor.WOOD)
+                                    .instrument(NoteBlockInstrument.BASS)
+                                    .strength(2.5F)
+                                    .sound(SoundType.WOOD)
+                                    .ignitedByLava(),
+                            fac));
             var item = WHItems.ITEMS.register(name,
                     res -> new BlockItem(block.get(), new Item.Properties().setId(ResourceKey.create(Registries.ITEM, res))));
-            ret.add(block);
+            ret.put(fac, block);
         }
-
         return ret;
     }
 }

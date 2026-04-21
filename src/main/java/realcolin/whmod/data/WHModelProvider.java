@@ -89,8 +89,8 @@ public class WHModelProvider extends ModelProvider {
     }
 
     private void craftingTables(BlockModelGenerators blockModels) {
-        for (var table : WHBlocks.CRAFTING_TABLES) {
-            var block = table.get();
+        for (var table : WHBlocks.CRAFTING_TABLE_MAP.entrySet()) {
+            var block = table.getValue().get();
             blockModels.createCraftingTableLike(block, block, WHModelProvider::table);
         }
     }
@@ -99,10 +99,10 @@ public class WHModelProvider extends ModelProvider {
         return new TextureMapping()
                 .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(table, "_front"))
                 .put(TextureSlot.UP, TextureMapping.getBlockTexture(table, "_top"))
-                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(table, "_top"))
-                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(table, "_bottom"))
                 .put(TextureSlot.DOWN, TextureMapping.getBlockTexture(table, "_bottom"))
-                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(table, "_side"))
-                .put(TextureSlot.FRONT, TextureMapping.getBlockTexture(table, "_front"));
+                .put(TextureSlot.EAST, TextureMapping.getBlockTexture(table, "_side"))
+                .put(TextureSlot.WEST, TextureMapping.getBlockTexture(table, "_side"))
+                .put(TextureSlot.NORTH, TextureMapping.getBlockTexture(table, "_front"))
+                .put(TextureSlot.SOUTH, TextureMapping.getBlockTexture(table, "_front"));
     }
 }

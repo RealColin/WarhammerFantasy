@@ -39,8 +39,8 @@ public class BlockLoot extends BlockLootSubProvider {
             ));
         }
 
-        for (var table : WHBlocks.CRAFTING_TABLES) {
-            dropSelf(table.get());
+        for (var table : WHBlocks.CRAFTING_TABLE_MAP.entrySet()) {
+            dropSelf(table.getValue().get());
         }
     }
 

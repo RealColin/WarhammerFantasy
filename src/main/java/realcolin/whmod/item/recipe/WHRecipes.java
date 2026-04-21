@@ -20,9 +20,15 @@ public class WHRecipes {
                 }
             });
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FactionCraftingRecipe>> FACTION_CRAFTING_S =
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FactionShapedCraftingRecipe>> SHAPED_FACTION_CRAFTING =
             RECIPE_SERIALIZERS.register(
-                    "faction_crafting",
-                    () -> new RecipeSerializer<>(FactionCraftingRecipe.CODEC, FactionCraftingRecipe.STREAM_CODEC)
+                    "shaped_faction_crafting",
+                    () -> new RecipeSerializer<>(FactionShapedCraftingRecipe.CODEC, FactionShapedCraftingRecipe.STREAM_CODEC)
+            );
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FactionShapelessCraftingRecipe>> SHAPELESS_FACTION_CRAFTING =
+            RECIPE_SERIALIZERS.register(
+                    "shapeless_faction_crafting",
+                    () -> new RecipeSerializer<>(FactionShapelessCraftingRecipe.CODEC, FactionShapelessCraftingRecipe.STREAM_CODEC)
             );
 }

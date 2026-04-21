@@ -122,13 +122,22 @@ public class WHRecipeProvider extends RecipeProvider {
 
     private void createEmpireCraftingRecipes() {
         // imperial sword
-        FactionRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, WHItems.IMPERIAL_SWORD.get(), 1)
+        FactionShapedRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, WHItems.IMPERIAL_SWORD.get(), 1)
                 .pattern(" X ")
                 .pattern(" X ")
                 .pattern(" Y ")
                 .define('X', Items.IRON_INGOT)
                 .define('Y', Items.STICK)
                 .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(this.output);
+
+        var table = WHBlocks.CRAFTING_TABLE_MAP.get(Faction.EMPIRE);
+        FactionShapedRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, table.get(), 1)
+                .pattern("XX")
+                .pattern("YY")
+                .define('X', Items.COBBLESTONE)
+                .define('Y', WHBlocks.PINE.planksItem())
+                .unlockedBy("whatever", has(Items.COBBLESTONE))
                 .save(this.output);
     }
 
