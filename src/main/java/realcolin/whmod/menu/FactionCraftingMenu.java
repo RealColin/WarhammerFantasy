@@ -1,5 +1,6 @@
 package realcolin.whmod.menu;
 
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +28,10 @@ public class FactionCraftingMenu extends AbstractCraftingMenu {
 
     public FactionCraftingMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, ContainerLevelAccess.NULL, Faction.NONE);
+    }
+
+    public FactionCraftingMenu(int containerId, Inventory inventory, RegistryFriendlyByteBuf buf) {
+        this(containerId, inventory, ContainerLevelAccess.create(inventory.player.level(), buf.readBlockPos()), buf.readEnum(Faction.class));
     }
 
     public FactionCraftingMenu(int containerId, Inventory inventory, ContainerLevelAccess access, Faction faction) {

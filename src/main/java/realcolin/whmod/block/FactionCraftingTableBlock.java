@@ -17,6 +17,8 @@ import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.menu.FactionCraftingMenu;
 
+import java.util.Objects;
+
 public class FactionCraftingTableBlock extends Block {
     private final Faction faction;
 
@@ -29,7 +31,10 @@ public class FactionCraftingTableBlock extends Block {
     protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult hitResult) {
         if (!level.isClientSide()) {
             if (canPlayerOpen(player)) {
-                player.openMenu(state.getMenuProvider(level, pos));
+                player.openMenu(Objects.requireNonNull(state.getMenuProvider(level, pos)), buf -> {
+                    buf.writeBlockPos(pos);
+                    buf.writeEnum(faction);
+                });
             } else {
                 player.sendOverlayMessage(Component.literal("Wrong faction!"));
             }

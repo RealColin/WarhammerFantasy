@@ -3,7 +3,6 @@ package realcolin.whmod.client.screen;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
-import net.minecraft.client.gui.screens.recipebook.CraftingRecipeBookComponent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -16,7 +15,7 @@ public class FactionCraftingScreen extends AbstractRecipeBookScreen<FactionCraft
     private final Identifier TEXTURE_LOCATION;
 
     public FactionCraftingScreen(FactionCraftingMenu menu, Inventory inventory, Component title) {
-        super(menu, new CraftingRecipeBookComponent(menu), inventory, title);
+        super(menu, new FactionCraftingRecipeBookComponent(menu, menu.getFaction()), inventory, title);
         var faction = menu.getFaction();
         TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "textures/gui/container/" + faction.id() + "_crafting_table.png");
     }

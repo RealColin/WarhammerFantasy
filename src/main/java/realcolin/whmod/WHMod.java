@@ -14,6 +14,8 @@ import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHCreativeTabs;
 import realcolin.whmod.item.WHItems;
+import realcolin.whmod.item.recipe.WHRecipeBookCategories;
+import realcolin.whmod.item.recipe.WHRecipeDisplays;
 import realcolin.whmod.item.recipe.WHRecipes;
 import realcolin.whmod.menu.WHMenuTypes;
 import realcolin.whmod.worldgen.biome.WHBiomeSource;
@@ -41,6 +43,8 @@ public class WHMod {
         WHItems.ITEMS.register(modEventBus);
         WHRecipes.RECIPE_TYPES.register(modEventBus);
         WHRecipes.RECIPE_SERIALIZERS.register(modEventBus);
+        WHRecipeDisplays.RECIPE_DISPLAYS.register(modEventBus);
+        WHRecipeBookCategories.CATEGORIES.register(modEventBus);
         WHMenuTypes.MENU_TYPES.register(modEventBus);
         WHCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         WHEntities.ENTITY_TYPES.register(modEventBus);

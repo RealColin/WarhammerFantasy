@@ -7,6 +7,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterRecipeBookSearchCategoriesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import realcolin.whmod.client.WHModelLayers;
 import realcolin.whmod.client.model.BoarModel;
 import realcolin.whmod.client.model.BrownBearModel;
+import realcolin.whmod.client.screen.WHSearchRecipeBookCategory;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
 import realcolin.whmod.entity.animal.BrownBear;
@@ -76,4 +78,13 @@ public class WHModBusEvents {
     public static void addCreativeModeTabs(BuildCreativeModeTabContentsEvent event) {
 
     }
+
+    @SubscribeEvent
+    public static void registerSearchCategories(RegisterRecipeBookSearchCategoriesEvent event) {
+        event.register(
+                WHSearchRecipeBookCategory.CRAFTING,
+                WHSearchRecipeBookCategory.CRAFTING.included()
+        );
+    }
+
 }
