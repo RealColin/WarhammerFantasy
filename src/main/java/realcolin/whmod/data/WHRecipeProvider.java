@@ -139,6 +139,12 @@ public class WHRecipeProvider extends RecipeProvider {
                 .define('Y', WHBlocks.PINE.planksItem())
                 .unlockedBy("whatever", has(Items.COBBLESTONE))
                 .save(this.output);
+
+        // TODO example recipe, delete when actual shapeless recipe is added
+        FactionShapelessRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, WHItems.STATE_TROOP_SET.helmet())
+                .requires(Items.IRON_INGOT, 2)
+                .unlockedBy("has_rion", has(Items.IRON_INGOT))
+                .save(this.output);
     }
 
     private ResourceKey<Recipe<?>> recipeKey(String path) {

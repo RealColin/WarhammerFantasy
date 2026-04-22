@@ -22,8 +22,8 @@ public record FactionShapedCraftingRecipeDisplay(Faction faction, int width, int
                     Codec.INT.fieldOf("height").forGetter(FactionShapedCraftingRecipeDisplay::height),
                     SlotDisplay.CODEC.listOf().fieldOf("ingredients").forGetter(FactionShapedCraftingRecipeDisplay::ingredients),
                     SlotDisplay.CODEC.fieldOf("result").forGetter(FactionShapedCraftingRecipeDisplay::result),
-                    SlotDisplay.CODEC.fieldOf("crafting_station").forGetter(FactionShapedCraftingRecipeDisplay::craftingStation))
-                    .apply(i, FactionShapedCraftingRecipeDisplay::new));
+                    SlotDisplay.CODEC.fieldOf("crafting_station").forGetter(FactionShapedCraftingRecipeDisplay::craftingStation)
+                    ).apply(i, FactionShapedCraftingRecipeDisplay::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, FactionShapedCraftingRecipeDisplay> STREAM_CODEC =
             StreamCodec.composite(
                     Faction.STREAM_CODEC, FactionShapedCraftingRecipeDisplay::faction,

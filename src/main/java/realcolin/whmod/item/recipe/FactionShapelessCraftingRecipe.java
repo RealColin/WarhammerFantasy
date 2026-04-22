@@ -8,7 +8,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.RecipeMatcher;
 import org.jspecify.annotations.NonNull;
@@ -92,5 +95,18 @@ public record FactionShapelessCraftingRecipe(Faction faction, List<Ingredient> i
     @Override
     public @NonNull RecipeBookCategory recipeBookCategory() {
         return WHRecipeBookCategories.FACTION_CRAFTING.get();
+    }
+
+    @Override
+    public @NonNull List<RecipeDisplay> display() {
+        // TODO change Items.CRAFTING_TABLE to whatever the faction crafting table is
+
+        return List.of(
+                new FactionShapelessCraftingRecipeDisplay(
+                        faction,
+                        this.ingredients.stream().map(Ingredient::display).toList(),
+                        new SlotDisplay.ItemStackSlotDisplay(this.result),
+                        new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE)));
+
     }
 }

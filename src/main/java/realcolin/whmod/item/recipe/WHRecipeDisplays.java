@@ -16,5 +16,15 @@ public class WHRecipeDisplays {
                     () -> new RecipeDisplay.Type<>(
                             FactionShapedCraftingRecipeDisplay.MAP_CODEC,
                             FactionShapedCraftingRecipeDisplay.STREAM_CODEC
-                    ));
+                    )
+            );
+
+    public static final DeferredHolder<RecipeDisplay.Type<?>, RecipeDisplay.Type<FactionShapelessCraftingRecipeDisplay>> FACTION_SHAPELESS =
+            RECIPE_DISPLAYS.register(
+                    "faction_shapeless",
+                    () -> new RecipeDisplay.Type<>(
+                            FactionShapelessCraftingRecipeDisplay.MAP_CODEC,
+                            FactionShapelessCraftingRecipeDisplay.STREAM_CODEC
+                    )
+            );
 }

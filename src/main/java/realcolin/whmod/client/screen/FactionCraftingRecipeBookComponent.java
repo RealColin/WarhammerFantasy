@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import org.jspecify.annotations.NonNull;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.recipe.FactionShapedCraftingRecipeDisplay;
+import realcolin.whmod.item.recipe.FactionShapelessCraftingRecipeDisplay;
 import realcolin.whmod.item.recipe.WHRecipeBookCategories;
 
 import java.util.List;
@@ -64,12 +65,11 @@ public class FactionCraftingRecipeBookComponent extends RecipeBookComponent<Abst
 
     }
 
-    // TODO implement pls
     private boolean canDisplay(RecipeDisplay display) {
         boolean ret;
         switch (display) {
             case FactionShapedCraftingRecipeDisplay shaped -> ret = this.faction == shaped.faction();
-
+            case FactionShapelessCraftingRecipeDisplay shapeless -> ret = this.faction == shapeless.faction();
             default -> ret = false;
         }
 
