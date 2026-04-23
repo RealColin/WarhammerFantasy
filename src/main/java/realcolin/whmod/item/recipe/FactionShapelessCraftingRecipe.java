@@ -20,8 +20,18 @@ import realcolin.whmod.faction.Faction;
 import java.util.ArrayList;
 import java.util.List;
 
-public record FactionShapelessCraftingRecipe(Faction faction, List<Ingredient> ingredients,
-                                             ItemStackTemplate result) implements FactionCraftingRecipe {
+public class FactionShapelessCraftingRecipe implements FactionCraftingRecipe {
+
+    private final Faction faction;
+    private final List<Ingredient> ingredients;
+    private final ItemStackTemplate result;
+    private PlacementInfo placementInfo;
+
+    public FactionShapelessCraftingRecipe(Faction faction, List<Ingredient> ingredients, ItemStackTemplate result) {
+        this.faction = faction;
+        this.ingredients = ingredients;
+        this.result = result;
+    }
 
     public static final MapCodec<FactionShapelessCraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(
             (i) -> i.group(
@@ -61,7 +71,7 @@ public record FactionShapelessCraftingRecipe(Faction faction, List<Ingredient> i
     }
 
     @Override
-    public @NonNull ItemStack assemble(CraftingInput craftingInput) {
+    public @NonNull ItemStack assemble(@NonNull CraftingInput craftingInput) {
         return result.create();
     }
 
@@ -83,13 +93,31 @@ public record FactionShapelessCraftingRecipe(Faction faction, List<Ingredient> i
     }
 
     @Override
+    public Faction faction() {
+        return faction;
+    }
+
+    public List<Ingredient> ingredients() {
+        return ingredients;
+    }
+
+    public ItemStackTemplate result() {
+        return result;
+    }
+
+
+    @Override
     public @NonNull RecipeType<? extends Recipe<CraftingInput>> getType() {
         return WHRecipes.FACTION_CRAFTING.get();
     }
 
     @Override
     public @NonNull PlacementInfo placementInfo() {
-        return PlacementInfo.NOT_PLACEABLE;
+        if (placementInfo == null) {
+            placementInfo = PlacementInfo.create(ingredients);
+        }
+
+        return placementInfo;
     }
 
     @Override

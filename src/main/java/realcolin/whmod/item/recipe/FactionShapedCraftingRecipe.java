@@ -16,8 +16,14 @@ import realcolin.whmod.faction.Faction;
 
 import java.util.List;
 
-public record FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern pattern,
-                                          ItemStackTemplate result) implements FactionCraftingRecipe {
+public class FactionShapedCraftingRecipe implements FactionCraftingRecipe {
+
+    private final Faction faction;
+    private final ShapedRecipePattern pattern;
+    private final ItemStackTemplate result;
+    private PlacementInfo info;
+
+
     public static final MapCodec<FactionShapedCraftingRecipe> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Faction.CODEC.fieldOf("faction").forGetter(FactionShapedCraftingRecipe::faction),
@@ -34,13 +40,19 @@ public record FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern p
                     FactionShapedCraftingRecipe::new
             );
 
+    public FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern pattern, ItemStackTemplate result) {
+        this.faction = faction;
+        this.pattern = pattern;
+        this.result = result;
+    }
+
     @Override
-    public boolean matches(CraftingInput craftingInput, @NonNull Level level) {
+    public boolean matches(@NonNull CraftingInput craftingInput, @NonNull Level level) {
         return this.pattern.matches(craftingInput);
     }
 
     @Override
-    public @NonNull ItemStack assemble(CraftingInput craftingInput) {
+    public @NonNull ItemStack assemble(@NonNull CraftingInput craftingInput) {
         return result.create();
     }
 
@@ -56,8 +68,6 @@ public record FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern p
         return "";
     }
 
-
-
     @Override
     public @NonNull RecipeType<? extends Recipe<CraftingInput>> getType() {
         return WHRecipes.FACTION_CRAFTING.get();
@@ -65,7 +75,12 @@ public record FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern p
 
     @Override
     public @NonNull PlacementInfo placementInfo() {
-        return PlacementInfo.NOT_PLACEABLE;
+        if (info == null) {
+            System.out.println("Pattern ingredients: " + this.pattern.ingredients());
+            this.info = PlacementInfo.createFromOptionals(this.pattern.ingredients());
+        }
+
+        return this.info;
     }
 
     @Override
@@ -76,6 +91,19 @@ public record FactionShapedCraftingRecipe(Faction faction, ShapedRecipePattern p
     @Override
     public @NonNull RecipeSerializer<? extends FactionCraftingRecipe> getSerializer() {
         return WHRecipes.SHAPED_FACTION_CRAFTING.get();
+    }
+
+    @Override
+    public Faction faction() {
+        return faction;
+    }
+
+    public ShapedRecipePattern pattern() {
+        return pattern;
+    }
+
+    public ItemStackTemplate result() {
+        return result;
     }
 
     @Override

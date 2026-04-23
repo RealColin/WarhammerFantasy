@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.recipebook.GhostSlots;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.recipebook.PlaceRecipeHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.entity.player.StackedItemContents;
@@ -22,6 +23,7 @@ import realcolin.whmod.item.recipe.FactionShapelessCraftingRecipeDisplay;
 import realcolin.whmod.item.recipe.WHRecipeBookCategories;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class FactionCraftingRecipeBookComponent extends RecipeBookComponent<AbstractCraftingMenu> {
@@ -35,7 +37,7 @@ public class FactionCraftingRecipeBookComponent extends RecipeBookComponent<Abst
         this.faction = faction;
     }
 
-    private static List<RecipeBookComponent.TabInfo> makeTabs(Faction faction) {
+    private static List<TabInfo> makeTabs(Faction faction) {
         Item item;
         switch (faction) {
             case EMPIRE -> item = WHItems.IMPERIAL_SWORD.get();
@@ -44,8 +46,8 @@ public class FactionCraftingRecipeBookComponent extends RecipeBookComponent<Abst
         }
 
         return List.of(
-                new RecipeBookComponent.TabInfo(new ItemStack(Items.COMPASS), Optional.empty(), WHSearchRecipeBookCategory.CRAFTING),
-                new RecipeBookComponent.TabInfo(item, WHRecipeBookCategories.FACTION_CRAFTING.get())
+                new TabInfo(new ItemStack(Items.COMPASS), Optional.empty(), WHSearchRecipeBookCategory.CRAFTING),
+                new TabInfo(item, WHRecipeBookCategories.FACTION_CRAFTING.get())
         );
     }
 
@@ -71,6 +73,36 @@ public class FactionCraftingRecipeBookComponent extends RecipeBookComponent<Abst
 
     @Override
     protected void fillGhostRecipe(@NonNull GhostSlots ghostSlots, @NonNull RecipeDisplay recipeDisplay, @NonNull ContextMap contextMap) {
+        ghostSlots.setResult((this.menu).getResultSlot(), contextMap, recipeDisplay.result());
+        Objects.requireNonNull(recipeDisplay);
+        switch (recipeDisplay) {
+            case FactionShapedCraftingRecipeDisplay shaped -> {
+                var inputSlots = menu.getInputGridSlots();
+                PlaceRecipeHelper.placeRecipe(
+                        menu.getGridWidth(),
+                        menu.getGridHeight(),
+                        shaped.width(),
+                        shaped.height(),
+                        shaped.ingredients(),
+                        (ingredient, gridIndex, _, _) -> {
+                            var slot = inputSlots.get(gridIndex);
+                            ghostSlots.setInput(slot, contextMap, ingredient);
+                        }
+                );
+            }
+
+            case FactionShapelessCraftingRecipeDisplay shapeless -> {
+                var inputSlots = menu.getInputGridSlots();
+                int slotCount = Math.min(shapeless.ingredients().size(), inputSlots.size());
+
+                for (int i = 0; i < slotCount; i++) {
+                    ghostSlots.setInput(inputSlots.get(i), contextMap, shapeless.ingredients().get(i));
+                }
+            }
+
+
+            default -> System.out.println("A");
+        }
 
     }
 
