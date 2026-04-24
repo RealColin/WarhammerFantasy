@@ -11,13 +11,15 @@ import org.jspecify.annotations.NonNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.menu.FactionCraftingMenu;
 
+import java.util.Locale;
+
 public class FactionCraftingScreen extends AbstractRecipeBookScreen<FactionCraftingMenu> {
     private final Identifier TEXTURE_LOCATION;
 
     public FactionCraftingScreen(FactionCraftingMenu menu, Inventory inventory, Component title) {
         super(menu, new FactionCraftingRecipeBookComponent(menu, menu.getFaction()), inventory, title);
         var faction = menu.getFaction();
-        TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "textures/gui/container/" + faction.id() + "_crafting_table.png");
+        TEXTURE_LOCATION = Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "textures/gui/container/" + faction.adjective().toLowerCase(Locale.ROOT) + "_crafting_table.png");
     }
 
     protected void init() {

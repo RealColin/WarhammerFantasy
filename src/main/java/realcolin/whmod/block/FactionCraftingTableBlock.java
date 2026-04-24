@@ -17,6 +17,7 @@ import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.menu.FactionCraftingMenu;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class FactionCraftingTableBlock extends Block {
@@ -45,7 +46,7 @@ public class FactionCraftingTableBlock extends Block {
 
     @Override
     protected @Nullable MenuProvider getMenuProvider(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos) {
-        var title = Component.translatable("container." + faction.id() + "_faction_crafting");
+        var title = Component.translatable("container." + faction.adjective().toLowerCase(Locale.ROOT) + "_faction_crafting");
 
         return new SimpleMenuProvider((containerId, inventory, _) ->
                 new FactionCraftingMenu(containerId, inventory, ContainerLevelAccess.create(level, pos), faction), title);

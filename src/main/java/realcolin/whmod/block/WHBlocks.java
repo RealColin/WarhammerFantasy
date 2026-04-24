@@ -43,7 +43,7 @@ public class WHBlocks {
         var ret = new HashMap<Faction, DeferredBlock<FactionCraftingTableBlock>>();
 
         for (var fac : Faction.values()) {
-            var name = fac.id() + "_crafting_table";
+            var name = fac.adjective().toLowerCase(Locale.ROOT) + "_crafting_table";
             var block = BLOCKS.registerBlock(name,
                     (props) -> new FactionCraftingTableBlock(
                             props

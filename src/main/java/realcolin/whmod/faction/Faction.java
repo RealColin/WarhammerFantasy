@@ -13,12 +13,14 @@ public enum Faction {
     NONE(
             "none",
             "",
+            "none",
             new Pair(0, 0),
             Component.translatable("faction.whmod.none.desc"),
             List.of()),
     EMPIRE(
             "empire",
             "The Empire",
+            "Imperial",
             new Pair(46526, 30134),
             Component.translatable("faction.whmod.empire.desc"),
             List.of(
@@ -37,6 +39,7 @@ public enum Faction {
     DWARFS(
             "dwarfs",
             "Dwarfs",
+            "Dwarven",
             new Pair(46526, 30134),
             Component.translatable("faction.whmod.dwarfs.desc"),
             List.of(
@@ -52,25 +55,27 @@ public enum Faction {
                     )
             )
     ),
-    BEASTMEN("beastmen", "Beastmen", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc"), List.of(
+    BEASTMEN("beastmen", "Beastmen", "Beastish", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc"), List.of(
 
     )),
-    GREENSKINS("greenskins", "Greenskins", new Pair(46526, 30134), Component.translatable("faction.whmod.greenskins.desc"), List.of(
+    GREENSKINS("greenskins", "Greenskins", "Orcish", new Pair(46526, 30134), Component.translatable("faction.whmod.greenskins.desc"), List.of(
 
     )),
-    WOOD_ELVES("wood_elves", "Wood Elves", new Pair(46526, 30134), Component.translatable("faction.whmod.wood_elves.desc"), List.of(
+    WOOD_ELVES("wood_elves", "Wood Elves", "Wood_Elven", new Pair(46526, 30134), Component.translatable("faction.whmod.wood_elves.desc"), List.of(
 
     ));
 
     private final String id;
     private final String name;
+    private final String adjective;
     private final Pair spawnPos;
     private final Component description;
     private final List<FactionTrait> traits;
 
-    Faction(String id, String name, Pair spawnPos, Component description, List<FactionTrait> traits) {
+    Faction(String id, String name, String adjective, Pair spawnPos, Component description, List<FactionTrait> traits) {
         this.id = id;
         this.name = name;
+        this.adjective = adjective;
         this.spawnPos = spawnPos;
         this.description = description;
         this.traits = traits;
@@ -82,6 +87,10 @@ public enum Faction {
 
     public String getName() {
         return name;
+    }
+
+    public String adjective() {
+        return adjective;
     }
 
     public Pair spawnPos() {
