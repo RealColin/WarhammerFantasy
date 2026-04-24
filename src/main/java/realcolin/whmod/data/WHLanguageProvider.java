@@ -5,7 +5,10 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.entity.WHEntities;
+import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHItems;
+
+import java.util.Locale;
 
 public class WHLanguageProvider extends LanguageProvider {
     public WHLanguageProvider(PackOutput output) {
@@ -17,6 +20,7 @@ public class WHLanguageProvider extends LanguageProvider {
         WHBlocks.BLOCKS.getEntries().forEach(h -> addBlock(h, toTitleCase(h.getId().getPath())));
         WHItems.ITEMS.getEntries().forEach(h -> addItem(h, toTitleCase(h.getId().getPath())));
         WHEntities.ENTITY_TYPES.getEntries().forEach(h -> addEntityType(h, toTitleCase(h.getId().getPath())));
+        addScreens();
         addFactions();
     }
 
@@ -31,6 +35,14 @@ public class WHLanguageProvider extends LanguageProvider {
                     .append(' ');
         }
         return sb.toString().trim();
+    }
+
+    private void addScreens() {
+        for (var fac : Faction.values()) {
+            var translatable = "container." + fac.adjective().toLowerCase(Locale.ROOT) + "_faction_crafting";
+            var text = fac.adjective() + " Crafting";
+            add(translatable, text);
+        }
     }
 
     private void addFactions() {
