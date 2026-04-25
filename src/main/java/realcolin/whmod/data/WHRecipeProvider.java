@@ -140,12 +140,50 @@ public class WHRecipeProvider extends RecipeProvider {
                 .unlockedBy("whatever", has(Items.COBBLESTONE))
                 .save(this.output);
 
+        // state troop armor set
+        var stateTroopSet = WHItems.STATE_TROOP_SET;
+        FactionShapedRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, stateTroopSet.helmet().get(), 1)
+                .pattern("YXY")
+                .pattern("X X")
+                .define('X', Items.IRON_INGOT)
+                .define('Y', Items.LEATHER)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(this.output);
+
+        FactionShapedRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, stateTroopSet.chestplate().get(), 1)
+                .pattern("Y Y")
+                .pattern("XXX")
+                .pattern("XYX")
+                .define('X', Items.IRON_INGOT)
+                .define('Y', Items.LEATHER)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(this.output);
+
+        FactionShapedRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, stateTroopSet.leggings().get(), 1)
+                .pattern("YYY")
+                .pattern("X X")
+                .pattern("X X")
+                .define('X', Items.IRON_INGOT)
+                .define('Y', Items.LEATHER)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(this.output);
+
+        FactionShapedRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, stateTroopSet.boots().get(), 1)
+                .pattern("Y Y")
+                .pattern("X X")
+                .define('X', Items.IRON_INGOT)
+                .define('Y', Items.LEATHER)
+                .unlockedBy("has_iron", has(Items.IRON_INGOT))
+                .save(this.output);
+
+
         // TODO example recipe, delete when actual shapeless recipe is added
-        FactionShapelessRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, WHItems.STATE_TROOP_SET.helmet())
+        FactionShapelessRecipeBuilder.factionRecipe(Faction.EMPIRE, this.items, RecipeCategory.MISC, Items.COAL)
                 .requires(Items.IRON_INGOT, 2)
                 .unlockedBy("has_rion", has(Items.IRON_INGOT))
                 .save(this.output);
     }
+
 
     private ResourceKey<Recipe<?>> recipeKey(String path) {
         return ResourceKey.create(
