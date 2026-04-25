@@ -156,15 +156,20 @@ public abstract class NPC extends PathfinderMob implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(DefaultAnimations.genericWalkIdleController());
 
-        var attackController = new AnimationController<>("attack_controller", 0, _ -> PlayState.STOP)
-                .triggerableAnim("attack", DefaultAnimations.ATTACK_SWING);
+        // have to change the speed of the animation based on the entity's attack speed
+        // this should work but do more testing
+        var attackController = new AnimationController<>("attack_controller", 0, state -> {
+           var attackSpeed = this.getAttributeValue(Attributes.ATTACK_SPEED);
+           int attackTicks = Math.max(1, Mth.floor((float) (20.0 / attackSpeed)));
+           double animSpeed = 20.0 / attackTicks;
 
-        // TODO figure out workaround for this
-//                .setAnimationSpeed(state -> {
-//                    var attackSpeed = this.getAttributeValue(Attributes.ATTACK_SPEED);
-//                    int attackTicks = Math.max(1, Mth.floor((float) (20.0 / attackSpeed)));
-//                    return 20.0 / attackTicks;
-//                });
+           state.controller().setAnimationSpeed(animSpeed);
+
+           if (state.controller().isPlayingTriggeredAnimation())
+               return PlayState.CONTINUE;
+
+           return PlayState.STOP;
+        }).triggerableAnim("attack", DefaultAnimations.ATTACK_SWING);
 
         controllers.add(attackController);
     }
