@@ -63,7 +63,7 @@
     {
       "region": "old_world_placeholder",
       "color": 6927429,
-      "terrain": "whmod:flats",
+      "terrain": "whmod:rolling_lowlands",
       "biomes": [
         {
           "biome": "whmod:old_world",
