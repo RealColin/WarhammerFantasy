@@ -1,29 +1,18 @@
 {
-  "type": "minecraft:add",
-  "argument1": {
-    "type": "minecraft:mul",
-    "argument1": 0.0035,
-    "argument2": {
-      "type": "minecraft:shifted_noise",
-      "noise": "whmod:rolling_lowlands/broad_jitter",
-      "xz_scale": 0.45,
-      "y_scale": 0.0,
-      "shift_x": "minecraft:shift_x",
-      "shift_y": 0,
-      "shift_z": "minecraft:shift_z"
-    }
-  },
+  "type": "minecraft:mul",
+  "argument1": 0.02,
   "argument2": {
-    "type": "minecraft:mul",
-    "argument1": 0.00125,
-    "argument2": {
+    "type": "minecraft:clamp",
+    "input": {
       "type": "minecraft:shifted_noise",
-      "noise": "whmod:rolling_lowlands/small_jitter",
-      "xz_scale": 1.4,
-      "y_scale": 0.0,
+      "noise": "minecraft:ridge",
+      "xz_scale": 1.0,
+      "y_scale": 0,
       "shift_x": "minecraft:shift_x",
       "shift_y": 0,
       "shift_z": "minecraft:shift_z"
-    }
+    },
+    "min": -1.0,
+    "max": 1.0
   }
 }
