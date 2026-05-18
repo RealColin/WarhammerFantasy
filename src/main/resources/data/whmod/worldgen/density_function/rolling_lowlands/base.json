@@ -3,8 +3,8 @@
   "spline": {
     "coordinate": {
       "type": "minecraft:shifted_noise",
-      "noise": "minecraft:erosion",
-      "xz_scale": 0.75,
+      "noise": "whmod:rolling_lowlands/base",
+      "xz_scale": 1,
       "y_scale": 0,
       "shift_x": "minecraft:shift_x",
       "shift_y": 0,
@@ -12,34 +12,152 @@
     },
     "points": [
       {
-        "location": -1,
+        "location": -0.25,
         "derivative": 0,
-        "value": 0.01
+        "value": {
+          "coordinate": {
+            "type": "minecraft:shifted_noise",
+            "noise": "whmod:rolling_lowlands/jitter",
+            "xz_scale": 1,
+            "y_scale": 0,
+            "shift_x": "minecraft:shift_x",
+            "shift_y": 0,
+            "shift_z": "minecraft:shift_z"
+          },
+          "points": [
+            {
+              "location": -0.25,
+              "derivative": 0,
+              "value": 0
+            },
+            {
+              "location": -0.18,
+              "derivative": 0,
+              "value": 0.01
+            },
+            {
+              "location": 0.18,
+              "derivative": 0,
+              "value": 0.01
+            },
+            {
+              "location": 0.25,
+              "derivative": 0,
+              "value": 0.02
+            }
+          ]
+        }
       },
       {
-        "location": -0.2,
+        "location": -0.18,
         "derivative": 0,
-        "value": 0.015
+        "value": {
+          "coordinate": {
+            "type": "minecraft:shifted_noise",
+            "noise": "whmod:rolling_lowlands/jitter",
+            "xz_scale": 1,
+            "y_scale": 0,
+            "shift_x": "minecraft:shift_x",
+            "shift_y": 0,
+            "shift_z": "minecraft:shift_z"
+          },
+          "points": [
+            {
+              "location": -0.25,
+              "derivative": 0,
+              "value": 0.02
+            },
+            {
+              "location": -0.18,
+              "derivative": 0,
+              "value": 0.03
+            },
+            {
+              "location": 0.18,
+              "derivative": 0,
+              "value": 0.03
+            },
+            {
+              "location": 0.25,
+              "derivative": 0,
+              "value": 0.04
+            }
+          ]
+        }
       },
       {
-        "location": -0.1,
+        "location": 0.18,
         "derivative": 0,
-        "value": 0.048
+        "value": {
+          "coordinate": {
+            "type": "minecraft:shifted_noise",
+            "noise": "whmod:rolling_lowlands/jitter",
+            "xz_scale": 1,
+            "y_scale": 0,
+            "shift_x": "minecraft:shift_x",
+            "shift_y": 0,
+            "shift_z": "minecraft:shift_z"
+          },
+          "points": [
+            {
+              "location": -0.25,
+              "derivative": 0,
+              "value": 0.04
+            },
+            {
+              "location": -0.18,
+              "derivative": 0,
+              "value": 0.05
+            },
+            {
+              "location": 0.18,
+              "derivative": 0,
+              "value": 0.05
+            },
+            {
+              "location": 0.18,
+              "derivative": 0,
+              "value": 0.06
+            }
+          ]
+        }
       },
       {
-        "location": 0.4,
+        "location": 0.25,
         "derivative": 0,
-        "value": 0.052
-      },
-      {
-        "location": 0.5,
-        "derivative": 0,
-        "value": 0.09
-      },
-      {
-        "location": 1,
-        "derivative": 0,
-        "value": 0.095
+        "value": {
+          "coordinate": {
+            "type": "minecraft:shifted_noise",
+            "noise": "whmod:rolling_lowlands/jitter",
+            "xz_scale": 1,
+            "y_scale": 0,
+            "shift_x": "minecraft:shift_x",
+            "shift_y": 0,
+            "shift_z": "minecraft:shift_z"
+          },
+          "points": [
+            {
+              "location": -0.25,
+              "derivative": 0,
+              "value": 0.06
+            },
+            {
+              "location": -0.18,
+              "derivative": 0,
+              "value": 0.07
+            },
+            {
+              "location": 0.18,
+              "derivative": 0,
+              "value": 0.07
+            },
+            {
+              "location": 0.25,
+              "derivative": 0,
+              "value": 0.08
+            }
+          ]
+        }
       }
     ]
   }
