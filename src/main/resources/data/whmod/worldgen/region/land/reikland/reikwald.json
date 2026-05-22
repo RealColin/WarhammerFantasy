@@ -1,0 +1,37 @@
+{
+  "name": "reikwald",
+  "color": 37632,
+  "terrain": "whmod:rolling_lowlands",
+  "biomes": [
+    {
+      "biome": "whmod:reikwald",
+      "parameters": {
+        "temperature": 0,
+        "humidity": 0,
+        "continentalness": 0,
+        "erosion": 0,
+        "weirdness": [
+          -1,
+          0.6
+        ],
+        "depth": 0,
+        "offset": 0
+      }
+    },
+    {
+      "biome": "whmod:reikwald_clearing",
+      "parameters": {
+        "temperature": 0,
+        "humidity": 0,
+        "continentalness": 0,
+        "erosion": 0,
+        "weirdness": [
+          0.6,
+          1
+        ],
+        "depth": 0,
+        "offset": 0
+      }
+    }
+  ]
+}

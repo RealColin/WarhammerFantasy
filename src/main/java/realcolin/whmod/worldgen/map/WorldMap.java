@@ -2,6 +2,7 @@ package realcolin.whmod.worldgen.map;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.util.Constant;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFileCodec;
@@ -31,19 +32,18 @@ public class WorldMap {
     public static final Codec<WorldMap> DIRECT_CODEC =
             RecordCodecBuilder.create(inst -> inst.group(
                     Identifier.CODEC.fieldOf("image").forGetter(src -> src.imageLoc),
-                    Codec.INT.fieldOf("resolution").forGetter(src -> src.resolution),
                     Biome.CODEC.fieldOf("default_biome").forGetter(src -> src.defaultBiome),
                     Terrain.CODEC.fieldOf("default_terrain").forGetter(src -> src.defaultTerrain),
-                    MapEntry.ENTRIES_CODEC.fieldOf("entries").forGetter(src -> src.entries)
+                    MapEntry.CODEC.listOf().fieldOf("regions").forGetter(src -> src.entries)
             ).apply(inst, WorldMap::new));
 
     public static final Codec<Holder<WorldMap>> CODEC = RegistryFileCodec.create(WHRegistries.MAP, DIRECT_CODEC);
 
     private final Identifier imageLoc;
-    private final int resolution; // blocks per inch
     private final Holder<Biome> defaultBiome;
     private final Holder<Terrain> defaultTerrain;
-    private final List<MapEntry> entries;
+    private final List<Holder<MapEntry>> entries;
+
 
     private final Set<Holder<Terrain>> terrains;
     private final HashMap<Integer, MapEntry> colorRegionMap;
@@ -53,9 +53,8 @@ public class WorldMap {
 
     private final ConcurrentHashMap<Pair, Cell> cellCache;
 
-    public WorldMap(Identifier imageLoc, int resolution, Holder<Biome> defaultBiome, Holder<Terrain> defaultTerrain, List<MapEntry> entries) {
+    public WorldMap(Identifier imageLoc, Holder<Biome> defaultBiome, Holder<Terrain> defaultTerrain, List<Holder<MapEntry>> entries) {
         this.imageLoc = imageLoc;
-        this.resolution = resolution;
         this.defaultBiome = defaultBiome;
         this.defaultTerrain = defaultTerrain;
         this.entries = entries;
@@ -73,8 +72,8 @@ public class WorldMap {
             BridgeContext ctx = new BridgeContext(new UserAgentAdapter());
             node = builder.build(ctx, svgDocument);
 
-            this.width = Math.round((svgDocument.getRootElement().getWidth().getBaseVal().getValue() / 96) * resolution);
-            this.height = Math.round((svgDocument.getRootElement().getHeight().getBaseVal().getValue() / 96) * resolution);
+            this.width = Math.round((svgDocument.getRootElement().getWidth().getBaseVal().getValue() / 96) * Constants.BLOCKS_PER_INCH);
+            this.height = Math.round((svgDocument.getRootElement().getHeight().getBaseVal().getValue() / 96) * Constants.BLOCKS_PER_INCH);
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -82,10 +81,17 @@ public class WorldMap {
         terrains = new HashSet<>();
         colorRegionMap = new HashMap<>();
         for (var e : entries) {
-            terrains.add(e.terrain());
+            terrains.add(e.value().terrain());
 
-            var c = new Color(e.color());
-            colorRegionMap.put(c.getRGB(), e);
+            var c = new Color(e.value().color());
+
+            if (colorRegionMap.containsKey(c.getRGB())) {
+                var existingEntry = colorRegionMap.get(c.getRGB());
+                WHMod.LOGGER.error("Entry {} uses color already used by {}", e.value().region(), existingEntry.region());
+                throw new RuntimeException("Bad WorldMap");
+            }
+
+            colorRegionMap.put(c.getRGB(), e.value());
         }
         terrains.add(defaultTerrain);
 
@@ -101,7 +107,7 @@ public class WorldMap {
         set.add(defaultBiome);
 
         for (var e : entries) {
-            List<Holder<Biome>> list = e.biomes().values().stream().map(com.mojang.datafixers.util.Pair::getSecond).toList();
+            List<Holder<Biome>> list = e.value().biomes().values().stream().map(com.mojang.datafixers.util.Pair::getSecond).toList();
             set.addAll(list);
         }
 
@@ -127,7 +133,7 @@ public class WorldMap {
         if (cellCache.containsKey(cellPos))
             return cellCache.get(cellPos);
         else {
-            var cell = new Cell(this.node, this.resolution, cellPos);
+            var cell = new Cell(this.node, Constants.BLOCKS_PER_INCH, cellPos);
             cellCache.put(cellPos, cell);
             return cell;
         }
@@ -162,7 +168,7 @@ public class WorldMap {
             cell = cellCache.get(cellPos);
         else {
             var start = System.nanoTime();
-            cell = new Cell(this.node, this.resolution, cellPos);
+            cell = new Cell(this.node, Constants.BLOCKS_PER_INCH, cellPos);
             var elapsed = System.nanoTime() - start;
 //            System.out.println("Cell generated in " + elapsed + " nanoseconds.");
 

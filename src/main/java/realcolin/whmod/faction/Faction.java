@@ -21,7 +21,7 @@ public enum Faction {
             "empire",
             "The Empire",
             "Imperial",
-            new Pair(46526, 30134),
+            new Pair(485, 314),
             Component.translatable("faction.whmod.empire.desc"),
             List.of(
                     new FactionTrait(
@@ -40,7 +40,7 @@ public enum Faction {
             "dwarfs",
             "Dwarfs",
             "Dwarven",
-            new Pair(46526, 30134),
+            new Pair(12312, 7973),
             Component.translatable("faction.whmod.dwarfs.desc"),
             List.of(
                     new FactionTrait(
@@ -55,7 +55,7 @@ public enum Faction {
                     )
             )
     ),
-    BEASTMEN("beastmen", "Beastmen", "Beastish", new Pair(46526, 30134), Component.translatable("faction.whmod.beastmen.desc"), List.of(
+    BEASTMEN("beastmen", "Beastmen", "Beastish", new Pair(12312, 7973), Component.translatable("faction.whmod.beastmen.desc"), List.of(
 
     )),
     GREENSKINS("greenskins", "Greenskins", "Orcish", new Pair(46526, 30134), Component.translatable("faction.whmod.greenskins.desc"), List.of(

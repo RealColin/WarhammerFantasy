@@ -1,0 +1,19 @@
+{
+  "name": "river_teufel",
+  "color": 243,
+  "terrain": "whmod:river",
+  "biomes": [
+    {
+      "biome": "whmod:river_teufel",
+      "parameters": {
+        "temperature": 0,
+        "humidity": 0,
+        "continentalness": 0,
+        "erosion": 0,
+        "weirdness": 0,
+        "depth": 0,
+        "offset": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "vorber_marsh",
+  "color": 6975545,
+  "terrain": "whmod:flats",
+  "biomes": [
+    {
+      "biome": "whmod:vorber_marsh",
+      "parameters": {
+        "temperature": 0,
+        "humidity": 0,
+        "continentalness": 0,
+        "erosion": 0,
+        "weirdness": 0,
+        "depth": 0,
+        "offset": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "grey_mountains",
+  "color": 11842740,
+  "terrain": "whmod:mountains",
+  "biomes": [
+    {
+      "biome": "whmod:grey_mountains",
+      "parameters": {
+        "temperature": 0,
+        "humidity": 0,
+        "continentalness": 0,
+        "erosion": 0,
+        "weirdness": 0,
+        "depth": 0,
+        "offset": 0
+      }
+    }
+  ]
+}

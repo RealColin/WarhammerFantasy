@@ -1,0 +1,19 @@
+{
+  "name": "furdienst",
+  "color": 6978353,
+  "terrain": "whmod:flats",
+  "biomes": [
+    {
+      "biome": "whmod:furdienst",
+      "parameters": {
+        "temperature": 0,
+        "humidity": 0,
+        "continentalness": 0,
+        "erosion": 0,
+        "weirdness": 0,
+        "depth": 0,
+        "offset": 0
+      }
+    }
+  ]
+}
