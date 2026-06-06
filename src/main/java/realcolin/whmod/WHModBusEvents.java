@@ -26,7 +26,7 @@ import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 import realcolin.whmod.network.SelectFactionPayload;
 import realcolin.whmod.network.ServerPayloadHandler;
-import realcolin.whmod.worldgen.map.MapEntry;
+import realcolin.whmod.worldgen.map.Region;
 import realcolin.whmod.worldgen.map.Terrain;
 import realcolin.whmod.worldgen.map.WorldMap;
 
@@ -44,8 +44,8 @@ public class WHModBusEvents {
     @SubscribeEvent
     public static void newDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(WHRegistries.TERRAIN, Terrain.DIRECT_CODEC);
-        event.dataPackRegistry(WHRegistries.REGION, MapEntry.DIRECT_CODEC);
-        event.dataPackRegistry(WHRegistries.MAP, WorldMap.DIRECT_CODEC);
+        event.dataPackRegistry(WHRegistries.REGION, Region.DIRECT_CODEC, Region.NETWORK_CODEC);
+        event.dataPackRegistry(WHRegistries.MAP, WorldMap.DIRECT_CODEC, WorldMap.NETWORK_CODEC);
     }
 
     @SubscribeEvent

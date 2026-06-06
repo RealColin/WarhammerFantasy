@@ -1,14 +1,17 @@
 package realcolin.whmod.client.screen;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.NonNull;
+import realcolin.whmod.WHRegistries;
 import realcolin.whmod.client.screen.menu.CharacterSubScreen;
 import realcolin.whmod.client.screen.menu.FactionSubScreen;
 import realcolin.whmod.client.screen.menu.MapSubScreen;
 import realcolin.whmod.client.screen.menu.MenuSubScreen;
+import realcolin.whmod.worldgen.map.WorldMap;
 
 import java.util.ArrayList;
 
@@ -52,7 +55,10 @@ public class InGameMenuScreen extends Screen {
         super.init();
 
         subScreens = new ArrayList<>();
-        subScreens.add(new MapSubScreen());
+        var clientMap = getClientWorldMap();
+        if (clientMap != null) {
+            subScreens.add(new MapSubScreen(clientMap, this.minecraft.player));
+        }
         subScreens.add(new FactionSubScreen());
         subScreens.add(new CharacterSubScreen(this.minecraft.player));
 
@@ -111,6 +117,16 @@ public class InGameMenuScreen extends Screen {
     public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
         var sub = subScreens.get(selectedIndex);
         return sub.mouseDragged(event.x(), event.y(), event.button(), dx, dy);
+    }
+
+    @Override
+    public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
+        if (isMouseOverContent(x, y)) {
+            var sub = subScreens.get(selectedIndex);
+            return sub.mouseScrolled(x, y, scrollX, scrollY);
+        }
+
+        return super.mouseScrolled(x, y, scrollX, scrollY);
     }
 
     private boolean isMouseOverSidebar(double mouseX, double mouseY) {
@@ -181,5 +197,31 @@ public class InGameMenuScreen extends Screen {
         var content = subScreens.get(selectedIndex);
 
         content.render(g, contentX, CONTENT_Y, contentW, contentH, mouseX, mouseY, this.font);
+    }
+
+    private WorldMap getClientWorldMap() {
+        if (Minecraft.getInstance().level == null) {
+            return null;
+        }
+
+        var registryAccess = Minecraft.getInstance().level.registryAccess();
+        var mapRegistryOpt = registryAccess.lookup(WHRegistries.MAP);
+
+        if (mapRegistryOpt.isEmpty()) {
+            System.out.println("idk bro");
+            return null;
+        }
+
+        var mapRegistry = mapRegistryOpt.get();
+
+        WorldMap map = null;
+
+        for (var entry : mapRegistry.entrySet()) {
+            if (entry.getKey().identifier().getPath().equals("mallus")) {
+                map = entry.getValue();
+            }
+        }
+
+        return map;
     }
 }

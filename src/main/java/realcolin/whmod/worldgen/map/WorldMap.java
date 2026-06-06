@@ -2,7 +2,6 @@ package realcolin.whmod.worldgen.map;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.util.Constant;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFileCodec;
@@ -34,26 +33,35 @@ public class WorldMap {
                     Identifier.CODEC.fieldOf("image").forGetter(src -> src.imageLoc),
                     Biome.CODEC.fieldOf("default_biome").forGetter(src -> src.defaultBiome),
                     Terrain.CODEC.fieldOf("default_terrain").forGetter(src -> src.defaultTerrain),
-                    MapEntry.CODEC.listOf().fieldOf("regions").forGetter(src -> src.entries)
+                    Region.CODEC.listOf().fieldOf("regions").forGetter(src -> src.entries)
             ).apply(inst, WorldMap::new));
+
+    public static final Codec<WorldMap> NETWORK_CODEC =
+            RecordCodecBuilder.create(inst -> inst.group(
+                    Identifier.CODEC.fieldOf("image").forGetter(src -> src.imageLoc),
+                    Region.CODEC.listOf().fieldOf("regions").forGetter(src -> src.entries)
+            ).apply(inst, WorldMap::clientOnly));
 
     public static final Codec<Holder<WorldMap>> CODEC = RegistryFileCodec.create(WHRegistries.MAP, DIRECT_CODEC);
 
     private final Identifier imageLoc;
     private final Holder<Biome> defaultBiome;
     private final Holder<Terrain> defaultTerrain;
-    private final List<Holder<MapEntry>> entries;
+    private final List<Holder<Region>> entries;
 
 
     private final Set<Holder<Terrain>> terrains;
-    private final HashMap<Integer, MapEntry> colorRegionMap;
+    private final HashMap<Integer, Region> colorRegionMap;
+    private final float svgWidth;
+    private final float svgHeight;
     private final int width;
     private final int height;
     private final GraphicsNode node;
 
+
     private final ConcurrentHashMap<Pair, Cell> cellCache;
 
-    public WorldMap(Identifier imageLoc, Holder<Biome> defaultBiome, Holder<Terrain> defaultTerrain, List<Holder<MapEntry>> entries) {
+    public WorldMap(Identifier imageLoc, Holder<Biome> defaultBiome, Holder<Terrain> defaultTerrain, List<Holder<Region>> entries) {
         this.imageLoc = imageLoc;
         this.defaultBiome = defaultBiome;
         this.defaultTerrain = defaultTerrain;
@@ -72,14 +80,23 @@ public class WorldMap {
             BridgeContext ctx = new BridgeContext(new UserAgentAdapter());
             node = builder.build(ctx, svgDocument);
 
+            // this is a mess bro :sob:
+            this.svgWidth = svgDocument.getRootElement().getWidth().getBaseVal().getValueInSpecifiedUnits();
+            this.svgHeight = svgDocument.getRootElement().getHeight().getBaseVal().getValueInSpecifiedUnits();
             this.width = Math.round((svgDocument.getRootElement().getWidth().getBaseVal().getValue() / 96) * Constants.BLOCKS_PER_INCH);
             this.height = Math.round((svgDocument.getRootElement().getHeight().getBaseVal().getValue() / 96) * Constants.BLOCKS_PER_INCH);
+
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
 
         terrains = new HashSet<>();
         colorRegionMap = new HashMap<>();
+
+        // no entries when doing client side, gotta clean this up a bit make it more robust
+        if (entries == null)
+            return;
+
         for (var e : entries) {
             terrains.add(e.value().terrain());
 
@@ -98,6 +115,10 @@ public class WorldMap {
         WHMod.LOGGER.info("Successfully Initialized a WorldMap instance");
     }
 
+    public static WorldMap clientOnly(Identifier imageLoc, List<Holder<Region>> entries) {
+        return new WorldMap(imageLoc, null, null, entries);
+    }
+
     public Holder<Biome> getDefaultBiome() {
         return defaultBiome;
     }
@@ -114,7 +135,7 @@ public class WorldMap {
         return set;
     }
 
-    public MapEntry getEntryAt(int x, int z) {
+    public Region getEntryAt(int x, int z) {
         var color = getColorAtPixel(x, z);
 
         if (color != -1 && colorRegionMap.containsKey(color))
@@ -175,10 +196,34 @@ public class WorldMap {
             cellCache.put(cellPos, cell);
         }
 
+        if (cellCache.size() > 128) {
+            cellCache.clear();
+        }
+
         return cell.getColorAt(x, y);
     }
 
     private boolean outsideRange(int x, int y) {
         return x < 0 || x >= width || y < 0 || y >= height;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public float getSvgWidth() {
+        return this.svgWidth;
+    }
+
+    public float getSvgHeight() {
+        return this.svgHeight;
+    }
+
+    public GraphicsNode getNode() {
+        return this.node;
     }
 }

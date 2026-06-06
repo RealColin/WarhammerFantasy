@@ -8,6 +8,9 @@ public interface MenuSubScreen {
     boolean mouseClicked(double mouseX, double mouseY, int button);
     boolean mouseReleased(double mouseX, double mouseY, int button);
     boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY);
+    default boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        return false;
+    }
 
     String name();
 }
