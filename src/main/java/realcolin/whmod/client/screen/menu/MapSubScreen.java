@@ -14,12 +14,13 @@ public class MapSubScreen implements MenuSubScreen {
     private static final double MM_PER_INCH = 25.4;
     private static final int TILE_SIZE = 256;
     private static final double[] PIXELS_PER_MM_BY_ZOOM = {
-            0.03125,
             0.0625,
             0.125,
             0.25,
             0.5,
-            1.0
+            1.0,
+            2.0,
+            4.0
     };
 
     private int zoomLevel = 3;
@@ -49,8 +50,6 @@ public class MapSubScreen implements MenuSubScreen {
 
     /* Override methods */
 
-    // TODO verify all of these
-
     @Override
     public void render(GuiGraphicsExtractor g, int px, int py, int pw, int ph, int mouseX, int mouseY, Font font) {
         this.viewportWidth = pw;
@@ -60,7 +59,7 @@ public class MapSubScreen implements MenuSubScreen {
         g.fill(px, py, px + pw, py + ph, 0xFF101010);
         g.enableScissor(px, py, px + pw, py + ph);
 
-        renderVisibleTiles(g, px, py, pw, ph, font);
+        renderVisibleTiles(g, px, py, pw, ph);
         renderPlayerMarker(g, px, py, pw, ph);
 
         g.disableScissor();
@@ -162,7 +161,7 @@ public class MapSubScreen implements MenuSubScreen {
         }
     }
 
-    private void renderVisibleTiles(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font) {
+    private void renderVisibleTiles(GuiGraphicsExtractor g, int px, int py, int pw, int ph) {
         var viewX = getViewX(pw);
         var viewY = getViewY(ph);
 
@@ -188,27 +187,17 @@ public class MapSubScreen implements MenuSubScreen {
                 int screenX = px + (int) Math.round(tileMapX - viewX);
                 int screenY = py + (int) Math.round(tileMapY - viewY);
 
-                drawMapTile(g, font, tileX, tileY, screenX, screenY);
+                drawMapTile(g, tileX, tileY, screenX, screenY);
             }
         }
         
     }
 
-    private void drawMapTile(GuiGraphicsExtractor g, Font font, int tileX, int tileY, int screenX, int screenY) {
+    private void drawMapTile(GuiGraphicsExtractor g , int tileX, int tileY, int screenX, int screenY) {
         MapTileKey key = new MapTileKey(zoomLevel, tileX, tileY);
         MapTile tile = tileCache.getOrCreate(key);
 
         g.blit(RenderPipelines.GUI_TEXTURED, tile.identifier(), screenX, screenY, 0, 0, TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE);
-
-        var borderColor = 0xFF000000;
-
-        // Draw border and label after texture.
-//        g.fill(screenX, screenY, screenX + TILE_SIZE, screenY + 1, borderColor);
-//        g.fill(screenX, screenY, screenX + 1, screenY + TILE_SIZE, borderColor);
-//        g.fill(screenX + TILE_SIZE - 1, screenY, screenX + TILE_SIZE, screenY + TILE_SIZE, borderColor);
-//        g.fill(screenX, screenY + TILE_SIZE - 1, screenX + TILE_SIZE, screenY + TILE_SIZE, borderColor);
-//
-//        g.text(font, tileX + "," + tileY, screenX + 6, screenY + 6, borderColor, false);
     }
 
     private void renderPlayerMarker(GuiGraphicsExtractor g, int px, int py, int pw, int ph) {
