@@ -2,21 +2,31 @@ package realcolin.whmod.client.screen.menu;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import org.joml.Quaternionf;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class CharacterSubScreen implements MenuSubScreen {
 
     private static final int BUFFER = 10;
-    private static final int TITLE_HEIGHT = 20;
-    private static final int BOTTOM_HEIGHT = 40;
+    private static final int TITLE_HEIGHT = 22;
+    private static final int BOTTOM_HEIGHT = 42;
 
     private static final int BG = 0x44444444;
+    private static final int TITLE_BG = 0xAA9F7622;
+    private static final int MIDDLE_BG = 0x66000000;
+    private static final int BOTTOM_BG = 0x66666666;
+
+    private static final int COLUMN_HEADER_BG = 0x66332211;
+    private static final int COLUMN_BG = 0x33000000;
+    private static final int COLUMN_BORDER = 0x669F7622;
+
+    private static final int TEXT = 0xFFFFFFFF;
+    private static final int MUTED_TEXT = 0xFFCCCCCC;
 
     private static final Identifier HEART = Identifier.fromNamespaceAndPath("minecraft", "hud/heart/full");
     private static final Identifier WINDS = Identifier.fromNamespaceAndPath("minecraft", "hud/air");
@@ -24,65 +34,36 @@ public class CharacterSubScreen implements MenuSubScreen {
 
     private final Player player;
 
-    private float modelYaw = 180.0F;
-    private float modelPitch = 0.0F;
-    private boolean draggingModel = false;
-    private int modelBoxX1, modelBoxY1, modelBoxX2, modelBoxY2;
-
     public CharacterSubScreen(Player player) {
         this.player = player;
     }
-
 
     @Override
     public void render(GuiGraphicsExtractor g, int px, int py, int pw, int ph, int mouseX, int mouseY, Font font) {
         renderBackground(g, px, py, pw, ph);
         renderTitlePanel(g, px, py, pw, ph, font);
-        renderMiddle(g, px, py, pw, ph, font, mouseX, mouseY);
+        renderMiddle(g, px, py, pw, ph, font);
         renderBottomPanel(g, px, py, pw, ph, font);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && isInsideModelBox(mouseX, mouseY)) {
-            draggingModel = true;
-            return true;
-        }
-
         return false;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (button == 0 && draggingModel) {
-            draggingModel = false;
-            return true;
-        }
-
         return false;
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (button == 0 && draggingModel) {
-            modelYaw += (float) dragX * 2.0F;
-            modelPitch -= (float) dragY * 1.5F;
-
-            modelPitch = Mth.clamp(modelPitch, -60.0F, 60.0F);
-            return true;
-        }
-
         return false;
     }
 
     @Override
     public String name() {
         return "Character";
-    }
-
-    private boolean isInsideModelBox(double mouseX, double mouseY) {
-        return mouseX >= modelBoxX1 && mouseX < modelBoxX2
-                && mouseY >= modelBoxY1 && mouseY < modelBoxY2;
     }
 
     private void renderBackground(GuiGraphicsExtractor g, int px, int py, int pw, int ph) {
@@ -103,79 +84,109 @@ public class CharacterSubScreen implements MenuSubScreen {
         int textWidth = font.width(name);
         int textX = x + (w - textWidth) / 2;
 
-        g.fill(x, y, x + w, y + TITLE_HEIGHT, 0xAA9F7622);
-        g.text(font, player.getName(), textX, y + 6, 0xFFFFFFFF);
+        g.fill(x, y, x + w, y + TITLE_HEIGHT, TITLE_BG);
+        g.text(font, name, textX, y + 7, TEXT);
     }
 
     @SuppressWarnings("UnnecessaryLocalVariable")
-    private void renderMiddle(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font, int mouseX, int mouseY) {
+    private void renderMiddle(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font) {
         int x = px + BUFFER;
         int y = py + BUFFER + TITLE_HEIGHT;
         int w = pw - 2 * BUFFER;
         int bottom = (py + ph) - (BOTTOM_HEIGHT + BUFFER);
         int h = bottom - y;
 
-        g.fill(x, y, x + w, y + h, 0x66000000);
+        g.fill(x, y, x + w, y + h, MIDDLE_BG);
 
-        int ex = x;
-        int ey = y;
-        int eh = h;
-        int ew = eh / 2;
+        int innerPadding = 8;
+        int gap = 8;
 
-        modelBoxX1 = ex;
-        modelBoxY1 = ey;
-        modelBoxX2 = ex + ew;
-        modelBoxY2 = ey + eh;
+        int contentX = x + innerPadding;
+        int contentY = y + innerPadding;
+        int contentW = w - innerPadding * 2;
+        int contentH = h - innerPadding * 2;
 
-        int scaleFromHeight = (int) (eh * 0.45f);
-        int scaleFromWidth = (int) (ew * 0.80f);
-        int scale = Math.min(scaleFromHeight, scaleFromWidth);
+        int columnW = (contentW - gap * 2) / 3;
 
-//        InventoryScreen.renderEntityInInventoryFollowsMouse(g, ex, ey, ex + ew, ey + eh, scale, 0.0625F, mouseX, mouseY, player);
+        int abilitiesX = contentX;
+        int passivesX = abilitiesX + columnW + gap;
+        int titlesX = passivesX + columnW + gap;
 
-        Quaternionf rotation = new Quaternionf()
-                .rotateZ((float) Math.PI)
-                .rotateX((float) Math.toRadians(modelPitch))
-                .rotateY((float) Math.toRadians(modelYaw));
+        List<String> abilities = getAbilityNames();
+        List<String> passives = getPassiveNames();
+        List<String> titles = getTitleNames();
 
-//        InventoryScreen.renderEntityInInventory(
-//                g,
-//                ex,
-//                ey,
-//                ex + ew,
-//                ey + eh,
-//                (float)scale / player.getScale(),
-//                new Vector3f(0.0F, player.getBbHeight() / 2.0F + 0.0625F * player.getScale(), 0.0F),
-//                rotation,
-//                null,
-//                player
-//        );
+        renderColumn(g, font, "Abilities", abilities, abilitiesX, contentY, columnW, contentH);
+        renderColumn(g, font, "Passives", passives, passivesX, contentY, columnW, contentH);
+        renderColumn(g, font, "Titles", titles, titlesX, contentY, columnW, contentH);
+    }
 
-        // TODO verify this works
-        InventoryScreen.renderEntityInInventoryFollowsAngle(
-                g,
-                ex,
-                ey,
-                ex + ew,
-                ey + eh,
-                (int)(scale / player.getScale()),
-                0.0f,
-                modelPitch,
-                modelYaw,
-                player
-        );
+    private void renderColumn(
+            GuiGraphicsExtractor g,
+            Font font,
+            String header,
+            List<String> entries,
+            int x,
+            int y,
+            int w,
+            int h
+    ) {
+        int headerH = 20;
 
-        int dx = ex + ew + BUFFER;
-        int dy = y;
-        int dw = (x + w) - dx;
-        int dh = h;
+        g.fill(x, y, x + w, y + h, COLUMN_BG);
 
-        int tx = dx + 4;
-        int ty = dy + 8;
+        // Border
+        g.fill(x, y, x + w, y + 1, COLUMN_BORDER);
+        g.fill(x, y + h - 1, x + w, y + h, COLUMN_BORDER);
+        g.fill(x, y, x + 1, y + h, COLUMN_BORDER);
+        g.fill(x + w - 1, y, x + w, y + h, COLUMN_BORDER);
 
-        String temp = "Hi this is a temporary String";
-        g.text(font, temp, tx, ty, 0xFFFFFFFF);
+        // Header
+        g.fill(x, y, x + w, y + headerH, COLUMN_HEADER_BG);
 
+        int headerTextX = x + (w - font.width(header)) / 2;
+        g.text(font, header, headerTextX, y + 6, TEXT);
+
+        int entryX = x + 6;
+        int entryY = y + headerH + 8;
+        int lineHeight = 12;
+
+        if (entries.isEmpty()) {
+            g.text(font, "None", entryX, entryY, MUTED_TEXT);
+            return;
+        }
+
+        int maxVisibleEntries = Math.max(0, (h - headerH - 12) / lineHeight);
+
+        for (int i = 0; i < entries.size() && i < maxVisibleEntries; i++) {
+            String entry = entries.get(i);
+
+            // Trim text so it does not overflow the column.
+            entry = trimToWidth(font, entry, w - 12);
+
+            int color = i == 0 ? TEXT : MUTED_TEXT;
+            g.text(font, entry, entryX, entryY + i * lineHeight, color);
+        }
+
+        if (entries.size() > maxVisibleEntries) {
+            String moreText = "+" + (entries.size() - maxVisibleEntries) + " more";
+            g.text(font, moreText, entryX, y + h - 12, 0xFFAAAAAA);
+        }
+    }
+
+    private String trimToWidth(Font font, String text, int maxWidth) {
+        if (font.width(text) <= maxWidth) {
+            return text;
+        }
+
+        String suffix = "...";
+        int suffixWidth = font.width(suffix);
+
+        while (!text.isEmpty() && font.width(text) + suffixWidth > maxWidth) {
+            text = text.substring(0, text.length() - 1);
+        }
+
+        return text + suffix;
     }
 
     private void renderBottomPanel(GuiGraphicsExtractor g, int px, int py, int pw, int ph, Font font) {
@@ -184,44 +195,155 @@ public class CharacterSubScreen implements MenuSubScreen {
         int x = px + BUFFER;
         int y = (py + ph) - (h + BUFFER);
 
-        g.fill(x, y, x + w, y + h, 0x66666666); // background color
+        g.fill(x, y, x + w, y + h, BOTTOM_BG);
 
-        // health info
-        var health = player.getHealth();
-        var maxHealth = player.getMaxHealth();
-        var healthText = Mth.floor(health) + "/" + Mth.floor(maxHealth);
+        int statX = x + 10;
+        int statY = y + 16;
+        int maxX = x + w - 10;
+        int gap = 14;
 
-        int hx = x + 8;
-        int heartIconX = hx + font.width(healthText) + 2;
-        int heartIconY = y + 14;
+        float health = player.getHealth();
+        float maxHealth = player.getMaxHealth();
+        String healthText = Mth.floor(health) + "/" + Mth.floor(maxHealth);
 
-        g.text(font, healthText, hx, y + 16, 0xFFFFFFFF);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, HEART, heartIconX, heartIconY, 12, 12);
+        statX = renderIconStatClipped(g, font, statX, statY, maxX, gap, healthText, HEART);
+        if (statX == -1) return;
 
-        // winds of magic info
-        int winds = 0;
-        int maxWinds = 0;
-        var windsText = winds + "/" + maxWinds;
+        int armor = player.getArmorValue();
+        String armorText = String.valueOf(armor);
 
-        int wx = hx + font.width(healthText) + 2 + 12 + 20;
-        int windsIconX = wx + font.width(windsText) + 2;
-        int windsIconY = y + 14;
+        statX = renderIconStatClipped(g, font, statX, statY, maxX, gap, armorText, ARMOR);
+        if (statX == -1) return;
 
-        g.text(font, windsText, wx, y + 16, 0xFFFFFFFF);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, WINDS, windsIconX, windsIconY, 12, 12);
+        int winds = getCurrentWinds();
+        int maxWinds = getMaxWinds();
+        String windsText = winds + "/" + maxWinds;
 
+        statX = renderIconStatClipped(g, font, statX, statY, maxX, gap, windsText, WINDS);
+        if (statX == -1) return;
 
-        // armor info
-        var armor = player.getArmorValue();
-        var armorText = String.valueOf(armor);
+        statX = renderTextStatClipped(g, font, statX, statY, maxX, gap, "Lvl", String.valueOf(getCharacterLevel()));
+        if (statX == -1) return;
 
-        int ax = wx + font.width(windsText) + 2 + 12 + 20;
-        int armorIconX = ax + font.width(armorText) + 2;
-        int armorIconY = y + 14;
-
-        g.text(font, armorText, ax, y + 16, 0xFFFFFFFF);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR, armorIconX, armorIconY, 12, 12);
+        renderTextStatClipped(g, font, statX, statY, maxX, gap, "XP", getXpText());
     }
 
+    private int renderIconStatClipped(
+            GuiGraphicsExtractor g,
+            Font font,
+            int x,
+            int y,
+            int maxX,
+            int gap,
+            String text,
+            Identifier icon
+    ) {
+        int textWidth = font.width(text);
+        int width = textWidth + 3 + 12;
 
+        if (x + width > maxX) {
+            return -1;
+        }
+
+        g.text(font, text, x, y, TEXT);
+
+        int iconX = x + textWidth + 3;
+        int iconY = y - 2;
+
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, icon, iconX, iconY, 12, 12);
+
+        return x + width + gap;
+    }
+
+    private int renderTextStatClipped(
+            GuiGraphicsExtractor g,
+            Font font,
+            int x,
+            int y,
+            int maxX,
+            int gap,
+            String label,
+            String value
+    ) {
+        String text = label + ": " + value;
+        int width = font.width(text);
+
+        if (x + width > maxX) {
+            return -1;
+        }
+
+        g.text(font, text, x, y, TEXT);
+
+        return x + width + gap;
+    }
+
+    private int renderIconStat(
+            GuiGraphicsExtractor g,
+            Font font,
+            int x,
+            int y,
+            String text,
+            Identifier icon
+    ) {
+        g.text(font, text, x, y, TEXT);
+
+        int iconX = x + font.width(text) + 3;
+        int iconY = y - 2;
+
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, icon, iconX, iconY, 12, 12);
+
+        return iconX + 12;
+    }
+
+    private int renderTextStat(
+            GuiGraphicsExtractor g,
+            Font font,
+            int x,
+            int y,
+            String label,
+            String value
+    ) {
+        String text = label + ": " + value;
+        g.text(font, text, x, y, TEXT);
+        return x + font.width(text);
+    }
+
+    // ---------------------------------------------------------------------
+    // Temporary data hooks.
+    // Replace these later with my actual character/player capability data.
+    // ---------------------------------------------------------------------
+
+    private List<String> getAbilityNames() {
+        return List.of(
+                "To be added..."
+        );
+    }
+
+    private List<String> getPassiveNames() {
+        return List.of(
+                "To be added..."
+        );
+    }
+
+    private List<String> getTitleNames() {
+        return List.of(
+                "To be added..."
+        );
+    }
+
+    private int getCurrentWinds() {
+        return 0;
+    }
+
+    private int getMaxWinds() {
+        return 0;
+    }
+
+    private int getCharacterLevel() {
+        return 1;
+    }
+
+    private String getXpText() {
+        return "0/100";
+    }
 }
