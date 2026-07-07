@@ -16,10 +16,13 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.HandlerThread;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.block.WHBlocks;
+import realcolin.whmod.client.network.ClientPayloadHandler;
+import realcolin.whmod.client.network.StartAttackPayload;
 import realcolin.whmod.client.renderer.*;
 import realcolin.whmod.client.screen.FactionCraftingScreen;
 import realcolin.whmod.client.screen.InGameMenuScreen;
@@ -102,14 +105,13 @@ public class WHClient {
         var stack = mc.player.getMainHandItem();
 
         if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK && canMine(stack)) {
-            System.out.println("Swinging at block.");
             return;
         }
 
         // if not breaking blocks, send a custom attack swing packet
-        System.out.println("Click canceled");
         event.setSwingHand(false);
         event.setCanceled(true);
+        ClientPacketDistributor.sendToServer(new StartAttackPayload());
     }
 
     private static boolean canMine(ItemStack stack) {

@@ -1,4 +1,4 @@
-package realcolin.whmod.client;
+package realcolin.whmod.client.network;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.neoforge.network.handling.IPayloadContext;

@@ -6,6 +6,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.startup.Server;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterRecipeBookSearchCategoriesEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -17,6 +18,7 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import realcolin.whmod.client.WHModelLayers;
 import realcolin.whmod.client.model.BoarModel;
 import realcolin.whmod.client.model.BrownBearModel;
+import realcolin.whmod.client.network.StartAttackPayload;
 import realcolin.whmod.client.screen.WHSearchRecipeBookCategory;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.entity.animal.Boar;
@@ -39,6 +41,7 @@ public class WHModBusEvents {
         registrar.playToClient(OpenFactionScreenPayload.TYPE, OpenFactionScreenPayload.STREAM_CODEC);
         registrar.playToClient(CloseScreenPayload.TYPE, CloseScreenPayload.STREAM_CODEC);
         registrar.playToServer(SelectFactionPayload.TYPE, SelectFactionPayload.STREAM_CODEC, ServerPayloadHandler::handleSelectFactionPayload);
+        registrar.playToServer(StartAttackPayload.TYPE, StartAttackPayload.STREAM_CODEC, ServerPayloadHandler::handleStartAttack);
     }
 
     @SubscribeEvent

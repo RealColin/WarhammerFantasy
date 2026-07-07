@@ -1,6 +1,5 @@
 package realcolin.whmod.network;
 
-import io.netty.util.Constant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
@@ -15,11 +14,21 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import realcolin.whmod.Constants;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.client.network.StartAttackPayload;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.worldgen.WHDimensions;
 
 @SuppressWarnings("deprecation")
 public class ServerPayloadHandler {
+
+    public static void handleStartAttack(StartAttackPayload payload, final IPayloadContext context) {
+        var player = context.player();
+
+
+
+        System.out.println(player);
+        System.out.println("Start attack handled.");
+    }
 
     public static void handleSelectFactionPayload(SelectFactionPayload payload, final IPayloadContext context) {
         var player = context.player();
