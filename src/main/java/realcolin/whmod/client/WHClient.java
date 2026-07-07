@@ -3,16 +3,17 @@ package realcolin.whmod.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
@@ -85,5 +86,33 @@ public class WHClient {
             else if (mc.screen == null)
                 mc.setScreen(new InGameMenuScreen());
         }
+    }
+
+    @SubscribeEvent
+    static void onInteractionKey(InputEvent.InteractionKeyMappingTriggered event) {
+        if (!event.isAttack())
+            return;
+
+        var mc = Minecraft.getInstance();
+        if (mc.player == null)
+            return;
+
+        // if breaking blocks, then use normal minecraft block break logic
+        var hitResult = mc.hitResult;
+        var stack = mc.player.getMainHandItem();
+
+        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK && canMine(stack)) {
+            System.out.println("Swinging at block.");
+            return;
+        }
+
+        // if not breaking blocks, send a custom attack swing packet
+        System.out.println("Click canceled");
+        event.setSwingHand(false);
+        event.setCanceled(true);
+    }
+
+    private static boolean canMine(ItemStack stack) {
+        return !(stack.is(ItemTags.SPEARS) || stack.is(Items.MACE));
     }
 }
