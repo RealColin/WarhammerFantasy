@@ -15,6 +15,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import realcolin.whmod.Constants;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.client.network.StartAttackPayload;
+import realcolin.whmod.entity.combat.CombatController;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.worldgen.WHDimensions;
 
@@ -23,11 +24,12 @@ public class ServerPayloadHandler {
 
     public static void handleStartAttack(StartAttackPayload payload, final IPayloadContext context) {
         var player = context.player();
+        CombatController.startAttack(player);
 
 
 
-        System.out.println(player);
-        System.out.println("Start attack handled.");
+//        System.out.println(player);
+//        System.out.println("Start attack handled.");
     }
 
     public static void handleSelectFactionPayload(SelectFactionPayload payload, final IPayloadContext context) {

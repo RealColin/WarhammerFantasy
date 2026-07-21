@@ -19,9 +19,10 @@ public class CombatState {
     public CombatState() {
 
     }
-
-    public void startAttack(double attackSpeed) {
-        if (attacking) return;
+    
+    public boolean startAttack(double attackSpeed) {
+        if (attacking) return false;
+        if (attackSpeed <= 0.0) return false;
 
         double windup = 0.5;
 
@@ -33,23 +34,40 @@ public class CombatState {
         this.attackTick = 0;
         this.damageApplied = false;
         this.attacking = true;
+
+        return true;
     }
 
-    public void tickAttack() {
+    public boolean tickAttack() {
+        if (!attacking)
+            return false;
+
         attackTick++;
 
+        var shouldApplyDamage = false;
+
         if (!damageApplied && attackTick >= damageTick) {
-            // TODO handle damage
             damageApplied = true;
+            shouldApplyDamage = true;
         }
 
         // attack has finished, reset state
-        if (attackTick >= attackDurationTicks) {
-            attacking = false;
-            attackTick = 0;
-            attackDurationTicks = 0;
-            damageTick = 0;
-            damageApplied = false;
-        }
+        if (attackTick >= attackDurationTicks)
+            reset();
+
+        return shouldApplyDamage;
+    }
+
+    public void reset() {
+        this.attacking = false;
+        this.attackTick = 0;
+        this.attackDurationTicks = 0;
+        this.damageTick = 0;
+        this.damageApplied = false;
+    }
+
+    public void debugPrint() {
+        if (attacking)
+            System.out.println("current tick / total ticks: " + attackTick + "/" + attackDurationTicks);
     }
 }

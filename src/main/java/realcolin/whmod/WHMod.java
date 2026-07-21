@@ -11,6 +11,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import realcolin.whmod.block.WHBlocks;
 import realcolin.whmod.entity.WHEntities;
+import realcolin.whmod.entity.combat.CombatState;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.item.WHCreativeTabs;
 import realcolin.whmod.item.WHItems;
@@ -36,6 +37,10 @@ public class WHMod {
                     .sync((holder, player) -> holder == player, Faction.STREAM_CODEC)
                     .copyOnDeath()
                     .build()
+    );
+
+    public static final Supplier<AttachmentType<CombatState>> COMBAT_STATE_ATTACHMENT = ATTACHMENT_TYPES.register(
+            "combat_state", () -> AttachmentType.builder(CombatState::new).build()
     );
 
     public WHMod(IEventBus modEventBus, ModContainer modContainer) {

@@ -6,12 +6,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.Permissions;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import realcolin.whmod.entity.combat.CombatController;
 import realcolin.whmod.faction.Faction;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 
@@ -19,6 +22,15 @@ import java.util.Locale;
 
 @EventBusSubscriber(modid = WHMod.MOD_ID)
 public class WHEvents {
+
+    @SubscribeEvent
+    public static void tickEntities(EntityTickEvent.Post event) {
+        if (!(event.getEntity() instanceof LivingEntity livingEntity)) return;
+
+        if (livingEntity.level().isClientSide()) return;
+
+        CombatController.tickCombat(livingEntity);
+    }
 
     @SubscribeEvent
     public static void onPlayerJoin(EntityJoinLevelEvent event) {
