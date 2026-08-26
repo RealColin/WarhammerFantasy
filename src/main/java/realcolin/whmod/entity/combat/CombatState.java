@@ -16,6 +16,9 @@ public class CombatState {
     private int damageTick = 0;
     private boolean damageApplied = false;
 
+    private int comboIndex = 0;
+    private Attack activeAttack = null;
+
     public CombatState() {
 
     }
