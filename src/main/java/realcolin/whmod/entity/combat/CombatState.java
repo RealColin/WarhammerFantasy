@@ -16,6 +16,7 @@ public class CombatState {
     private int damageTick = 0;
     private boolean damageApplied = false;
 
+    private String comboAttackSetId = null;
     private int comboIndex = 0;
     private Attack activeAttack = null;
 
@@ -23,11 +24,18 @@ public class CombatState {
 
     }
     
-    public boolean startAttack(double attackSpeed) {
+    public boolean startAttack(double attackSpeed, AttackSet attackSet) {
         if (attacking) return false;
         if (attackSpeed <= 0.0) return false;
 
-        double windup = 0.5;
+        if (!attackSet.id().equals(comboAttackSetId)) {
+            comboAttackSetId = attackSet.id();
+            comboIndex = 0;
+        }
+
+        this.activeAttack = attackSet.get(comboIndex);
+
+        double windup = activeAttack.windupRatio();
 
         // figure out how many ticks the attack will last, and at which tick damage is applied
         this.attackDurationTicks = Math.max(1, Mth.floor((20.0 / attackSpeed)));
@@ -41,24 +49,34 @@ public class CombatState {
         return true;
     }
 
-    public boolean tickAttack() {
+    public Attack tickAttack() {
         if (!attacking)
-            return false;
+            return null;
 
         attackTick++;
 
-        var shouldApplyDamage = false;
+        Attack toApply = null;
 
         if (!damageApplied && attackTick >= damageTick) {
             damageApplied = true;
-            shouldApplyDamage = true;
+            toApply = activeAttack;
         }
 
         // attack has finished, reset state
         if (attackTick >= attackDurationTicks)
-            reset();
+            finishAttack();
 
-        return shouldApplyDamage;
+        return toApply;
+    }
+
+    private void finishAttack() {
+        attacking = false;
+        attackTick = 0;
+        attackDurationTicks = 0;
+        damageTick = 0;
+        damageApplied = false;
+        activeAttack = null;
+        comboIndex++;
     }
 
     public void reset() {
@@ -67,10 +85,12 @@ public class CombatState {
         this.attackDurationTicks = 0;
         this.damageTick = 0;
         this.damageApplied = false;
+        comboIndex = 0;
+        comboAttackSetId = null;
     }
 
-    public void debugPrint() {
+    public void debugPrint(LivingEntity entity) {
         if (attacking)
-            System.out.println("current tick / total ticks: " + attackTick + "/" + attackDurationTicks);
+            System.out.println(entity.level().getGameTime() + ", current tick / total ticks: " + attackTick + "/" + attackDurationTicks);
     }
 }
