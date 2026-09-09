@@ -1,8 +1,12 @@
 package realcolin.whmod.entity.combat;
 
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.Tags;
 import realcolin.whmod.WHMod;
 
 public class CombatController {
@@ -43,7 +47,7 @@ public class CombatController {
     }
 
     private static void applyDamage(LivingEntity attacker, LivingEntity target, Attack attack) {
-
+        target.hurt(attacker.damageSources().mobAttack(attacker), 1);
     }
 
 }
