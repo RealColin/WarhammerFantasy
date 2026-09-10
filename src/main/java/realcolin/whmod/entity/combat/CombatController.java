@@ -1,10 +1,12 @@
 package realcolin.whmod.entity.combat;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
 import realcolin.whmod.WHMod;
@@ -47,7 +49,20 @@ public class CombatController {
     }
 
     private static void applyDamage(LivingEntity attacker, LivingEntity target, Attack attack) {
-        target.hurt(attacker.damageSources().mobAttack(attacker), 1);
+        if (!(attacker.level() instanceof ServerLevel level))
+            return;
+
+        var damage = attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * attack.damageMultiplier();
+        System.out.println("Applied " + damage + " damage.");
+
+        var damageSource = attacker instanceof Player player ? attacker.damageSources().playerAttack(player) : attacker.damageSources().mobAttack(attacker);
+
+        var hit = target.hurtServer(level, damageSource, (float)damage);
+
+        if (hit) {
+            var stack = attacker.getMainHandItem();
+            stack.hurtEnemy(target, attacker);
+        }
     }
 
 }
