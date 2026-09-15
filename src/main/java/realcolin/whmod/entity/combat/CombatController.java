@@ -62,6 +62,7 @@ public class CombatController {
         if (hit) {
             var stack = attacker.getMainHandItem();
             stack.hurtEnemy(target, attacker);
+            stack.postHurtEnemy(target, attacker);
         }
     }
 
