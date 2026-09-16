@@ -10,7 +10,7 @@ import realcolin.whmod.WHRegistries;
 public record Terrain(DensityFunction height, double blendWeight, double blendRange, boolean isWater, String name) {
     public static final Codec<Terrain> DIRECT_CODEC =
             RecordCodecBuilder.create(instance -> instance.group(
-                    DensityFunction.HOLDER_HELPER_CODEC.fieldOf("height").forGetter(Terrain::height),
+                    DensityFunction.CODEC.fieldOf("height").forGetter(Terrain::height),
                     Codec.DOUBLE.fieldOf("blend_weight").forGetter(Terrain::blendWeight),
                     Codec.DOUBLE.fieldOf("blend_range").forGetter(Terrain::blendRange),
                     Codec.BOOL.fieldOf("is_water").forGetter(Terrain::isWater),

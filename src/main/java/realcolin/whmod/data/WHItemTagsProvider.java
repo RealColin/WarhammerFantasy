@@ -18,7 +18,7 @@ public class WHItemTagsProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         for (var woodSet : WHBlocks.woodSets) {
-            this.tag(ItemTags.PLANKS).add(woodSet.planksItem().get());
+            this.tag(ItemTags.PLANKS).add(woodSet.planksItem().getKey());
         }
     }
 }

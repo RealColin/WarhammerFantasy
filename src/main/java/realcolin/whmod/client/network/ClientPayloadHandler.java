@@ -12,14 +12,14 @@ public class ClientPayloadHandler {
     public static void handleOpenFactionScreen(OpenFactionScreenPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            mc.setScreen(new FactionSelectionScreen());
+            mc.gui.setScreen(new FactionSelectionScreen());
         });
     }
 
     public static void handleCloseScreen(CloseScreenPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Minecraft mc = Minecraft.getInstance();
-            mc.setScreen(null);
+            mc.gui.setScreen(null);
         });
     }
 }

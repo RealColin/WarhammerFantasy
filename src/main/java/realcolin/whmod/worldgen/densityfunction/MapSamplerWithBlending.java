@@ -55,27 +55,36 @@ public class MapSamplerWithBlending implements DensityFunction.SimpleFunction {
     }
 
     @Override
-    public @NotNull DensityFunction mapAll(@NotNull Visitor v) {
+    public DensityFunction mapChildren(Visitor visitor) {
         if (functions != null) {
             var remapped = new HashMap<Terrain, DensityFunction>();
+
             for (var e : functions.entrySet()) {
-                remapped.put(e.getKey(), e.getValue().mapAll(v));
+                remapped.put(
+                        e.getKey(),
+                        e.getValue().mapAll(visitor)
+                );
             }
 
-            return v.apply(new MapSamplerWithBlending(map, field, remapped));
+            return new MapSamplerWithBlending(
+                    map,
+                    field,
+                    remapped
+            );
         }
 
         var terrains = map.value().getTerrains();
         var tmpFuncs = new HashMap<Terrain, DensityFunction>();
 
         for (var th : terrains) {
-            var t = th.value();
-            var fn = field.read(t).mapAll(v);
+            var terrain = th.value();
 
-            tmpFuncs.put(t, fn);
+            var function = field.read(terrain).mapAll(visitor);
+
+            tmpFuncs.put(terrain, function);
         }
 
-        return v.apply(new MapSamplerWithBlending(this.map, this.field, tmpFuncs));
+        return new MapSamplerWithBlending(map, field, tmpFuncs);
     }
 
     @Override

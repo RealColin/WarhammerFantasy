@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public record Noise(NoiseHolder noise, double xScale, double yScale, double zScale) implements DensityFunction {
     public static final MapCodec<Noise> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -29,8 +30,8 @@ public record Noise(NoiseHolder noise, double xScale, double yScale, double zSca
     }
 
     @Override
-    public @NotNull DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(new Noise(visitor.visitNoise(noise), this.xScale, this.yScale, this.zScale));
+    public @NonNull DensityFunction mapChildren(Visitor visitor) {
+        return new Noise(visitor.visitNoise(noise), xScale, yScale, zScale);
     }
 
     @Override

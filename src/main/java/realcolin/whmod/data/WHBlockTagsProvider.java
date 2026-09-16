@@ -2,6 +2,7 @@ package realcolin.whmod.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class WHBlockTagsProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         var logs = tag(BlockTags.LOGS);
-        var logsThatBurn = tag(BlockTags.LOGS_THAT_BURN);
+        var logsThatBurn = tag(BlockItemTags.LOGS_THAT_BURN.block());
         var goatHorn = tag(BlockTags.SNAPS_GOAT_HORN);
         var planks = tag(BlockTags.PLANKS);
         var stairs = tag(BlockTags.STAIRS);
@@ -31,27 +32,27 @@ public class WHBlockTagsProvider extends BlockTagsProvider {
         var mineableHoe = tag(BlockTags.MINEABLE_WITH_HOE);
 
         for (var woodSet : WHBlocks.woodSets) {
-            logs.add(woodSet.log().get());
-            logsThatBurn.add(woodSet.log().get());
-            goatHorn.add(woodSet.log().get());
+            logs.add(woodSet.log().getKey());
+            logsThatBurn.add(woodSet.log().getKey());
+            goatHorn.add(woodSet.log().getKey());
 
-            logs.add(woodSet.strippedLog().get());
-            logsThatBurn.add(woodSet.strippedLog().get());
+            logs.add(woodSet.strippedLog().getKey());
+            logsThatBurn.add(woodSet.strippedLog().getKey());
 
-            logs.add(woodSet.wood().get());
-            logsThatBurn.add(woodSet.wood().get());
+            logs.add(woodSet.wood().getKey());
+            logsThatBurn.add(woodSet.wood().getKey());
 
-            logs.add(woodSet.strippedWood().get());
-            logsThatBurn.add(woodSet.strippedWood().get());
+            logs.add(woodSet.strippedWood().getKey());
+            logsThatBurn.add(woodSet.strippedWood().getKey());
 
-            planks.add(woodSet.planks().get());
-            stairs.add(woodSet.stairs().get());
-            woodenStairs.add(woodSet.stairs().get());
-            slabs.add(woodSet.slab().get());
-            woodenSlabs.add(woodSet.slab().get());
+            planks.add(woodSet.planks().getKey());
+            stairs.add(woodSet.stairs().getKey());
+            woodenStairs.add(woodSet.stairs().getKey());
+            slabs.add(woodSet.slab().getKey());
+            woodenSlabs.add(woodSet.slab().getKey());
 
-            leaves.add(woodSet.leaves().get());
-            mineableHoe.add(woodSet.leaves().get());
+            leaves.add(woodSet.leaves().getKey());
+            mineableHoe.add(woodSet.leaves().getKey());
         }
     }
 }

@@ -84,10 +84,10 @@ public class WHClient {
 
             if (mc.level == null) break;
 
-            if (mc.screen instanceof InGameMenuScreen)
-                mc.setScreen(null);
-            else if (mc.screen == null)
-                mc.setScreen(new InGameMenuScreen());
+            if (mc.gui.screen() instanceof InGameMenuScreen)
+                mc.gui.setScreen(null);
+            else if (mc.gui.screen() == null)
+                mc.gui.setScreen(new InGameMenuScreen());
         }
     }
 

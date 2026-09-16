@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public record ShiftedNoise(NoiseHolder noise,
                            double xScale,
@@ -20,9 +21,9 @@ public record ShiftedNoise(NoiseHolder noise,
             Codec.DOUBLE.fieldOf("x_scale").forGetter(ShiftedNoise::xScale),
             Codec.DOUBLE.fieldOf("y_scale").forGetter(ShiftedNoise::yScale),
             Codec.DOUBLE.fieldOf("z_scale").forGetter(ShiftedNoise::zScale),
-            DensityFunction.HOLDER_HELPER_CODEC.fieldOf("shift_x").forGetter(ShiftedNoise::shiftX),
-            DensityFunction.HOLDER_HELPER_CODEC.fieldOf("shift_y").forGetter(ShiftedNoise::shiftY),
-            DensityFunction.HOLDER_HELPER_CODEC.fieldOf("shift_z").forGetter(ShiftedNoise::shiftZ)
+            DensityFunction.CODEC.fieldOf("shift_x").forGetter(ShiftedNoise::shiftX),
+            DensityFunction.CODEC.fieldOf("shift_y").forGetter(ShiftedNoise::shiftY),
+            DensityFunction.CODEC.fieldOf("shift_z").forGetter(ShiftedNoise::shiftZ)
     ).apply(instance, ShiftedNoise::new));
 
     @Override
@@ -39,9 +40,10 @@ public record ShiftedNoise(NoiseHolder noise,
     }
 
     @Override
-    public DensityFunction mapAll(Visitor visitor) {
-        return visitor.apply(new ShiftedNoise(visitor.visitNoise(this.noise), this.xScale, this.yScale, this.zScale, this.shiftX.mapAll(visitor), this.shiftY.mapAll(visitor), this.shiftZ.mapAll(visitor)));
+    public @NonNull DensityFunction mapChildren(Visitor visitor) {
+        return new ShiftedNoise(visitor.visitNoise(noise), xScale, yScale, zScale, shiftX.mapAll(visitor), shiftY.mapAll(visitor), shiftZ.mapAll(visitor));
     }
+
 
     @Override
     public double minValue() {
