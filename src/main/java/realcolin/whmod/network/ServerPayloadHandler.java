@@ -14,6 +14,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import realcolin.whmod.Constants;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.client.network.SelectFactionPayload;
 import realcolin.whmod.client.network.StartAttackPayload;
 import realcolin.whmod.entity.combat.CombatController;
 import realcolin.whmod.faction.Faction;

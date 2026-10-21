@@ -1,9 +1,18 @@
 package realcolin.whmod.client;
 
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.api.PlayerAnimationAccess;
+import com.zigythebird.playeranim.api.PlayerAnimationFactory;
+import com.zigythebird.playeranimcore.animation.layered.modifier.FirstPersonOffsetModifier;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonConfiguration;
+import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
+import com.zigythebird.playeranimcore.enums.PlayState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.filefix.fixes.ResourcePackLocationFileFix;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.HitResult;
@@ -28,6 +37,7 @@ import realcolin.whmod.client.screen.FactionCraftingScreen;
 import realcolin.whmod.client.screen.InGameMenuScreen;
 import realcolin.whmod.entity.WHEntities;
 import realcolin.whmod.menu.WHMenuTypes;
+import realcolin.whmod.network.AttackStartedPayload;
 import realcolin.whmod.network.CloseScreenPayload;
 import realcolin.whmod.network.OpenFactionScreenPayload;
 
@@ -36,6 +46,9 @@ import java.util.List;
 @Mod(value = WHMod.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = WHMod.MOD_ID, value = Dist.CLIENT)
 public class WHClient {
+
+    public static final Identifier COMBAT_LAYER = Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "combat");
+
     public WHClient(ModContainer container) {
 
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
@@ -47,6 +60,30 @@ public class WHClient {
         EntityRenderers.register(WHEntities.BROWN_BEAR.get(), BrownBearRenderer::new);
         EntityRenderers.register(WHEntities.IMPERIAL_SWORDSMAN.get(), ctx -> new NPCRenderer<>(ctx, "npc/human/imperial_swordsman"));
         EntityRenderers.register(WHEntities.UNGOR.get(), ctx -> new NPCRenderer<>(ctx, "npc/beastmen/ungor"));
+
+        event.enqueueWork(() -> {
+            PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(
+                    COMBAT_LAYER,
+                    1500,
+                    player -> {
+                        var controller = new PlayerAnimationController(
+                                player,
+                                (_, _, _) -> PlayState.STOP
+                        );
+
+                        controller.setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL);
+                        controller.setFirstPersonFollowsCamera(true);
+
+                        controller.setFirstPersonConfiguration(
+                                new FirstPersonConfiguration().setShowLeftArm(true).setShowLeftArm(true)
+                        );
+
+                        controller.addModifier(new FirstPersonOffsetModifier(), 0);
+
+                        return controller;
+                    }
+            );
+        });
     }
 
     @SubscribeEvent
@@ -69,12 +106,14 @@ public class WHClient {
     static void registerClientPayloadHandlers(RegisterClientPayloadHandlersEvent event) {
         event.register(OpenFactionScreenPayload.TYPE, HandlerThread.NETWORK, ClientPayloadHandler::handleOpenFactionScreen);
         event.register(CloseScreenPayload.TYPE, HandlerThread.NETWORK, ClientPayloadHandler::handleCloseScreen);
+        event.register(AttackStartedPayload.TYPE, HandlerThread.NETWORK, ClientPayloadHandler::handleStartedAttack);
     }
 
     @SubscribeEvent
     static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         WHKeybinds.init();
         event.register(WHKeybinds.OPEN_MENU);
+        event.register(WHKeybinds.DEV_TEST);
     }
 
     @SubscribeEvent
@@ -88,6 +127,15 @@ public class WHClient {
                 mc.gui.setScreen(null);
             else if (mc.gui.screen() == null)
                 mc.gui.setScreen(new InGameMenuScreen());
+        }
+
+        while (WHKeybinds.DEV_TEST.consumeClick()) {
+            var mc = Minecraft.getInstance();
+            var player = mc.player;
+
+            var controller = (PlayerAnimationController)PlayerAnimationAccess.getPlayerAnimationLayer(player, COMBAT_LAYER);
+
+            controller.triggerAnimation(Identifier.fromNamespaceAndPath("whmod", "wave"));
         }
     }
 

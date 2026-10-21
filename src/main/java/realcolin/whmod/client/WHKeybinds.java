@@ -12,12 +12,19 @@ public class WHKeybinds {
             KeyMapping.Category.register(Identifier.fromNamespaceAndPath(WHMod.MOD_ID, "warhammer"));
 
     public static KeyMapping OPEN_MENU;
+    public static KeyMapping DEV_TEST;
 
     public static void init() {
         OPEN_MENU = new KeyMapping(
                 "key.whmod.open_menu",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
+                WARHAMMER
+        );
+        DEV_TEST = new KeyMapping(
+                "key.whmod.dev_test",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_K,
                 WARHAMMER
         );
     }

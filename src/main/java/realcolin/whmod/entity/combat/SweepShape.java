@@ -10,7 +10,7 @@ import java.util.List;
 public record SweepShape(double reach, double sweepAngle, double thickness, double rollAngle) implements AttackShape{
     @Override
     public List<LivingEntity> getTargets(LivingEntity attacker) {
-        debugDraw(attacker);
+//        debugDraw(attacker);
 
         return getCandidates(attacker)
                 .stream()

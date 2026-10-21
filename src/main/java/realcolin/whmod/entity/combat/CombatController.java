@@ -1,6 +1,7 @@
 package realcolin.whmod.entity.combat;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
@@ -9,7 +10,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.network.PacketDistributor;
 import realcolin.whmod.WHMod;
+import realcolin.whmod.network.AttackStartedPayload;
 
 public class CombatController {
 
@@ -22,7 +25,7 @@ public class CombatController {
         if (!started)
             return;
 
-//        System.out.println("Started attack for " + entity + " at game time: " + entity.level().getGameTime());
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, new AttackStartedPayload(entity.getId(), state.getAttack().id(), attackSpeed));
     }
 
     public static void tickCombat(LivingEntity entity) {

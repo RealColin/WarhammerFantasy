@@ -79,6 +79,10 @@ public class CombatState {
         comboIndex++;
     }
 
+    public Attack getAttack() {
+        return this.activeAttack;
+    }
+
     public void reset() {
         this.attacking = false;
         this.attackTick = 0;

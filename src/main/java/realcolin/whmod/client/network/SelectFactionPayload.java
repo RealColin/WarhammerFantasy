@@ -1,4 +1,4 @@
-package realcolin.whmod.network;
+package realcolin.whmod.client.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;

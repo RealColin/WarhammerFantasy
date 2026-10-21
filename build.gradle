@@ -18,9 +18,17 @@ repositories {
         name "KosmX's maven"
         url 'https://maven.kosmx.dev/'
     }
-    maven {
-        name = "RedlanceMinecraft"
-        url = "https://repo.redlance.org/public"
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "CurseMaven"
+                url = "https://cursemaven.com/"
+            }
+        }
+
+        filter {
+            includeGroup "curse.maven"
+        }
     }
     exclusiveContent {
         forRepository {
@@ -41,7 +49,10 @@ base {
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-    version = project.neo_version
+    enable {
+        version = "26.2.0.87"
+//        disableRecompilation = true
+    }
 
     runs {
         client {
@@ -89,6 +100,7 @@ dependencies {
 //    implementation 'maven.modrinth:better-combat:3.0.0+1.21.8-neoforge'
 //    implementation "me.shedaniel.cloth:cloth-config-neoforge:19.0.147"
     implementation "com.geckolib:geckolib-neoforge-${minecraft_version}:${geckolibVersion}"
+    implementation("curse.maven:player-animation-library-1283899:8674798")
 
     implementation 'org.apache.xmlgraphics:batik-all:1.16'
     implementation 'org.apache.xmlgraphics:xmlgraphics-commons:2.7'

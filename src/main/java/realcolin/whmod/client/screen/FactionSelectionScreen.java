@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.NonNull;
 import realcolin.whmod.WHMod;
 import realcolin.whmod.faction.Faction;
-import realcolin.whmod.network.SelectFactionPayload;
+import realcolin.whmod.client.network.SelectFactionPayload;
 
 import java.util.ArrayList;
 import java.util.List;

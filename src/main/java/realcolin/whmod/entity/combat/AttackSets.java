@@ -11,6 +11,8 @@ public final class AttackSets {
     public static AttackSet resolve(LivingEntity entity) {
         if (entity.getMainHandItem().is(ItemTags.SWORDS)) {
             return AttackSets.SWORD;
+        } else if (entity.getMainHandItem().is(ItemTags.AXES)) {
+            return AttackSets.AXE;
         }
 
         return AttackSets.PUNCH;
@@ -21,29 +23,41 @@ public final class AttackSets {
             List.of(
                     new Attack(
                             "slash_1",
-                            0.4,
+                            0.5,
                             1.0,
                             new SweepShape(3.0, 130.0, 0.6, 0.0)
-                    ),
-                    new Attack(
-                            "slash_2",
-                            0.4,
-                            1.0,
-                            new SweepShape(3.0, 130.0, 0.6, 0.0)
-                    ),
-                    new Attack(
-                            "slash_3",
-                            0.4,
-                            1.0,
-                            new SweepShape(3.0, 130.0, 0.6, 45.0)
-                    ),
-                    new Attack(
-                            "slash_4",
-                            0.4,
-                            1.0,
-                            new SweepShape(3.0, 130.0, 0.6, -45.0)
                     )
+//                    new Attack(
+//                            "slash_2",
+//                            0.4,
+//                            1.0,
+//                            new SweepShape(3.0, 130.0, 0.6, 0.0)
+//                    ),
+//                    new Attack(
+//                            "slash_3",
+//                            0.4,
+//                            1.0,
+//                            new SweepShape(3.0, 130.0, 0.6, 45.0)
+//                    ),
+//                    new Attack(
+//                            "slash_4",
+//                            0.4,
+//                            1.0,
+//                            new SweepShape(3.0, 130.0, 0.6, -45.0)
+//                    )
     ));
+
+    public static final AttackSet AXE = new AttackSet(
+            "axe",
+            List.of(
+                    new Attack(
+                            "slash_1",
+                            0.5,
+                            1.0,
+                            new SweepShape(3.0, 115.0, 0.6, 0.0)
+                    )
+            )
+    );
 
     public static final AttackSet PUNCH = new AttackSet(
             "punch",
